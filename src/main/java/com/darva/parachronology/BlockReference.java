@@ -10,9 +10,9 @@ import java.util.HashMap;
  */
 public class BlockReference {
 
-    String blockName;
-    int metadata;
-    Block targBlock;
+    public String blockName;
+    public int metadata;
+    public Block targBlock;
     private static HashMap<String, BlockReference> allRefs = new HashMap<String, BlockReference>();
 
     private BlockReference() {
@@ -23,19 +23,27 @@ public class BlockReference {
     public static BlockReference readBlockFromString(String str) {
         //Example.  minecraft:sapling:1
 
-        if (allRefs.containsKey(str))
-            return allRefs.get(str);
-        BlockReference ref = new BlockReference();
+        int metadata;
+        Block targBlock;
+        String blockName;
+
         String[] parts = str.split(":");
         if (parts.length < 2)
             return null;
-        ref.blockName = parts[0] + parts[1];
+        blockName = parts[0] + ":" + parts[1];
         if (parts.length > 2)
-            ref.metadata = Integer.parseInt(parts[2]);
+            metadata = Integer.parseInt(parts[2]);
         else
-            ref.metadata = 0;
-        ref.targBlock = Block.getBlockFromName(ref.blockName);
-        allRefs.put(str, ref);
+            metadata = 0;
+        targBlock = Block.getBlockFromName(blockName);
+        if (allRefs.containsKey(blockName + ":" + metadata))
+            return allRefs.get(blockName + ":" + metadata);
+
+        BlockReference ref = new BlockReference();
+        ref.targBlock = targBlock;
+        ref.blockName = blockName;
+        ref.metadata = metadata;
+        allRefs.put(ref.blockName + ":" + ref.metadata, ref);
         return ref;
     }
 

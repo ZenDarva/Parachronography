@@ -101,17 +101,19 @@ public class Displacer extends BlockContainer {
         if (world.isRemote)
             return;
         int tier = world.getBlockMetadata(tx, ty, tz) + 1;
-        HashMap<Block, ArrayList<BlockReference>> transforms = DisplaceListBuilder.Instance().getDisplacements(tier);
+        HashMap<BlockReference, ArrayList<BlockReference>> transforms = DisplaceListBuilder.Instance().getDisplacements(tier);
         Random r = new Random();
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
                 for (int z = -1; z <= 1; z++) {
                     Block block = world.getBlock(x + tx, y + ty, z + tz);
-                    if (transforms.containsKey(block)) {
-                        Block to = transforms.get(block).get(r.nextInt(transforms.get(block).size()));
-                        world.setBlock(x + tx, y + ty, z + tz, to);
+                    BlockReference ref = BlockReference.readBlockFromString(Block.blockRegistry.getNameForObject(block) + ":" + world.getBlockMetadata(x, y, z));
+                    if (ref != null && transforms.containsKey(ref)) {
+                        BlockReference to = transforms.get(ref).get(r.nextInt(transforms.get(ref).size()));
+                        //world.setBlock(x + tx, y + ty, z + tz, to);
+                        to.placeInWorld(world, x + tx, y + ty, z + tz);
 
-                        if (to instanceof BlockMobSpawner) {
+                        if (to.targBlock instanceof BlockMobSpawner) {
                             for (Field f : TileEntityMobSpawner.class.getDeclaredFields()) {
                                 if (f.getGenericType() == MobSpawnerBaseLogic.class) {
                                     world.markBlockForUpdate(x + tx, y + ty, z + tz);

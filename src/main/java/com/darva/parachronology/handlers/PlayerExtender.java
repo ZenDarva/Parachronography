@@ -21,12 +21,9 @@ public class PlayerExtender implements IExtendedEntityProperties {
     @Override
     public void loadNBTData(NBTTagCompound compound) {
         System.out.println("LoadNBT");
-        if (compound.getCompoundTag(EXT_PROP_NAME).hasKey("First"))
-        {
+        if (compound.getCompoundTag(EXT_PROP_NAME).hasKey("First")) {
             this.firstConnection = false;
-        }
-        else
-        {
+        } else {
             this.firstConnection = true;
         }
     }
@@ -35,8 +32,8 @@ public class PlayerExtender implements IExtendedEntityProperties {
     public void init(Entity entity, World world) {
 
     }
-    public static PlayerExtender get(EntityPlayer player)
-    {
+
+    public static PlayerExtender get(EntityPlayer player) {
         return (PlayerExtender) player.getExtendedProperties(EXT_PROP_NAME);
     }
 
@@ -47,8 +44,7 @@ public class PlayerExtender implements IExtendedEntityProperties {
     public final static String EXT_PROP_NAME = "Parachronology";
     public boolean firstConnection = true;
 
-    public static void register(EntityPlayer player)
-    {
+    public static void register(EntityPlayer player) {
         player.registerExtendedProperties(PlayerExtender.EXT_PROP_NAME, new PlayerExtender(player));
     }
 
@@ -69,7 +65,7 @@ public class PlayerExtender implements IExtendedEntityProperties {
         PlayerExtender playerData = PlayerExtender.get(player);
         NBTTagCompound savedData = commonProxy.getEntityData(getSaveKey(player));
 
-        if(savedData != null) {
+        if (savedData != null) {
             playerData.loadNBTData(savedData);
         }
     }

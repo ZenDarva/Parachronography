@@ -11,17 +11,17 @@ import java.util.Map;
 public class commonProxy {
 
     private static final Map<String, NBTTagCompound> extendedEntityData = new HashMap<String, NBTTagCompound>();
-    public void registerRenderThings() {}
+
+    public void registerRenderThings() {
+    }
 
 
-    public static void storeEntityData(String id, NBTTagCompound compound)
-    {
+    public static void storeEntityData(String id, NBTTagCompound compound) {
         extendedEntityData.put(id, compound);
     }
 
 
-    public static NBTTagCompound getEntityData(String name)
-    {
+    public static NBTTagCompound getEntityData(String name) {
         return extendedEntityData.remove(name);
     }
 

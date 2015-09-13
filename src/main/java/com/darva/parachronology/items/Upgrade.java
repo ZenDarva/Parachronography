@@ -42,8 +42,7 @@ public class Upgrade extends Item {
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
-        switch(stack.getItemDamage())
-        {
+        switch (stack.getItemDamage()) {
             case 0:
                 return "tier2upgrade";
             case 1:
@@ -52,8 +51,7 @@ public class Upgrade extends Item {
         return "nothing";
     }
 
-    public Upgrade()
-    {
+    public Upgrade() {
         this.setMaxStackSize(1);
         GameRegistry.registerItem(this, "base-upgrade");
         this.setMaxDamage(0);
@@ -70,19 +68,17 @@ public class Upgrade extends Item {
 
     @Override
     public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float p_77648_8_, float p_77648_9_, float p_77648_10_) {
-        Block block = world.getBlock(x,y,z);
+        Block block = world.getBlock(x, y, z);
 
         if (block != Parachronology.displacer)
             return false;
-        if (stack.getItemDamage() == 0 && world.getBlockMetadata(x,y,z) == 0)
-        {
+        if (stack.getItemDamage() == 0 && world.getBlockMetadata(x, y, z) == 0) {
             //Do some particly stuff here in the future.
-            world.setBlock(x,y,z,block,1,3);
+            world.setBlock(x, y, z, block, 1, 3);
             stack.stackSize--;
             return true;
         }
-        if (stack.getItemDamage() == 1 && world.getBlockMetadata(x,y,z) == 1)
-        {
+        if (stack.getItemDamage() == 1 && world.getBlockMetadata(x, y, z) == 1) {
             //Do some particly stuff here in the future.
             world.setBlock(x, y, z, block, 2, 3);
             stack.stackSize--;

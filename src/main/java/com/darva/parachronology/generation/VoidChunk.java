@@ -14,9 +14,8 @@ public class VoidChunk extends ChunkProviderGenerate {
 
     @Override
     public void populate(IChunkProvider p_73153_1_, int x, int z) {
-        if (x == 0 && z == 0 && !world.getWorldInfo().isInitialized())
-        {
-            world.setSpawnLocation(0,65,0);
+        if (x == 0 && z == 0 && !world.getWorldInfo().isInitialized()) {
+            world.setSpawnLocation(0, 65, 0);
         }
     }
 

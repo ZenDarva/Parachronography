@@ -10,8 +10,7 @@ import net.minecraft.item.ItemStack;
 public class DiplacerItemBlock extends ItemBlock {
     @Override
     public String getUnlocalizedName(ItemStack p_77667_1_) {
-        switch (p_77667_1_.getItemDamage())
-        {
+        switch (p_77667_1_.getItemDamage()) {
             case 0:
                 return "parachronology:chrono-displacer";
             case 1:

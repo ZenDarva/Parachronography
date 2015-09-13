@@ -20,13 +20,12 @@ public class VoidWorld extends WorldProvider {
 
     @Override
     public ChunkCoordinates getRandomizedSpawnPoint() {
-        return new ChunkCoordinates(1,64,1);
+        return new ChunkCoordinates(1, 64, 1);
     }
 
 
     @Override
-    public IChunkProvider createChunkGenerator()
-    {
+    public IChunkProvider createChunkGenerator() {
         return new VoidChunk(worldObj, worldObj.getSeed(), false);
     }
 }

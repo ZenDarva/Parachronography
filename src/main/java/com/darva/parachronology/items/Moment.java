@@ -2,6 +2,8 @@ package com.darva.parachronology.items;
 
 import com.darva.parachronology.Parachronology;
 import com.darva.parachronology.TransformListBuilder;
+import com.darva.parachronology.utility.BlockVector;
+import com.darva.parachronology.utility.MultiBlockHelper;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -90,7 +92,6 @@ public class Moment extends Item {
 
             return false;
         }
-
         int amount = 7;
         switch(Stack.getItemDamage())
         {
@@ -154,7 +155,24 @@ public class Moment extends Item {
             spread(world,x,y,z,amount);
             return true;
         }
+
+
+        if (block == Blocks.end_stone && stack.getItemDamage() == 2) {
+            BlockVector corner = MultiBlockHelper.findSouthWestCorner(world, x, y, z);
+            if (corner != null) {
+                if (MultiBlockHelper.checkMultiblock(corner) == true) {
+                    corner = corner.East().North();
+                    corner.setBlock(Blocks.end_portal);
+                    corner.North().setBlock(Blocks.end_portal);
+                    corner.East().setBlock(Blocks.end_portal);
+                    corner.East().North().setBlock(Blocks.end_portal);
+                }
+            }
+            stack.stackSize--;
+        }
         return false;
+
+
     }
 
     @Override

@@ -102,11 +102,11 @@ public class Moment extends Item {
     public String getUnlocalizedName(ItemStack stack) {
         switch (stack.getItemDamage()) {
             case 0:
-                return "parachronograph:simple-moment";
+                return "parachronology:simple-moment";
             case 1:
-                return "parachronograph:moment";
+                return "parachronology:moment";
             case 2:
-                return "parachronograph:complex-moment";
+                return "parachronology:complex-moment";
 
         }
         return null;

@@ -44,9 +44,9 @@ public class Upgrade extends Item {
     public String getUnlocalizedName(ItemStack stack) {
         switch (stack.getItemDamage()) {
             case 0:
-                return "tier2upgrade";
+                return "parachronology:tier2upgrade";
             case 1:
-                return "tier3upgrade";
+                return "parachronology:tier3upgrade";
         }
         return "nothing";
     }

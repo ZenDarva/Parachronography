@@ -83,6 +83,21 @@ public class DisplaceListBuilder {
                 result.put(block, array);
             }
         }
+        if (tier >= 3) {
+            for (BlockReference block : tier3.keySet()) {
+                ArrayList<BlockReference> array;
+
+                if (result.containsKey(block)) {
+                    array = result.get(block);
+                } else {
+                    array = new ArrayList<BlockReference>();
+                }
+                for (BlockReference targ : tier3.get(block)) {
+                    array.add(targ);
+                }
+                result.put(block, array);
+            }
+        }
 
         return result;
     }

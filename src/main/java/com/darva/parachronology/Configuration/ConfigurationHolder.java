@@ -3,8 +3,14 @@ package com.darva.parachronology.Configuration;
 import com.darva.parachronology.BlockReference;
 import com.darva.parachronology.DisplaceListBuilder;
 import com.darva.parachronology.TransformListBuilder;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModContainer;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by James on 8/24/2015.
@@ -12,6 +18,26 @@ import net.minecraftforge.common.config.Property;
 public class ConfigurationHolder {
 
     private static ConfigurationHolder instance;
+    private List<String> defaultTier1Wood;
+    private List<String> defaultTier1Cobble;
+    private List<String> defaultTier1IronBlock;
+    private List<String> defaultTier1Sapling1;
+    private List<String> defaultTier1Sapling2;
+    private List<String> defaultTier1Sapling3;
+    private List<String> defaultTier1Sapling4;
+    private List<String> defaultTier2Dirt;
+    private List<String> defaultTier2Cobble;
+    private List<String> defaultTier2Stone;
+    private List<String> defaultTier2Netherrack;
+    private List<String> defaultTier2Sand;
+    private List<String> defaultTier3Stone;
+    private List<String> defaultTier3Diamond;
+    private List<String> defaultTier3SoulSand;
+    private Configuration config;
+    private boolean hasCopper = false;
+    private boolean hasTin = false;
+    private boolean hasLead = false;
+    private boolean hasSilver = false;
 
     private ConfigurationHolder() {
 
@@ -24,73 +50,65 @@ public class ConfigurationHolder {
         return instance;
     }
 
-    public void LoadConfigs(Configuration con) {
-        loadDisplacements(con);
-        loadTransforms(con);
+    public void setupConfigs(Configuration con) {
+        config = con;
+    }
 
+    public void LoadConfigs() {
 
+        buildDefaults();
+        loadDisplacements(config);
+        loadTransforms(config);
+
+        for (ModContainer container : Loader.instance().getModList()) {
+            System.out.println(container.getModId());
+        }
+    }
+
+    public void save() {
+        config.save();
     }
 
 
     private void loadDisplacements(Configuration con) {
-        String[] defaultTier1Wood = {"minecraft:stone", "minecraft:cobblestone", "minecraft:gravel"};
-        String[] defaultTier1Cobble = {"minecraft:iron_ore", "minecraft:coal_ore", "minecraft:dirt"};
-        String[] defaultTier1IronBlock = {"minecraft:obsidian"};
-        String[] defaultTier1Sapling1 = {"minecraft:sapling:1", "minecraft:sapling:2", "minecraft:sapling:3", "minecraft:sapling:4",};
-        String[] defaultTier1Sapling2 = {"minecraft:sapling:0", "minecraft:sapling:3", "minecraft:sapling:4", "minecraft:sapling:1",};
-        String[] defaultTier1Sapling3 = {"minecraft:sapling:0", "minecraft:sapling:1", "minecraft:sapling:2", "minecraft:sapling:4",};
-        String[] defaultTier1Sapling4 = {"minecraft:sapling:0", "minecraft:sapling:1", "minecraft:sapling:2", "minecraft:sapling:3",};
 
-        Property prop = con.get("Displacements.Tier1", "minecraft:log", defaultTier1Wood);
+
+        Property prop = con.get("Displacements.Tier1", "minecraft:log", defaultTier1Wood.toArray(new String[defaultTier1Wood.size()]));
         DisplaceListBuilder.Instance().AddDisplacement(1, BlockReference.readBlockFromString("minecraft:log"), prop.getStringList());
-        prop = con.get("Displacements.Tier1", "minecraft:cobblestone", defaultTier1Cobble);
+        prop = con.get("Displacements.Tier1", "minecraft:cobblestone", defaultTier1Cobble.toArray(new String[defaultTier1Cobble.size()]));
         DisplaceListBuilder.Instance().AddDisplacement(1, BlockReference.readBlockFromString("minecraft:cobblestone"), prop.getStringList());
-        prop = con.get("Displacements.Tier1", "minecraft:iron_block", defaultTier1IronBlock);
+        prop = con.get("Displacements.Tier1", "minecraft:iron_block", defaultTier1IronBlock.toArray(new String[defaultTier1IronBlock.size()]));
         DisplaceListBuilder.Instance().AddDisplacement(1, BlockReference.readBlockFromString("minecraft:iron_block"), prop.getStringList());
 
-        prop = con.get("Displacements.Tier1", "minecraft:sapling:1", defaultTier1Sapling1);
+        prop = con.get("Displacements.Tier1", "minecraft:sapling:1", defaultTier1Sapling1.toArray(new String[defaultTier1Sapling1.size()]));
         DisplaceListBuilder.Instance().AddDisplacement(1, BlockReference.readBlockFromString("minecraft:sapling:0"), prop.getStringList());
 
-        prop = con.get("Displacements.Tier1", "minecraft:sapling:2", defaultTier1Sapling2);
+        prop = con.get("Displacements.Tier1", "minecraft:sapling:2", defaultTier1Sapling2.toArray(new String[defaultTier1Sapling2.size()]));
         DisplaceListBuilder.Instance().AddDisplacement(1, BlockReference.readBlockFromString("minecraft:sapling:1"), prop.getStringList());
-        prop = con.get("Displacements.Tier1", "minecraft:sapling:3", defaultTier1Sapling3);
+        prop = con.get("Displacements.Tier1", "minecraft:sapling:3", defaultTier1Sapling3.toArray(new String[defaultTier1Sapling3.size()]));
         DisplaceListBuilder.Instance().AddDisplacement(1, BlockReference.readBlockFromString("minecraft:sapling:2"), prop.getStringList());
-        prop = con.get("Displacements.Tier1", "minecraft:sapling:4", defaultTier1Sapling3);
+        prop = con.get("Displacements.Tier1", "minecraft:sapling:4", defaultTier1Sapling3.toArray(new String[defaultTier1Sapling4.size()]));
         DisplaceListBuilder.Instance().AddDisplacement(1, BlockReference.readBlockFromString("minecraft:sapling:3"), prop.getStringList());
 
 
-
-
-
-
-        String[] defaultTier2Dirt = {"minecraft:melon_block", "minecraft:mycelium", "minecraft:pumpkin", "minecraft:waterlily"};
-        String[] defaultTier2Cobble = {"minecraft:gold_ore"};
-        String[] defaultTier2Stone = {"minecraft:lapis_ore", "minecraft:emerald_ore", "minecraft:redstone_ore"};
-        String[] defaultTier2Netherrack = {"minecraft:sand", "minecraft:clay", "minecraft:sand:1"};
-        String[] defaultTier2Sand = {"minecraft:cactus", "minecraft:sandstone"};
-
-        prop = con.get("Displacements.Tier2", "minecraft:dirt", defaultTier2Dirt);
+        prop = con.get("Displacements.Tier2", "minecraft:dirt", defaultTier2Dirt.toArray(new String[defaultTier2Dirt.size()]));
         DisplaceListBuilder.Instance().AddDisplacement(2, BlockReference.readBlockFromString("minecraft:dirt"), prop.getStringList());
-        prop = con.get("Displacements.Tier2", "minecraft:cobblestone", defaultTier2Cobble);
+        prop = con.get("Displacements.Tier2", "minecraft:cobblestone", defaultTier2Cobble.toArray(new String[defaultTier2Cobble.size()]));
         DisplaceListBuilder.Instance().AddDisplacement(2, BlockReference.readBlockFromString("minecraft:cobblestone"), prop.getStringList());
-        prop = con.get("Displacements.Tier2", "minecraft:stone", defaultTier2Stone);
+        prop = con.get("Displacements.Tier2", "minecraft:stone", defaultTier2Stone.toArray(new String[defaultTier2Stone.size()]));
         DisplaceListBuilder.Instance().AddDisplacement(2, BlockReference.readBlockFromString("minecraft:stone"), prop.getStringList());
 
-        prop = con.get("Displacements.Tier2", "minecraft:netherrack", defaultTier2Netherrack);
+        prop = con.get("Displacements.Tier2", "minecraft:netherrack", defaultTier2Netherrack.toArray(new String[defaultTier2Netherrack.size()]));
         DisplaceListBuilder.Instance().AddDisplacement(2, BlockReference.readBlockFromString("minecraft:netherrack"), prop.getStringList());
-        prop = con.get("Displacements.Tier2", "minecraft:sand", defaultTier2Sand);
+        prop = con.get("Displacements.Tier2", "minecraft:sand", defaultTier2Sand.toArray(new String[defaultTier2Sand.size()]));
         DisplaceListBuilder.Instance().AddDisplacement(2, BlockReference.readBlockFromString("minecraft:sand"), prop.getStringList());
 
 
-        String[] defaultTier3Stone = {"minecraft:diamond_ore"};
-        String[] defaultTier3Diamond = {"minecraft:mob_spawner"};
-        String[] defaultTier3SoulSand = {"minecraft:end_stone"};
-
-        prop = con.get("Displacements.Tier3", "minecraft:stone", defaultTier3Stone);
+        prop = con.get("Displacements.Tier3", "minecraft:stone", defaultTier3Stone.toArray(new String[defaultTier3Stone.size()]));
         DisplaceListBuilder.Instance().AddDisplacement(3, BlockReference.readBlockFromString("minecraft:stone"), prop.getStringList());
-        prop = con.get("Displacements.Tier3", "minecraft:diamond_block", defaultTier3Diamond);
+        prop = con.get("Displacements.Tier3", "minecraft:diamond_block", defaultTier3Diamond.toArray(new String[defaultTier3Diamond.size()]));
         DisplaceListBuilder.Instance().AddDisplacement(3, BlockReference.readBlockFromString("minecraft:diamond_block"), prop.getStringList());
-        prop = con.get("Displacements.Tier3", "minecraft:soul_sand", defaultTier3SoulSand);
+        prop = con.get("Displacements.Tier3", "minecraft:soul_sand", defaultTier3SoulSand.toArray(new String[defaultTier3SoulSand.size()]));
         DisplaceListBuilder.Instance().AddDisplacement(3, BlockReference.readBlockFromString("minecraft:soul_sand"), prop.getStringList());
     }
 
@@ -120,6 +138,48 @@ public class ConfigurationHolder {
 
         prop = con.get("Transforms.Tier2", "Enderman", defaultTier2Enderman);
         TransformListBuilder.Instance().addTransform(2, "Enderman", defaultTier2Enderman);
+
+    }
+
+
+    private void buildDefaults() {
+
+        defaultTier1Wood = new ArrayList<String>(Arrays.asList("minecraft:stone", "minecraft:cobblestone", "minecraft:gravel"));
+        defaultTier1Cobble = new ArrayList<String>(Arrays.asList("minecraft:iron_ore", "minecraft:coal_ore", "minecraft:dirt"));
+        defaultTier1IronBlock = new ArrayList<String>(Arrays.asList("minecraft:obsidian"));
+        defaultTier1Sapling1 = new ArrayList<String>(Arrays.asList("minecraft:sapling:1", "minecraft:sapling:2", "minecraft:sapling:3", "minecraft:sapling:4"));
+        defaultTier1Sapling2 = new ArrayList<String>(Arrays.asList("minecraft:sapling:0", "minecraft:sapling:3", "minecraft:sapling:4", "minecraft:sapling:1"));
+        defaultTier1Sapling3 = new ArrayList<String>(Arrays.asList("minecraft:sapling:0", "minecraft:sapling:1", "minecraft:sapling:2", "minecraft:sapling:4"));
+        defaultTier1Sapling4 = new ArrayList<String>(Arrays.asList("minecraft:sapling:0", "minecraft:sapling:1", "minecraft:sapling:2", "minecraft:sapling:3"));
+
+        defaultTier2Dirt = new ArrayList<String>(Arrays.asList("minecraft:melon_block", "minecraft:mycelium", "minecraft:pumpkin", "minecraft:waterlily"));
+
+        defaultTier2Cobble = new ArrayList<String>(Arrays.asList("minecraft:gold_ore"));
+        defaultTier2Stone = new ArrayList<String>(Arrays.asList("minecraft:lapis_ore", "minecraft:emerald_ore", "minecraft:redstone_ore"));
+        defaultTier2Netherrack = new ArrayList<String>(Arrays.asList("minecraft:sand", "minecraft:clay", "minecraft:sand:1"));
+        defaultTier2Sand = new ArrayList<String>(Arrays.asList("minecraft:cactus", "minecraft:sandstone"));
+
+        defaultTier3Stone = new ArrayList<String>(Arrays.asList("minecraft:diamond_ore"));
+        defaultTier3Diamond = new ArrayList<String>(Arrays.asList("minecraft:mob_spawner"));
+        defaultTier3SoulSand = new ArrayList<String>(Arrays.asList("minecraft:end_stone"));
+
+        if (Loader.isModLoaded("ThermalFoundation")) {
+            defaultTier2Cobble.add("ThermalFoundation:Ore:0"); //copper
+            defaultTier2Cobble.add("ThermalFoundation:Ore:1"); //tin
+            defaultTier2Cobble.add("ThermalFoundation:Ore:2"); //silver
+            defaultTier2Cobble.add("ThermalFoundation:Ore:3"); //lead
+
+            defaultTier3Stone.add("ThermalFoundation:Ore:4"); //Ferrous.
+            hasCopper = true;
+            hasTin = true;
+            hasLead = true;
+            hasSilver = true;
+            System.out.println("Parachronology just Snarfed TE's ores.");
+
+        }
+
+
+
 
     }
 

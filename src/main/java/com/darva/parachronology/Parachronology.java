@@ -62,10 +62,12 @@ public class Parachronology {
     public void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new MobDrop());
         worldType = new VoidWorldType();
-
-
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.TERRAIN_GEN_BUS.register(this);
+        ConfigurationHolder.getInstance().LoadConfigs();
+
+        ConfigurationHolder.getInstance().save();
+
     }
 
     @SubscribeEvent
@@ -123,9 +125,7 @@ public class Parachronology {
         Configuration config = new Configuration(event.getSuggestedConfigurationFile());
         config.load();
 
-        ConfigurationHolder.getInstance().LoadConfigs(config);
-
-        config.save();
+        ConfigurationHolder.getInstance().setupConfigs(config);
 
         petrifiedWood = new PetrifiedWood(Material.rock);
         GameRegistry.registerBlock(petrifiedWood, "petrifiedwood");

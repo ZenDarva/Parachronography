@@ -1,0 +1,8 @@
+*.txt
+/.gradle
+/build
+/eclipse
+/gradle
+*.iml
+*.ipr
+*.iws

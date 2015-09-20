@@ -5,6 +5,7 @@ import com.darva.parachronology.DisplaceListBuilder;
 import com.darva.parachronology.Parachronology;
 import com.darva.parachronology.entity.DisplacerEntity;
 import com.darva.parachronology.items.Moment;
+import com.darva.parachronology.utility.tasks.Transform;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -110,30 +111,34 @@ public class Displacer extends BlockContainer {
                     BlockReference ref = BlockReference.readBlockFromString(Block.blockRegistry.getNameForObject(block) + ":" + world.getBlockMetadata(x, y, z));
                     if (ref != null && transforms.containsKey(ref)) {
                         BlockReference to = transforms.get(ref).get(r.nextInt(transforms.get(ref).size()));
-                        //world.setBlock(x + tx, y + ty, z + tz, to);
-                        to.placeInWorld(world, x + tx, y + ty, z + tz);
 
-                        if (to.targBlock instanceof BlockMobSpawner) {
-                            for (Field f : TileEntityMobSpawner.class.getDeclaredFields()) {
-                                if (f.getGenericType() == MobSpawnerBaseLogic.class) {
-                                    world.markBlockForUpdate(x + tx, y + ty, z + tz);
-                                    f.setAccessible(true);
+                        Transform tranform = new Transform(world,x+tx,y+ty,z+tz,to);
+                        Parachronology.proxy.getScheduler().schedule(r.nextInt(15),tranform,Side.SERVER);
 
-                                    TileEntityMobSpawner spawner = (TileEntityMobSpawner) world.getTileEntity(x + tx, y + ty, z + tz);
-                                    try {
-                                        MobSpawnerBaseLogic logic = (MobSpawnerBaseLogic) f.get(spawner);
-                                        logic.setEntityName(spawnableList[r.nextInt(spawnableList.length)]);
-                                    } catch (IllegalAccessException e) {
-                                        e.printStackTrace();
-                                    }
+//                        world.func_147480_a(x +tx,y+ty,z+tz,false);
+//                        to.placeInWorld(world, x + tx, y + ty, z + tz);
+//
+//                        if (to.targBlock instanceof BlockMobSpawner) {
+//                            for (Field f : TileEntityMobSpawner.class.getDeclaredFields()) {
+//                                if (f.getGenericType() == MobSpawnerBaseLogic.class) {
+//                                    world.markBlockForUpdate(x + tx, y + ty, z + tz);
+//                                    f.setAccessible(true);
+//
+//                                    TileEntityMobSpawner spawner = (TileEntityMobSpawner) world.getTileEntity(x + tx, y + ty, z + tz);
+//                                    try {
+//                                        MobSpawnerBaseLogic logic = (MobSpawnerBaseLogic) f.get(spawner);
+//                                        logic.setEntityName(spawnableList[r.nextInt(spawnableList.length)]);
+//                                    } catch (IllegalAccessException e) {
+//                                        e.printStackTrace();
+//                                    }
+//
+//                                }
+//                            }
+//
+//                        }
 
-                                }
-                            }
 
-                        }
-
-
-                        world.markBlockForUpdate(x + tx, y + ty, z + tz);
+//                        world.markBlockForUpdate(x + tx, y + ty, z + tz);
                     }
                 }
             }

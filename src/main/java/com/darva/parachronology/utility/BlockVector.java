@@ -62,6 +62,8 @@ public class BlockVector {
         return false;
     }
 
+
+
     public void setBlock(Block block, int metadata) {
         world.setBlock(x, y, z, block, metadata, 3);
     }

@@ -1,5 +1,6 @@
 package com.darva.parachronology.proxy;
 
+import com.darva.parachronology.utility.Scheduler;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.HashMap;
@@ -9,6 +10,8 @@ import java.util.Map;
  * Created by James on 9/12/2015.
  */
 public class commonProxy {
+
+    private static Scheduler scheduler;
 
     private static final Map<String, NBTTagCompound> extendedEntityData = new HashMap<String, NBTTagCompound>();
 
@@ -23,6 +26,15 @@ public class commonProxy {
 
     public static NBTTagCompound getEntityData(String name) {
         return extendedEntityData.remove(name);
+    }
+
+    public static Scheduler getScheduler()
+    {
+        if (scheduler == null)
+        {
+            scheduler= new Scheduler();
+        }
+        return scheduler;
     }
 
 

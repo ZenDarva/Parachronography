@@ -1,9 +1,11 @@
 package com.darva.parachronology.items;
 
+import com.darva.parachronology.BlockReference;
 import com.darva.parachronology.Parachronology;
 import com.darva.parachronology.TransformListBuilder;
 import com.darva.parachronology.utility.BlockVector;
 import com.darva.parachronology.utility.MultiBlockHelper;
+import com.darva.parachronology.utility.tasks.Transform;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -50,6 +52,7 @@ public class Moment extends Item {
     public boolean onItemUse(ItemStack Stack, EntityPlayer Player, World World, int x, int y, int z, int side, float p_77648_8_, float p_77648_9_, float p_77648_10_) {
 
         Block block = World.getBlock(x, y, z);
+        Random rand = new Random();
 
         if (block instanceof IGrowable) {
 
@@ -61,7 +64,7 @@ public class Moment extends Item {
             if (event.getResult() == Event.Result.ALLOW) {
                 if (!World.isRemote) {
                     Stack.stackSize--;
-                    Moment.func_150918_a(World, x, y, z - 1, 15);
+                    Moment.func_150918_a(World, x, y, z, 15);
                     System.out.println("Spawned particles");
                 }
                 return true;
@@ -69,20 +72,24 @@ public class Moment extends Item {
 
             if (block instanceof IGrowable) {
                 IGrowable igrowable = (IGrowable) block;
-                for (int i = 0; i < Stack.getItemDamage() + 2; i++) {
+                int amount = Stack.getItemDamage() + 5;
+                for (int i = 0; i < amount; i++) {
                     if (igrowable.func_149851_a(World, x, y, z, World.isRemote)) {
                         if (!World.isRemote) {
                             if (igrowable.func_149852_a(World, World.rand, x, y, z)) {
                                 igrowable.func_149853_b(World, World.rand, x, y, z);
                             }
-
-                            //TODO: Figure out why particles aren't spawning.
+                            if (block.isOpaqueCube())
+                                World.playAuxSFX(2005, x, y+1, z, 0);
+                            else
+                                World.playAuxSFX(2005, x, y, z, 0);
                             --Stack.stackSize;
                         }
 
-                        return true;
+
                     }
                 }
+                return true;
             }
 
             return false;
@@ -134,9 +141,11 @@ public class Moment extends Item {
     }
 
     private boolean transformUse(EntityPlayer player, World world, ItemStack stack, int x, int y, int z, int amount) {
+        Random r  = new Random();
         Block block = world.getBlock(x, y, z);
 
         if (OreDictionary.itemMatches(new ItemStack(Blocks.log), new ItemStack(block), false)) {
+            world.func_147480_a(x ,y,z,false);
             world.setBlock(x, y, z, Parachronology.petrifiedWood);
             world.markBlockForUpdate(x, y, z);
             stack.stackSize--;
@@ -200,9 +209,11 @@ public class Moment extends Item {
 
 
     private int spread(World world, int x, int y, int z, int times) {
+
         if (times == 0)
             return 0;
         if (OreDictionary.itemMatches(new ItemStack(Blocks.log), new ItemStack(world.getBlock(x, y - 1, z)), false)) {
+            world.func_147480_a(x ,y-1,z, false);
             world.setBlock(x, y - 1, z, Parachronology.petrifiedWood);
             world.markBlockForUpdate(x, y - 1, z);
             times--;
@@ -211,6 +222,7 @@ public class Moment extends Item {
         if (times == 0)
             return 0;
         if (OreDictionary.itemMatches(new ItemStack(Blocks.log), new ItemStack(world.getBlock(x, y + 1, z)), false)) {
+            world.func_147480_a(x ,y+1,z,false);
             world.setBlock(x, y + 1, z, Parachronology.petrifiedWood);
             world.markBlockForUpdate(x, y + 1, z);
             times--;
@@ -219,6 +231,7 @@ public class Moment extends Item {
         if (times == 0)
             return 0;
         if (OreDictionary.itemMatches(new ItemStack(Blocks.log), new ItemStack(world.getBlock(x - 1, y, z)), false)) {
+            world.func_147480_a(x-1 ,y,z,false);
             world.setBlock(x - 1, y, z, Parachronology.petrifiedWood);
             world.markBlockForUpdate(x - 1, y, z);
             times--;
@@ -227,6 +240,7 @@ public class Moment extends Item {
         if (times == 0)
             return 0;
         if (OreDictionary.itemMatches(new ItemStack(Blocks.log), new ItemStack(world.getBlock(x + 1, y, z)), false)) {
+            world.func_147480_a(x+1 ,y,z,false);
             world.setBlock(x + 1, y, z, Parachronology.petrifiedWood);
             world.markBlockForUpdate(x + 1, y, z);
             times--;
@@ -235,6 +249,7 @@ public class Moment extends Item {
         if (times == 0)
             return 0;
         if (OreDictionary.itemMatches(new ItemStack(Blocks.log), new ItemStack(world.getBlock(x, y, z - 1)), false)) {
+            world.func_147480_a(x ,y,z-1,false);
             world.setBlock(x, y, z - 1, Parachronology.petrifiedWood);
             world.markBlockForUpdate(x, y, z - 1);
             times--;
@@ -243,6 +258,7 @@ public class Moment extends Item {
         if (times == 0)
             return 0;
         if (OreDictionary.itemMatches(new ItemStack(Blocks.log), new ItemStack(world.getBlock(x, y, z + 1)), false)) {
+            world.func_147480_a(x ,y,z+1,false);
             world.setBlock(x, y, z + 1, Parachronology.petrifiedWood);
             world.markBlockForUpdate(x, y, z + 1);
             times--;

@@ -41,7 +41,6 @@ public class DisplaceISBRH implements ISimpleBlockRenderingHandler {
         GL11.glTranslatef((float) 0.5F, (float) -.65F, (float) 0.5F);
         displacer.render((Entity) null, 0.0F, 0.0F, -0.1F, 0.0F, -1.0F, 0.0625F);
         GL11.glPopMatrix();
-
     }
 
     //This method only returns false because you have TESR instead

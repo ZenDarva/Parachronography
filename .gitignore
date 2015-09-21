@@ -3,6 +3,7 @@
 /build
 /eclipse
 /gradle
+/.idea
 *.iml
 *.ipr
 *.iws

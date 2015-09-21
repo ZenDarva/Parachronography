@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="metal-deobf">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/eclipse/mods/metal-deobf.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

@@ -5,25 +5,21 @@ import com.darva.parachronology.DisplaceListBuilder;
 import com.darva.parachronology.Parachronology;
 import com.darva.parachronology.entity.DisplacerEntity;
 import com.darva.parachronology.items.Moment;
-import com.darva.parachronology.utility.tasks.Transform;
+import com.darva.parachronology.utility.tasks.TransformTask;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockMobSpawner;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -112,33 +108,8 @@ public class Displacer extends BlockContainer {
                     if (ref != null && transforms.containsKey(ref)) {
                         BlockReference to = transforms.get(ref).get(r.nextInt(transforms.get(ref).size()));
 
-                        Transform tranform = new Transform(world,x+tx,y+ty,z+tz,to);
+                        TransformTask tranform = new TransformTask(world,x+tx,y+ty,z+tz,to);
                         Parachronology.proxy.getScheduler().schedule(r.nextInt(15),tranform,Side.SERVER);
-
-//                        world.func_147480_a(x +tx,y+ty,z+tz,false);
-//                        to.placeInWorld(world, x + tx, y + ty, z + tz);
-//
-//                        if (to.targBlock instanceof BlockMobSpawner) {
-//                            for (Field f : TileEntityMobSpawner.class.getDeclaredFields()) {
-//                                if (f.getGenericType() == MobSpawnerBaseLogic.class) {
-//                                    world.markBlockForUpdate(x + tx, y + ty, z + tz);
-//                                    f.setAccessible(true);
-//
-//                                    TileEntityMobSpawner spawner = (TileEntityMobSpawner) world.getTileEntity(x + tx, y + ty, z + tz);
-//                                    try {
-//                                        MobSpawnerBaseLogic logic = (MobSpawnerBaseLogic) f.get(spawner);
-//                                        logic.setEntityName(spawnableList[r.nextInt(spawnableList.length)]);
-//                                    } catch (IllegalAccessException e) {
-//                                        e.printStackTrace();
-//                                    }
-//
-//                                }
-//                            }
-//
-//                        }
-
-
-//                        world.markBlockForUpdate(x + tx, y + ty, z + tz);
                     }
                 }
             }

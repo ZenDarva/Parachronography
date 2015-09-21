@@ -64,9 +64,7 @@ public class Parachronology {
         worldType = new VoidWorldType();
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.TERRAIN_GEN_BUS.register(this);
-        ConfigurationHolder.getInstance().LoadConfigs();
 
-        ConfigurationHolder.getInstance().save();
 
     }
 
@@ -152,6 +150,9 @@ public class Parachronology {
         proxy.registerRenderThings();
         GameRegistry.registerTileEntity(DisplacerEntity.class, "tileEntityDisplacer");
 
+        ConfigurationHolder.getInstance().LoadConfigs();
+
+        ConfigurationHolder.getInstance().save();
     }
 
 

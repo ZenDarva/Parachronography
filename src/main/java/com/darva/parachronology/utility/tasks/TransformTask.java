@@ -12,7 +12,7 @@ import java.util.Random;
 /**
  * Created by James on 9/19/2015.
  */
-public class Transform implements Runnable {
+public class TransformTask implements Runnable {
     private String[] spawnableList = {"Enderman", "Zombie", "Skeleton", "Spider", "Blaze"};
     private World world;
     int x,y,z;
@@ -44,7 +44,7 @@ public class Transform implements Runnable {
         world.markBlockForUpdate(x, y, z);
     }
 
-    public Transform(World world, int x, int y, int z, BlockReference block)
+    public TransformTask(World world, int x, int y, int z, BlockReference block)
     {
         this.world =world;
         this.x=x;

@@ -73,12 +73,14 @@ public class Moment extends Item {
             if (block instanceof IGrowable) {
                 IGrowable igrowable = (IGrowable) block;
                 int amount = Stack.getItemDamage() + 5;
+
                 for (int i = 0; i < amount; i++) {
                     if (igrowable.func_149851_a(World, x, y, z, World.isRemote)) {
                         if (!World.isRemote) {
                             if (igrowable.func_149852_a(World, World.rand, x, y, z)) {
                                 igrowable.func_149853_b(World, World.rand, x, y, z);
                             }
+
                             if (block.isOpaqueCube())
                                 World.playAuxSFX(2005, x, y+1, z, 0);
                             else
@@ -175,7 +177,7 @@ public class Moment extends Item {
     @Override
     public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase entity) {
 
-        Random r = new Random();
+        Random r = player.worldObj.rand;
         if (stack.getItemDamage() < 1)
             return false;
         if (player.isSneaking()) {
@@ -193,6 +195,9 @@ public class Moment extends Item {
         ArrayList<String> transforms = TransformListBuilder.Instance().getTransforms(stack.getItemDamage(), EntityList.getEntityString(entity));
         if (transforms.size() == 0)
             return false;
+        for (int i = 0;i<25;i++) {
+            entity.worldObj.spawnParticle("portal", entity.posX -.5 + r.nextFloat(), entity.posY, entity.posZ -.5 + +r.nextFloat(), r.nextFloat() *.5, r.nextFloat()*.5, r.nextFloat()*.5);
+        }
         if (player.worldObj.isRemote)
             return true;
         stack.stackSize--;
@@ -202,7 +207,10 @@ public class Moment extends Item {
         newEntity.setPosition(loc.xCoord, loc.yCoord, loc.zCoord);
         newEntity.setRotationYawHead(entity.getRotationYawHead());
         player.worldObj.spawnEntityInWorld(newEntity);
+
+
         entity.setDead();
+
 
         return false;
     }

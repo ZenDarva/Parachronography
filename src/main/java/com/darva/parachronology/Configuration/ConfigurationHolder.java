@@ -78,7 +78,7 @@ public class ConfigurationHolder {
         prop = con.get("Displacements.Tier1", "minecraft:cobblestone", defaultTier1Cobble.toArray(new String[defaultTier1Cobble.size()]));
         DisplaceListBuilder.Instance().AddDisplacement(1, BlockReference.readBlockFromString("minecraft:cobblestone"), prop.getStringList());
 
-        DisplaceListBuilder.Instance().AddDisplacement(1, BlockReference.readBlockFromString("Parachronolgy:petrifiedwood"), prop.getStringList());
+        DisplaceListBuilder.Instance().AddDisplacement(1, BlockReference.readBlockFromString("Parachronology:petrifiedwood"), prop.getStringList());
 
         prop = con.get("Displacements.Tier1", "minecraft:iron_block", defaultTier1IronBlock.toArray(new String[defaultTier1IronBlock.size()]));
         DisplaceListBuilder.Instance().AddDisplacement(1, BlockReference.readBlockFromString("minecraft:iron_block"), prop.getStringList());

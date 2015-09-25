@@ -5,6 +5,7 @@ import com.darva.parachronology.DisplaceListBuilder;
 import com.darva.parachronology.TransformListBuilder;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
+import net.minecraft.block.Block;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
@@ -60,8 +61,12 @@ public class ConfigurationHolder {
         loadDisplacements(config);
         loadTransforms(config);
 
-        for (ModContainer container : Loader.instance().getModList()) {
-            System.out.println(container.getModId());
+//        for (ModContainer container : Loader.instance().getModList()) {
+//            System.out.println(container.getModId());
+//        }
+        for (Object block : Block.blockRegistry.getKeys())
+        {
+            System.out.println((String)block);
         }
     }
 
@@ -150,10 +155,10 @@ public class ConfigurationHolder {
         defaultTier1Wood = new ArrayList<String>(Arrays.asList("minecraft:stone", "minecraft:cobblestone", "minecraft:gravel"));
         defaultTier1Cobble = new ArrayList<String>(Arrays.asList("minecraft:iron_ore", "minecraft:coal_ore", "minecraft:dirt"));
         defaultTier1IronBlock = new ArrayList<String>(Arrays.asList("minecraft:obsidian"));
-        defaultTier1Sapling1 = new ArrayList<String>(Arrays.asList("minecraft:sapling:1", "minecraft:sapling:2", "minecraft:sapling:3", "minecraft:sapling:4"));
-        defaultTier1Sapling2 = new ArrayList<String>(Arrays.asList("minecraft:sapling:0", "minecraft:sapling:3", "minecraft:sapling:4", "minecraft:sapling:1"));
-        defaultTier1Sapling3 = new ArrayList<String>(Arrays.asList("minecraft:sapling:0", "minecraft:sapling:1", "minecraft:sapling:2", "minecraft:sapling:4"));
-        defaultTier1Sapling4 = new ArrayList<String>(Arrays.asList("minecraft:sapling:0", "minecraft:sapling:1", "minecraft:sapling:2", "minecraft:sapling:3"));
+        defaultTier1Sapling1 = new ArrayList<String>(Arrays.asList("minecraft:sapling:1", "minecraft:sapling:2", "minecraft:sapling:3", "minecraft:sapling:4", " minecraft:reeds"));
+        defaultTier1Sapling2 = new ArrayList<String>(Arrays.asList("minecraft:sapling:0", "minecraft:sapling:3", "minecraft:sapling:4", "minecraft:sapling:1", " minecraft:reeds"));
+        defaultTier1Sapling3 = new ArrayList<String>(Arrays.asList("minecraft:sapling:0", "minecraft:sapling:1", "minecraft:sapling:2", "minecraft:sapling:4", " minecraft:reeds"));
+        defaultTier1Sapling4 = new ArrayList<String>(Arrays.asList("minecraft:sapling:0", "minecraft:sapling:1", "minecraft:sapling:2", "minecraft:sapling:3", " minecraft:reeds"));
 
         defaultTier2Dirt = new ArrayList<String>(Arrays.asList("minecraft:melon_block", "minecraft:mycelium", "minecraft:pumpkin", "minecraft:waterlily"));
 

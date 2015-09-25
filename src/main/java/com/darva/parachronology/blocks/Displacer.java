@@ -13,12 +13,14 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,7 +72,7 @@ public class Displacer extends BlockContainer {
     @Override
     public void updateTick(World world, int x, int y, int z, Random r) {
         AxisAlignedBB bb;
-        bb = AxisAlignedBB.getBoundingBox(x - 5, y - 5, z - 5, x + 5, y + 5, z + 5);
+        bb = AxisAlignedBB.getBoundingBox(x - 3, y - 3, z - 3, x + 3, y + 3, z + 3);
 
         List<EntityItem> items = world.getEntitiesWithinAABB(EntityItem.class, bb);
 
@@ -81,6 +83,16 @@ public class Displacer extends BlockContainer {
                 this.transform(world, x, y, z);
                 world.scheduleBlockUpdate(x, y, z, world.getBlock(x, y, z), 20);
                 return;
+            }
+
+            if (OreDictionary.getOreID(item.getEntityItem())==OreDictionary.getOreID(new ItemStack(Blocks.log)) && !world.isRemote)
+            {
+                ItemStack petrified = new ItemStack(Parachronology.petrifiedWood,item.getEntityItem().stackSize);
+                EntityItem newItem = new EntityItem(world,item.posX,item.posY,item.posZ,petrified);
+                world.spawnEntityInWorld(newItem);
+                newItem.motionX =0;
+                newItem.motionY=0;
+                item.setDead();
             }
         }
         world.scheduleBlockUpdate(x, y, z, world.getBlock(x, y, z), 20);

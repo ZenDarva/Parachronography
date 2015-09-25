@@ -34,6 +34,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.terraingen.WorldTypeEvent;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 /**
  * Created by James on 8/23/2015.
@@ -127,7 +128,7 @@ public class Parachronology {
 
         petrifiedWood = new PetrifiedWood(Material.rock);
         GameRegistry.registerBlock(petrifiedWood, "petrifiedwood");
-        OreDictionary.registerOre("Cobblestone", petrifiedWood);
+        OreDictionary.registerOre("cobblestone", petrifiedWood);
 
         displacer = new Displacer(Material.rock);
         GameRegistry.registerBlock(displacer, DiplacerItemBlock.class, "displacer");
@@ -137,7 +138,8 @@ public class Parachronology {
         capturedMoment = new CapturedMoment();
 
         ItemStack stack = new ItemStack(displacer, 1, 0);
-        GameRegistry.addRecipe(stack, "aaa", "aba", "aaa", 'a', new ItemStack(Blocks.cobblestone), 'b', new ItemStack(moment));
+        //GameRegistry.addRecipe(stack, "aaa", "aba", "aaa", 'a', new ItemStack(Blocks.cobblestone), 'b', new ItemStack(moment));
+        GameRegistry.addRecipe(new ShapedOreRecipe(stack, "aaa", "aba", "aaa", 'a', "cobblestone", 'b', new ItemStack(moment)));
         stack = new ItemStack(upgrade);
         GameRegistry.addRecipe(stack, "aaa", "aba", "aaa", 'a', new ItemStack(moment), 'b', new ItemStack(moment, 1, 1));
         stack = new ItemStack(upgrade, 1, 1);

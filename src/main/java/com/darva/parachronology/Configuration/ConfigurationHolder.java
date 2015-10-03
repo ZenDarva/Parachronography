@@ -64,10 +64,7 @@ public class ConfigurationHolder {
 //        for (ModContainer container : Loader.instance().getModList()) {
 //            System.out.println(container.getModId());
 //        }
-//        for (Object block : Block.blockRegistry.getKeys())
-//        {
-//            System.out.println((String)block);
-//        }
+//        for (Object block : Block.blockRegistry.getKeys()){System.out.println((String)block); }
     }
 
     public void save() {

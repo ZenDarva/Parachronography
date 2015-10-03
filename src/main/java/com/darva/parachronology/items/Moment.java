@@ -199,11 +199,11 @@ public class Moment extends Item {
         if (player.worldObj.isRemote)
             return true;
         stack.stackSize--;
-        Vec3 loc = entity.getPosition(1.0f);
+
 
         EntityLiving newEntity = (EntityLiving) EntityList.createEntityByName(transforms.get(r.nextInt(transforms.size())), player.getEntityWorld());
-        newEntity.setPosition(loc.xCoord, loc.yCoord, loc.zCoord);
-        newEntity.setRotationYawHead(entity.getRotationYawHead());
+        newEntity.setPosition(entity.posX, entity.posY, entity.posZ);
+        //newEntity.setRotationYawHead(entity.getRotationYawHead());
         player.worldObj.spawnEntityInWorld(newEntity);
 
 

@@ -1,6 +1,7 @@
 package com.darva.parachronology.utility;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -44,7 +45,7 @@ public class BlockVector {
     }
 
     public Block block() {
-        return world.getBlock(x, y, z);
+        return world.getBlockState(new BlockPos(x,y,z)).getBlock();
     }
 
     public void setBlock(Block block) {
@@ -64,8 +65,9 @@ public class BlockVector {
 
 
 
-    public void setBlock(Block block, int metadata) {
-        world.setBlock(x, y, z, block, metadata, 3);
+    public void setBlock(Block block, int metadata)
+    {
+        world.setBlockState(new BlockPos(x,y,z), block.getStateFromMeta(metadata));
     }
 }
 

@@ -1,6 +1,7 @@
 package com.darva.parachronology;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
@@ -48,6 +49,6 @@ public class BlockReference {
     }
 
     public void placeInWorld(World world, int x, int y, int z) {
-        world.setBlock(x, y, z, targBlock, metadata, 3);
+        world.setBlockState(new BlockPos(x, y, z), targBlock.getStateFromMeta(metadata));
     }
 }

@@ -13,14 +13,6 @@ import com.darva.parachronology.items.DiplacerItemBlock;
 import com.darva.parachronology.items.Moment;
 import com.darva.parachronology.items.Upgrade;
 import com.darva.parachronology.proxy.commonProxy;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.network.handshake.FMLHandshakeMessage;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,15 +20,31 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldProvider;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import net.minecraftforge.event.terraingen.WorldTypeEvent;
+import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+
+import java.lang.reflect.Field;
+import java.util.Hashtable;
 
 /**
  * Created by James on 8/23/2015.
@@ -47,21 +55,21 @@ public class Parachronology {
 
     @SidedProxy(clientSide = "com.darva.parachronology.proxy.clientProxy", serverSide = "com.darva.parachronology.proxy.commonProxy")
     public static commonProxy proxy;
-    public static Item moment;
+    public static Moment moment;
     public static CapturedMoment capturedMoment;
-    public static Block displacer;
+    public static Displacer displacer;
     public static VoidWorldType worldType;
-    public static Item upgrade;
-    public static Block petrifiedWood;
+    public static Upgrade upgrade;
+    public static PetrifiedWood petrifiedWood;
 
     public static boolean islandsLoaded = false;
+    Hashtable<Integer, Class<? extends WorldProvider>> providers = ReflectionHelper.getPrivateValue(DimensionManager.class, null, "providers");
 
-    public static int renderId = -1;
 
     @Mod.Instance("Parachronology")
     public static Parachronology instance;
-    public static final String MODID = "Parachronology";
-    public static final String VERSION = "0.1.5";
+    public static final String MODID = "parachronology";
+    public static final String VERSION = "0.1.6";
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
@@ -78,15 +86,36 @@ public class Parachronology {
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.TERRAIN_GEN_BUS.register(this);
 
-
     }
 
     @SubscribeEvent
     public void onWorldLoad(WorldTypeEvent event) {
-
-        if (event.worldType == worldType) {
+        if (event.worldType == worldType && providers.get(0) != VoidWorld.class) {
             DimensionManager.unregisterProviderType(0);
             DimensionManager.registerProviderType(0, VoidWorld.class, true);
+            providers.put(0, VoidWorld.class);
+        }
+ }
+    @SubscribeEvent
+    public void onWorldLoad(WorldEvent event) {
+
+        if (event.world.getWorldType() == worldType && event.world.provider.getDimensionId() == 0 && !(event.world.provider instanceof VoidWorld)) {
+            long seed = event.world.getSeed();
+            Field provider;
+            try {
+                provider = ReflectionHelper.findField(World.class, "provider");
+            }
+            catch (Exception dontcare)
+            {
+                provider = ReflectionHelper.findField(World.class, "field_73011_w");
+
+            }
+            try {
+                provider.set(event.world, new VoidWorld(seed));
+                event.world.provider.registerWorld(event.world);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -143,14 +172,14 @@ public class Parachronology {
         OreDictionary.registerOre("cobblestone", petrifiedWood);
 
         displacer = new Displacer(Material.rock);
-        GameRegistry.registerBlock(displacer, DiplacerItemBlock.class, "displacer");
+
 
         moment = new Moment();
         upgrade = new Upgrade();
         capturedMoment = new CapturedMoment();
 
         ItemStack stack = new ItemStack(displacer, 1, 0);
-        //GameRegistry.addRecipe(stack, "aaa", "aba", "aaa", 'a', new ItemStack(Blocks.cobblestone), 'b', new ItemStack(moment));
+        GameRegistry.addRecipe(stack, "aaa", "aba", "aaa", 'a', new ItemStack(Blocks.cobblestone), 'b', new ItemStack(moment));
         GameRegistry.addRecipe(new ShapedOreRecipe(stack, "aaa", "aba", "aaa", 'a', "cobblestone", 'b', new ItemStack(moment)));
         stack = new ItemStack(upgrade);
         GameRegistry.addRecipe(stack, "aaa", "aba", "aaa", 'a', new ItemStack(moment), 'b', new ItemStack(moment, 1, 1));
@@ -161,12 +190,13 @@ public class Parachronology {
         GameRegistry.addShapelessRecipe(new ItemStack(Items.lava_bucket), new ItemStack(Items.bucket), new ItemStack(moment, 1, 1));
 
 
-        proxy.registerRenderThings();
+
         GameRegistry.registerTileEntity(DisplacerEntity.class, "tileEntityDisplacer");
 
         ConfigurationHolder.getInstance().LoadConfigs();
 
         ConfigurationHolder.getInstance().save();
+        proxy.registerRenderThings();
     }
 
 

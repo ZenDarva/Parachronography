@@ -20,7 +20,6 @@ public class PlayerExtender implements IExtendedEntityProperties {
 
     @Override
     public void loadNBTData(NBTTagCompound compound) {
-        System.out.println("LoadNBT");
         if (compound.getCompoundTag(EXT_PROP_NAME).hasKey("First")) {
             this.firstConnection = false;
         } else {

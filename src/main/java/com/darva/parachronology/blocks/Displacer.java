@@ -4,22 +4,34 @@ import com.darva.parachronology.BlockReference;
 import com.darva.parachronology.DisplaceListBuilder;
 import com.darva.parachronology.Parachronology;
 import com.darva.parachronology.entity.DisplacerEntity;
+import com.darva.parachronology.items.DiplacerItemBlock;
 import com.darva.parachronology.items.Moment;
 import com.darva.parachronology.utility.tasks.TransformTask;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.google.common.primitives.Ints;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
@@ -30,14 +42,19 @@ import java.util.Random;
 /**
  * Created by James on 8/23/2015.
  */
-public class Displacer extends BlockContainer {
+public class Displacer extends Block implements ITileEntityProvider {
 
     private String[] spawnableList = {"Enderman", "Zombie", "Skeleton", "Spider", "Blaze"};
+    public static final PropertyEnum TIER = PropertyEnum.create("tier",Displacer.EnumTier.class);
 
     @Override
-    public int onBlockPlaced(World world, int x, int y, int z, int side, float p_149660_6_, float p_149660_7_, float p_149660_8_, int p_149660_9_) {
-        world.scheduleBlockUpdate(x, y, z, world.getBlock(x, y, z), 20);
-        return super.onBlockPlaced(world, x, y, z, side, p_149660_6_, p_149660_7_, p_149660_8_, p_149660_9_);
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        worldIn.scheduleUpdate(pos, worldIn.getBlockState(pos).getBlock(), 20);
+    }
+
+    @Override
+    protected BlockState createBlockState() {
+        return new BlockState(this, new IProperty[] {TIER});
     }
 
     public Displacer(Material p_i45394_1_) {
@@ -45,10 +62,14 @@ public class Displacer extends BlockContainer {
         this.setHardness(1);
         this.setLightOpacity(1);
         this.setTickRandomly(true);
+        this.setRegistryName("displacer");
+        setDefaultState(blockState.getBaseState().withProperty(TIER, EnumTier.TIER1));
+        GameRegistry.registerBlock(this, DiplacerItemBlock.class, "displacer");
+
     }
 
     @Override
-    public boolean shouldSideBeRendered(IBlockAccess p_149646_1_, int p_149646_2_, int p_149646_3_, int p_149646_4_, int p_149646_5_) {
+    public boolean isVisuallyOpaque() {
         return false;
     }
 
@@ -62,17 +83,11 @@ public class Displacer extends BlockContainer {
         return "parachronology:displacer";
     }
 
-
     @Override
-    public int damageDropped(int p_149692_1_) {
-        return p_149692_1_;
-    }
-
-
-    @Override
-    public void updateTick(World world, int x, int y, int z, Random r) {
+    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
         AxisAlignedBB bb;
-        bb = AxisAlignedBB.getBoundingBox(x - 3, y - 3, z - 3, x + 3, y + 3, z + 3);
+
+        bb = AxisAlignedBB.fromBounds(pos.getX() - 3, pos.getY() - 3, pos.getZ() - 3, pos.getX() + 3, pos.getY() + 3, pos.getZ() + 3);
 
         List<EntityItem> items = world.getEntitiesWithinAABB(EntityItem.class, bb);
 
@@ -80,12 +95,14 @@ public class Displacer extends BlockContainer {
         for (EntityItem item : items) {
             if (item.getEntityItem().getItem() instanceof Moment) {
                 item.getEntityItem().stackSize--;
-                this.transform(world, x, y, z);
-                world.scheduleBlockUpdate(x, y, z, world.getBlock(x, y, z), 20);
+                this.transform(world, pos.getX(), pos.getY(), pos.getZ());
+                world.scheduleUpdate(pos, world.getBlockState(pos).getBlock(), 20);
                 return;
             }
 
-            if (OreDictionary.getOreID(item.getEntityItem())==OreDictionary.getOreID(new ItemStack(Blocks.log)) && !world.isRemote)
+
+
+            if (Ints.contains(OreDictionary.getOreIDs(item.getEntityItem()), OreDictionary.getOreID("logWood")))
             {
                 ItemStack petrified = new ItemStack(Parachronology.petrifiedWood,item.getEntityItem().stackSize);
                 EntityItem newItem = new EntityItem(world,item.posX,item.posY,item.posZ,petrified);
@@ -95,7 +112,16 @@ public class Displacer extends BlockContainer {
                 item.setDead();
             }
         }
-        world.scheduleBlockUpdate(x, y, z, world.getBlock(x, y, z), 20);
+        world.scheduleUpdate(pos, world.getBlockState(pos).getBlock(), 20);
+
+
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void registerModel() {
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 1, new ModelResourceLocation(getRegistryName(), "tier=tier2"));
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 2, new ModelResourceLocation(getRegistryName(), "tier=tier3"));
     }
 
     @Override
@@ -106,17 +132,22 @@ public class Displacer extends BlockContainer {
         }
     }
 
+    @Override
+    public int damageDropped(IBlockState state) {
+        return getMetaFromState(state);
+    }
+
     private void transform(World world, int tx, int ty, int tz) {
         if (world.isRemote)
             return;
-        int tier = world.getBlockMetadata(tx, ty, tz) + 1;
+        int tier = getMetaFromState(world.getBlockState(new BlockPos(tx, ty, tz)));
         HashMap<BlockReference, ArrayList<BlockReference>> transforms = DisplaceListBuilder.Instance().getDisplacements(tier);
         Random r = new Random();
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
                 for (int z = -1; z <= 1; z++) {
-                    Block block = world.getBlock(x + tx, y + ty, z + tz);
-                    BlockReference ref = BlockReference.readBlockFromString(Block.blockRegistry.getNameForObject(block) + ":" + world.getBlockMetadata(x, y, z));
+                    Block block = world.getBlockState(new BlockPos(x + tx, y + ty, z + tz)).getBlock();
+                    BlockReference ref = BlockReference.readBlockFromString(Block.blockRegistry.getNameForObject(block) + ":" + block.getMetaFromState(world.getBlockState(new BlockPos(x+tx,y+ty,z+tz))));
                     if (ref != null && transforms.containsKey(ref)) {
                         BlockReference to = transforms.get(ref).get(r.nextInt(transforms.get(ref).size()));
 
@@ -130,12 +161,48 @@ public class Displacer extends BlockContainer {
     }
 
     @Override
-    public int getRenderType() {
-        return Parachronology.renderId;
+    public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
+        return new DisplacerEntity();
     }
 
     @Override
-    public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
-        return new DisplacerEntity();
+    public IBlockState getStateFromMeta(int meta) {
+        switch (meta)
+        {
+            case 0: return getDefaultState().withProperty(TIER,EnumTier.TIER1);
+            case 1: return getDefaultState().withProperty(TIER,EnumTier.TIER2);
+            case 2: return getDefaultState().withProperty(TIER,EnumTier.TIER3);
+
+        }
+        return getDefaultState();
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        EnumTier type = (EnumTier) state.getValue(TIER);
+        return type.getID();
+    }
+
+    public enum EnumTier implements IStringSerializable {
+        TIER1(0, "tier1"),
+        TIER2(1, "tier2"),
+        TIER3(2, "tier3");
+
+        private int ID;
+        private String name;
+
+        private EnumTier(int ID, String name) {
+            this.ID = ID;
+            this.name = name;
+        }
+
+        @Override
+        public String getName() {
+            return name;
+        }
+
+        public int getID() {
+            return ID;
+        }
     }
 }

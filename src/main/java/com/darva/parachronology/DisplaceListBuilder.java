@@ -59,7 +59,7 @@ public class DisplaceListBuilder {
     public HashMap<BlockReference, ArrayList<BlockReference>> getDisplacements(int tier) {
         HashMap<BlockReference, ArrayList<BlockReference>> result = new HashMap<BlockReference, ArrayList<BlockReference>>();
 
-        if (tier >= 1) {
+        if (tier >= 0) {
             for (BlockReference ref : tier1.keySet()) {
                 ArrayList<BlockReference> array = new ArrayList<BlockReference>();
                 for (BlockReference targ : tier1.get(ref)) {
@@ -68,7 +68,7 @@ public class DisplaceListBuilder {
                 result.put(ref, array);
             }
         }
-        if (tier >= 2) {
+        if (tier >= 1) {
             for (BlockReference block : tier2.keySet()) {
                 ArrayList<BlockReference> array;
 
@@ -83,7 +83,7 @@ public class DisplaceListBuilder {
                 result.put(block, array);
             }
         }
-        if (tier >= 3) {
+        if (tier >= 2) {
             for (BlockReference block : tier3.keySet()) {
                 ArrayList<BlockReference> array;
 

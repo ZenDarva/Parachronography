@@ -4,14 +4,11 @@ import com.darva.parachronology.Parachronology;
 import com.darva.parachronology.TransformListBuilder;
 import com.darva.parachronology.utility.BlockVector;
 import com.darva.parachronology.utility.MultiBlockHelper;
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -20,11 +17,18 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.Vec3;
+
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.BonemealEvent;
+import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
@@ -36,33 +40,39 @@ import java.util.Random;
  */
 public class Moment extends Item {
 
-    private IIcon[] icons;
+
 
     public Moment() {
         this.setMaxStackSize(64);
         GameRegistry.registerItem(this, "base-moment");
         this.setMaxDamage(0);
         this.setCreativeTab(CreativeTabs.tabMaterials);
-        icons = new IIcon[3];
+
+    }
+    @SideOnly(Side.CLIENT)
+    public void registerModel() {
+        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation("parachronology:simplemoment", "inventory"));
+        ModelLoader.setCustomModelResourceLocation(this, 1, new ModelResourceLocation("parachronology:moment", "moment"));
+        ModelLoader.setCustomModelResourceLocation(this, 2, new ModelResourceLocation("parachronology:complexmoment", "complexmoment"));
     }
 
-    @Override
-    public boolean onItemUse(ItemStack Stack, EntityPlayer Player, World World, int x, int y, int z, int side, float p_77648_8_, float p_77648_9_, float p_77648_10_) {
 
-        Block block = World.getBlock(x, y, z);
+    @Override
+    public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+        Block block = worldIn.getBlockState(pos).getBlock();
         Random rand = new Random();
 
         if (block instanceof IGrowable) {
 
-            BonemealEvent event = new BonemealEvent(Player, World, block, x, y, z);
+            BonemealEvent event = new BonemealEvent(playerIn, worldIn, pos, worldIn.getBlockState(pos));
             if (MinecraftForge.EVENT_BUS.post(event)) {
                 return false;
             }
 
             if (event.getResult() == Event.Result.ALLOW) {
-                if (!World.isRemote) {
-                    Stack.stackSize--;
-                    Moment.func_150918_a(World, x, y, z, 15);
+                if (!worldIn.isRemote) {
+                    stack.stackSize--;
+                    Moment.func_150918_a(worldIn, pos.getX(),pos.getY(),pos.getZ(), 15);
                     System.out.println("Spawned particles");
                 }
                 return true;
@@ -70,20 +80,20 @@ public class Moment extends Item {
 
             if (block instanceof IGrowable) {
                 IGrowable igrowable = (IGrowable) block;
-                int amount = Stack.getItemDamage() + 5;
+                int amount = stack.getItemDamage() + 5;
 
                 for (int i = 0; i < amount; i++) {
-                    if (igrowable.func_149851_a(World, x, y, z, World.isRemote)) {
-                        if (!World.isRemote) {
-                            if (igrowable.func_149852_a(World, World.rand, x, y, z)) {
-                                igrowable.func_149853_b(World, World.rand, x, y, z);
+                    if (igrowable.canGrow(worldIn, pos, worldIn.getBlockState(pos), worldIn.isRemote)) {
+                        if (!worldIn.isRemote) {
+                            if (igrowable.canGrow(worldIn, pos, worldIn.getBlockState(pos),worldIn.isRemote)) {
+                                igrowable.grow(worldIn, worldIn.rand, pos, worldIn.getBlockState(pos));
                             }
 
                             if (block.isOpaqueCube())
-                                World.playAuxSFX(2005, x, y+1, z, 0);
+                                worldIn.playAuxSFX(2005, pos.add(0,-1,0), 0);
                             else
-                                World.playAuxSFX(2005, x, y, z, 0);
-                            --Stack.stackSize;
+                                worldIn.playAuxSFX(2005, pos, 0);
+                            --stack.stackSize;
                         }
 
 
@@ -95,7 +105,7 @@ public class Moment extends Item {
             return false;
         }
         int amount = 7;
-        switch (Stack.getItemDamage()) {
+        switch (stack.getItemDamage()) {
 
             case 1:
                 amount = 15;
@@ -103,18 +113,19 @@ public class Moment extends Item {
             case 2:
                 amount = 31;
         }
-        return transformUse(Player, World, Stack, x, y, z, amount);
+        return transformUse(playerIn, worldIn, stack, pos, amount);
     }
+
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
         switch (stack.getItemDamage()) {
             case 0:
-                return "parachronology:simple-moment";
+                return "parachronology:simplemoment";
             case 1:
                 return "parachronology:moment";
             case 2:
-                return "parachronology:complex-moment";
+                return "parachronology:complexmoment";
 
         }
         return null;
@@ -126,36 +137,24 @@ public class Moment extends Item {
         return true;
     }
 
-    @Override
-    public void registerIcons(IIconRegister register) {
 
-        icons[0] = register.registerIcon("parachronology:simplemoment");
-        icons[1] = register.registerIcon("parachronology:moment");
-        icons[2] = register.registerIcon("parachronology:complexmoment");
-        super.registerIcons(register);
-    }
 
-    @Override
-    public IIcon getIconFromDamage(int p_77617_1_) {
-        return icons[p_77617_1_];
-    }
-
-    private boolean transformUse(EntityPlayer player, World world, ItemStack stack, int x, int y, int z, int amount) {
+    private boolean transformUse(EntityPlayer player, World world, ItemStack stack, BlockPos targ, int amount) {
         Random r  = new Random();
-        Block block = world.getBlock(x, y, z);
+        Block block = world.getBlockState(targ).getBlock();
 
         if (OreDictionary.itemMatches(new ItemStack(Blocks.log), new ItemStack(block), false)) {
-            world.func_147480_a(x ,y,z,false);
-            world.setBlock(x, y, z, Parachronology.petrifiedWood);
-            world.markBlockForUpdate(x, y, z);
+            world.destroyBlock(targ, false);
+            world.setBlockState(targ, Parachronology.petrifiedWood.getDefaultState());
+            world.markBlockForUpdate(targ);
             stack.stackSize--;
-            spread(world, x, y, z, amount);
+            spread(world, targ, amount);
             return true;
         }
 
 
         if (block == Blocks.end_stone && stack.getItemDamage() == 2) {
-            BlockVector corner = MultiBlockHelper.findSouthWestCorner(world, x, y, z);
+            BlockVector corner = MultiBlockHelper.findSouthWestCorner(world, targ.getX(), targ.getY(), targ.getZ());
             if (corner != null) {
                 if (MultiBlockHelper.checkMultiblock(corner) == true) {
                     corner = corner.East().North();
@@ -194,7 +193,7 @@ public class Moment extends Item {
         if (transforms.size() == 0)
             return false;
         for (int i = 0;i<25;i++) {
-            entity.worldObj.spawnParticle("portal", entity.posX -.5 + r.nextFloat(), entity.posY, entity.posZ -.5 + +r.nextFloat(), r.nextFloat() *.5, r.nextFloat()*.5, r.nextFloat()*.5);
+            entity.worldObj.spawnParticle(EnumParticleTypes.PORTAL, entity.posX -.5 + r.nextFloat(), entity.posY, entity.posZ -.5 + +r.nextFloat(), r.nextFloat() *.5, r.nextFloat()*.5, r.nextFloat()*.5);
         }
         if (player.worldObj.isRemote)
             return true;
@@ -214,61 +213,61 @@ public class Moment extends Item {
     }
 
 
-    private int spread(World world, int x, int y, int z, int times) {
+    private int spread(World world, BlockPos from, int times) {
 
         if (times == 0)
             return 0;
-        if (OreDictionary.itemMatches(new ItemStack(Blocks.log), new ItemStack(world.getBlock(x, y - 1, z)), false)) {
-            world.func_147480_a(x ,y-1,z, false);
-            world.setBlock(x, y - 1, z, Parachronology.petrifiedWood);
-            world.markBlockForUpdate(x, y - 1, z);
+        if (OreDictionary.itemMatches(new ItemStack(Blocks.log), new ItemStack(world.getBlockState(from.add(0,-1,0)).getBlock()), false)) {
+            world.destroyBlock(from.add(0, -1, 0), false);
+            world.setBlockState(from.add(0,-1,0), Parachronology.petrifiedWood.getDefaultState());
+            world.markBlockForUpdate(from);
             times--;
-            times = spread(world, x, y - 1, z, times);
+            times = spread(world, from.add(0,-1,0), times);
         }
         if (times == 0)
             return 0;
-        if (OreDictionary.itemMatches(new ItemStack(Blocks.log), new ItemStack(world.getBlock(x, y + 1, z)), false)) {
-            world.func_147480_a(x ,y+1,z,false);
-            world.setBlock(x, y + 1, z, Parachronology.petrifiedWood);
-            world.markBlockForUpdate(x, y + 1, z);
+        if (OreDictionary.itemMatches(new ItemStack(Blocks.log), new ItemStack(world.getBlockState(from.add(0,1,0)).getBlock()), false)) {
+            world.destroyBlock(from.add(0,1,0), false);
+            world.setBlockState(from.add(0, 1, 0), Parachronology.petrifiedWood.getDefaultState());
+            world.markBlockForUpdate(from);
             times--;
-            times = spread(world, x, y + 1, z, times);
+            times = spread(world, from.add(0,1,0), times);
         }
         if (times == 0)
             return 0;
-        if (OreDictionary.itemMatches(new ItemStack(Blocks.log), new ItemStack(world.getBlock(x - 1, y, z)), false)) {
-            world.func_147480_a(x-1 ,y,z,false);
-            world.setBlock(x - 1, y, z, Parachronology.petrifiedWood);
-            world.markBlockForUpdate(x - 1, y, z);
+        if (OreDictionary.itemMatches(new ItemStack(Blocks.log), new ItemStack(world.getBlockState(from.add(-1,0,0)).getBlock()), false)) {
+            world.destroyBlock(from.add(-1, 0, 0), false);
+            world.setBlockState(from.add(-1, 0, 0), Parachronology.petrifiedWood.getDefaultState());
+            world.markBlockForUpdate(from);
             times--;
-            times = spread(world, x - 1, y, z, times);
+            times = spread(world, from.add(-1,0,0), times);
         }
         if (times == 0)
             return 0;
-        if (OreDictionary.itemMatches(new ItemStack(Blocks.log), new ItemStack(world.getBlock(x + 1, y, z)), false)) {
-            world.func_147480_a(x+1 ,y,z,false);
-            world.setBlock(x + 1, y, z, Parachronology.petrifiedWood);
-            world.markBlockForUpdate(x + 1, y, z);
+        if (OreDictionary.itemMatches(new ItemStack(Blocks.log), new ItemStack(world.getBlockState(from.add(1,0,0)).getBlock()), false)) {
+            world.destroyBlock(from.add(1, 0, 0), false);
+            world.setBlockState(from.add(1, 0, 0), Parachronology.petrifiedWood.getDefaultState());
+            world.markBlockForUpdate(from);
             times--;
-            times = spread(world, x + 1, y, z, times);
+            times = spread(world, from.add(1,0,0), times);
         }
         if (times == 0)
             return 0;
-        if (OreDictionary.itemMatches(new ItemStack(Blocks.log), new ItemStack(world.getBlock(x, y, z - 1)), false)) {
-            world.func_147480_a(x ,y,z-1,false);
-            world.setBlock(x, y, z - 1, Parachronology.petrifiedWood);
-            world.markBlockForUpdate(x, y, z - 1);
+        if (OreDictionary.itemMatches(new ItemStack(Blocks.log), new ItemStack(world.getBlockState(from.add(0,0,-1)).getBlock()), false)) {
+            world.destroyBlock(from.add(0,0,-1), false);
+            world.setBlockState(from.add(0,0,-1), Parachronology.petrifiedWood.getDefaultState());
+            world.markBlockForUpdate(from);
             times--;
-            times = spread(world, x, y, z - 1, times);
+            times = spread(world, from.add(0,0,-1), times);
         }
         if (times == 0)
             return 0;
-        if (OreDictionary.itemMatches(new ItemStack(Blocks.log), new ItemStack(world.getBlock(x, y, z + 1)), false)) {
-            world.func_147480_a(x ,y,z+1,false);
-            world.setBlock(x, y, z + 1, Parachronology.petrifiedWood);
-            world.markBlockForUpdate(x, y, z + 1);
+        if (OreDictionary.itemMatches(new ItemStack(Blocks.log), new ItemStack(world.getBlockState(from.add(0,0,1)).getBlock()), false)) {
+            world.destroyBlock(from.add(0, 0, 1), false);
+            world.setBlockState(from.add(0, 0, 1), Parachronology.petrifiedWood.getDefaultState());
+            world.markBlockForUpdate(from);
             times--;
-            times = spread(world, x, y, z + 1, times);
+            times = spread(world, from.add(0,0,1), times);
         }
         return times;
 
@@ -288,24 +287,24 @@ public class Moment extends Item {
         if (p_150918_4_ == 0) {
             p_150918_4_ = 15;
         }
-
-        Block block = p_150918_0_.getBlock(p_150918_1_, p_150918_2_, p_150918_3_);
+        BlockPos targ = new BlockPos(p_150918_1_, p_150918_2_, p_150918_3_);
+        Block block = p_150918_0_.getBlockState(targ).getBlock();
 
         if (block.getMaterial() != Material.air) {
-            block.setBlockBoundsBasedOnState(p_150918_0_, p_150918_1_, p_150918_2_, p_150918_3_);
+            block.setBlockBoundsBasedOnState(p_150918_0_, targ);
 
             for (int i1 = 0; i1 < p_150918_4_; ++i1) {
                 double d0 = itemRand.nextGaussian() * 0.02D;
                 double d1 = itemRand.nextGaussian() * 0.02D;
                 double d2 = itemRand.nextGaussian() * 0.02D;
-                p_150918_0_.spawnParticle("happyVillager", (double) ((float) p_150918_1_ + itemRand.nextFloat()), (double) p_150918_2_ + (double) itemRand.nextFloat() * block.getBlockBoundsMaxY(), (double) ((float) p_150918_3_ + itemRand.nextFloat()), d0, d1, d2);
+                p_150918_0_.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, (double) ((float) p_150918_1_ + itemRand.nextFloat()), (double) p_150918_2_ + (double) itemRand.nextFloat() * block.getBlockBoundsMaxY(), (double) ((float) p_150918_3_ + itemRand.nextFloat()), d0, d1, d2);
             }
         } else {
             for (int i1 = 0; i1 < p_150918_4_; ++i1) {
                 double d0 = itemRand.nextGaussian() * 0.02D;
                 double d1 = itemRand.nextGaussian() * 0.02D;
                 double d2 = itemRand.nextGaussian() * 0.02D;
-                p_150918_0_.spawnParticle("happyVillager", (double) ((float) p_150918_1_ + itemRand.nextFloat()), (double) p_150918_2_ + (double) itemRand.nextFloat() * 1.0f, (double) ((float) p_150918_3_ + itemRand.nextFloat()), d0, d1, d2);
+                p_150918_0_.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, (double) ((float) p_150918_1_ + itemRand.nextFloat()), (double) p_150918_2_ + (double) itemRand.nextFloat() * 1.0f, (double) ((float) p_150918_3_ + itemRand.nextFloat()), d0, d1, d2);
             }
         }
     }

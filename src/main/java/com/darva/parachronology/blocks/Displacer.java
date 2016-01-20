@@ -95,7 +95,7 @@ public class Displacer extends Block implements ITileEntityProvider {
         for (EntityItem item : items) {
             if (item.getEntityItem().getItem() instanceof Moment) {
                 item.getEntityItem().stackSize--;
-                this.transform(world, pos.getX(), pos.getY(), pos.getZ());
+                this.transform(world, pos);
                 world.scheduleUpdate(pos, world.getBlockState(pos).getBlock(), 20);
                 return;
             }
@@ -137,27 +137,28 @@ public class Displacer extends Block implements ITileEntityProvider {
         return getMetaFromState(state);
     }
 
-    private void transform(World world, int tx, int ty, int tz) {
+    private void transform(World world, BlockPos pos)
+    {
         if (world.isRemote)
             return;
-        int tier = getMetaFromState(world.getBlockState(new BlockPos(tx, ty, tz)));
-        HashMap<BlockReference, ArrayList<BlockReference>> transforms = DisplaceListBuilder.Instance().getDisplacements(tier);
+        int tier = getMetaFromState(world.getBlockState(pos));
         Random r = new Random();
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
                 for (int z = -1; z <= 1; z++) {
-                    Block block = world.getBlockState(new BlockPos(x + tx, y + ty, z + tz)).getBlock();
-                    BlockReference ref = BlockReference.readBlockFromString(Block.blockRegistry.getNameForObject(block) + ":" + block.getMetaFromState(world.getBlockState(new BlockPos(x+tx,y+ty,z+tz))));
-                    if (ref != null && transforms.containsKey(ref)) {
-                        BlockReference to = transforms.get(ref).get(r.nextInt(transforms.get(ref).size()));
+                    BlockPos tempPos=pos.add(x,y,z);
+                    Block block = world.getBlockState(tempPos).getBlock();
+                    BlockReference ref = BlockReference.readBlockFromString(Block.blockRegistry.getNameForObject(block) + ":" + block.getMetaFromState(world.getBlockState(tempPos)));
+                    ArrayList<BlockReference> transforms = DisplaceListBuilder.Instance().getDisplacements(tier, ref);
+                    if (transforms != null && transforms.size() >0) {
+                        BlockReference to = transforms.get(r.nextInt(transforms.size()));
 
-                        TransformTask tranform = new TransformTask(world,x+tx,y+ty,z+tz,to);
+                        TransformTask tranform = new TransformTask(world,tempPos.getX(),tempPos.getY(),tempPos.getZ(),to);
                         Parachronology.proxy.getScheduler().schedule(r.nextInt(15),tranform,Side.SERVER);
                     }
                 }
             }
         }
-
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.darva.parachronology;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
@@ -50,5 +51,14 @@ public class BlockReference {
 
     public void placeInWorld(World world, int x, int y, int z) {
         world.setBlockState(new BlockPos(x, y, z), targBlock.getStateFromMeta(metadata));
+    }
+
+    public static BlockReference getReferenceFromBlock(Block block, int meta)
+    {
+        return BlockReference.readBlockFromString(Block.blockRegistry.getNameForObject(block) + ":" + meta);
+    }
+    public ItemStack getStack()
+    {
+        return new ItemStack(targBlock,1, metadata);
     }
 }

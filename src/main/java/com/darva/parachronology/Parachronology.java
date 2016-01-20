@@ -197,6 +197,7 @@ public class Parachronology {
 
         ConfigurationHolder.getInstance().save();
         proxy.registerRenderThings();
+
     }
 
 

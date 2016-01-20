@@ -84,63 +84,63 @@ public class ConfigurationHolder {
     {
         Property prop = con.get("Displacements.Tier1", "minecraft:log", defaultTier1Wood.toArray(new String[defaultTier1Wood.size()]));
         prop.set(defaultTier1Wood.toArray(new String[defaultTier1Wood.size()]));
-        DisplaceListBuilder.Instance().AddDisplacement(1, BlockReference.readBlockFromString("minecraft:log"), prop.getStringList());
+        DisplaceListBuilder.Instance().addDisplacement(1, BlockReference.readBlockFromString("minecraft:log"), prop.getStringList());
         prop = con.get("Displacements.Tier1", "minecraft:cobblestone", defaultTier1Cobble.toArray(new String[defaultTier1Cobble.size()]));
         prop.set(defaultTier1Cobble.toArray(new String[defaultTier1Cobble.size()]));
-        DisplaceListBuilder.Instance().AddDisplacement(1, BlockReference.readBlockFromString("minecraft:cobblestone"), prop.getStringList());
+        DisplaceListBuilder.Instance().addDisplacement(1, BlockReference.readBlockFromString("minecraft:cobblestone"), prop.getStringList());
 
         prop = con.get("Displacements.Tier1", "parachronology:petrifiedwood", defaultTier1Cobble.toArray(new String[defaultTier1Cobble.size()]));
         prop.set(defaultTier1Cobble.toArray(new String[defaultTier1Cobble.size()]));
 
-        DisplaceListBuilder.Instance().AddDisplacement(1, BlockReference.readBlockFromString("parachronology:petrifiedwood"), prop.getStringList());
+        DisplaceListBuilder.Instance().addDisplacement(1, BlockReference.readBlockFromString("parachronology:petrifiedwood"), prop.getStringList());
 
         prop = con.get("Displacements.Tier1", "minecraft:iron_block", defaultTier1IronBlock.toArray(new String[defaultTier1IronBlock.size()]));
         prop.set(defaultTier1IronBlock.toArray(new String[defaultTier1IronBlock.size()]));
         prop.set(defaultTier1IronBlock.toArray(new String[defaultTier1IronBlock.size()]));
-        DisplaceListBuilder.Instance().AddDisplacement(1, BlockReference.readBlockFromString("minecraft:iron_block"), prop.getStringList());
+        DisplaceListBuilder.Instance().addDisplacement(1, BlockReference.readBlockFromString("minecraft:iron_block"), prop.getStringList());
 
         prop = con.get("Displacements.Tier1", "minecraft:sapling:1", defaultTier1Sapling1.toArray(new String[defaultTier1Sapling1.size()]));
         prop.set(defaultTier1Sapling1.toArray(new String[defaultTier1Sapling1.size()]));
-        DisplaceListBuilder.Instance().AddDisplacement(1, BlockReference.readBlockFromString("minecraft:sapling:0"), prop.getStringList());
+        DisplaceListBuilder.Instance().addDisplacement(1, BlockReference.readBlockFromString("minecraft:sapling:0"), prop.getStringList());
 
         prop = con.get("Displacements.Tier1", "minecraft:sapling:2", defaultTier1Sapling2.toArray(new String[defaultTier1Sapling2.size()]));
         prop.set(defaultTier1Sapling2.toArray(new String[defaultTier1Sapling2.size()]));
-        DisplaceListBuilder.Instance().AddDisplacement(1, BlockReference.readBlockFromString("minecraft:sapling:1"), prop.getStringList());
+        DisplaceListBuilder.Instance().addDisplacement(1, BlockReference.readBlockFromString("minecraft:sapling:1"), prop.getStringList());
         prop = con.get("Displacements.Tier1", "minecraft:sapling:3", defaultTier1Sapling3.toArray(new String[defaultTier1Sapling3.size()]));
         prop.set(defaultTier1Sapling3.toArray(new String[defaultTier1Sapling3.size()]));
-        DisplaceListBuilder.Instance().AddDisplacement(1, BlockReference.readBlockFromString("minecraft:sapling:2"), prop.getStringList());
+        DisplaceListBuilder.Instance().addDisplacement(1, BlockReference.readBlockFromString("minecraft:sapling:2"), prop.getStringList());
         prop = con.get("Displacements.Tier1", "minecraft:sapling:4", defaultTier1Sapling3.toArray(new String[defaultTier1Sapling4.size()]));
         prop.set(defaultTier1Sapling3.toArray(new String[defaultTier1Sapling4.size()]));
-        DisplaceListBuilder.Instance().AddDisplacement(1, BlockReference.readBlockFromString("minecraft:sapling:3"), prop.getStringList());
+        DisplaceListBuilder.Instance().addDisplacement(1, BlockReference.readBlockFromString("minecraft:sapling:3"), prop.getStringList());
 
 
         prop = con.get("Displacements.Tier2", "minecraft:dirt", defaultTier2Dirt.toArray(new String[defaultTier2Dirt.size()]));
         prop.set(defaultTier2Dirt.toArray(new String[defaultTier2Dirt.size()]));
-        DisplaceListBuilder.Instance().AddDisplacement(2, BlockReference.readBlockFromString("minecraft:dirt"), prop.getStringList());
+        DisplaceListBuilder.Instance().addDisplacement(2, BlockReference.readBlockFromString("minecraft:dirt"), prop.getStringList());
         prop = con.get("Displacements.Tier2", "minecraft:cobblestone", defaultTier2Cobble.toArray(new String[defaultTier2Cobble.size()]));
         prop.set(defaultTier2Cobble.toArray(new String[defaultTier2Cobble.size()]));
-        DisplaceListBuilder.Instance().AddDisplacement(2, BlockReference.readBlockFromString("minecraft:cobblestone"), prop.getStringList());
+        DisplaceListBuilder.Instance().addDisplacement(2, BlockReference.readBlockFromString("minecraft:cobblestone"), prop.getStringList());
         prop = con.get("Displacements.Tier2", "minecraft:stone", defaultTier2Stone.toArray(new String[defaultTier2Stone.size()]));
         prop.set(defaultTier2Stone.toArray(new String[defaultTier2Stone.size()]));
-        DisplaceListBuilder.Instance().AddDisplacement(2, BlockReference.readBlockFromString("minecraft:stone"), prop.getStringList());
+        DisplaceListBuilder.Instance().addDisplacement(2, BlockReference.readBlockFromString("minecraft:stone"), prop.getStringList());
 
         prop = con.get("Displacements.Tier2", "minecraft:netherrack", defaultTier2Netherrack.toArray(new String[defaultTier2Netherrack.size()]));
         prop.set(defaultTier2Netherrack.toArray(new String[defaultTier2Netherrack.size()]));
-        DisplaceListBuilder.Instance().AddDisplacement(2, BlockReference.readBlockFromString("minecraft:netherrack"), prop.getStringList());
+        DisplaceListBuilder.Instance().addDisplacement(2, BlockReference.readBlockFromString("minecraft:netherrack"), prop.getStringList());
         prop = con.get("Displacements.Tier2", "minecraft:sand", defaultTier2Sand.toArray(new String[defaultTier2Sand.size()]));
         prop.set(defaultTier2Sand.toArray(new String[defaultTier2Sand.size()]));
-        DisplaceListBuilder.Instance().AddDisplacement(2, BlockReference.readBlockFromString("minecraft:sand"), prop.getStringList());
+        DisplaceListBuilder.Instance().addDisplacement(2, BlockReference.readBlockFromString("minecraft:sand"), prop.getStringList());
 
 
         prop = con.get("Displacements.Tier3", "minecraft:stone", defaultTier3Stone.toArray(new String[defaultTier3Stone.size()]));
         prop.set(defaultTier3Stone.toArray(new String[defaultTier3Stone.size()]));
-        DisplaceListBuilder.Instance().AddDisplacement(3, BlockReference.readBlockFromString("minecraft:stone"), prop.getStringList());
+        DisplaceListBuilder.Instance().addDisplacement(3, BlockReference.readBlockFromString("minecraft:stone"), prop.getStringList());
         prop = con.get("Displacements.Tier3", "minecraft:diamond_block", defaultTier3Diamond.toArray(new String[defaultTier3Diamond.size()]));
         prop.set(defaultTier3Diamond.toArray(new String[defaultTier3Diamond.size()]));
-        DisplaceListBuilder.Instance().AddDisplacement(3, BlockReference.readBlockFromString("minecraft:diamond_block"), prop.getStringList());
+        DisplaceListBuilder.Instance().addDisplacement(3, BlockReference.readBlockFromString("minecraft:diamond_block"), prop.getStringList());
         prop = con.get("Displacements.Tier3", "minecraft:soul_sand", defaultTier3SoulSand.toArray(new String[defaultTier3SoulSand.size()]));
         prop.set(defaultTier3SoulSand.toArray(new String[defaultTier3SoulSand.size()]));
-        DisplaceListBuilder.Instance().AddDisplacement(3, BlockReference.readBlockFromString("minecraft:soul_sand"), prop.getStringList());
+        DisplaceListBuilder.Instance().addDisplacement(3, BlockReference.readBlockFromString("minecraft:soul_sand"), prop.getStringList());
     }
 
 
@@ -150,7 +150,7 @@ public class ConfigurationHolder {
 
             for(ConfigCategory category : transforms.getChildren())
                 for (String key : category.keySet()) {
-                    DisplaceListBuilder.Instance().AddDisplacement(getTierFromString(category.getName()), BlockReference.readBlockFromString(key), category.get(key).getStringList());
+                    DisplaceListBuilder.Instance().addDisplacement(getTierFromString(category.getName()), BlockReference.readBlockFromString(key), category.get(key).getStringList());
                 }
 
     }

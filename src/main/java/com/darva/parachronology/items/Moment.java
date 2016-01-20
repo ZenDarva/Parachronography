@@ -156,7 +156,7 @@ public class Moment extends Item {
         if (block == Blocks.end_stone && stack.getItemDamage() == 2) {
             BlockVector corner = MultiBlockHelper.findSouthWestCorner(world, targ.getX(), targ.getY(), targ.getZ());
             if (corner != null) {
-                if (MultiBlockHelper.checkMultiblock(corner) == true) {
+                if (MultiBlockHelper.checkMultiblock(corner)) {
                     corner = corner.East().North();
                     corner.setBlock(Blocks.end_portal);
                     corner.North().setBlock(Blocks.end_portal);

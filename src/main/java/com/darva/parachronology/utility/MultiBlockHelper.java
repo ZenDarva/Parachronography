@@ -69,10 +69,7 @@ public class MultiBlockHelper {
             return false;
         }
 
-        if (start.equals(vector)) {
-            return true;
-        }
-        return false;
+        return start.equals(vector);
     }
 
     private static BlockVector westUntilNot(BlockVector start) {

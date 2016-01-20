@@ -1,0 +1,33 @@
+{
+
+  "forge_marker": 1,
+  "defaults": {
+    "model": "parachronology:displacer",
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "inventory": [
+      {}
+    ],
+    "tier=tier1": {
+      "model": "parachronology:displacer",
+      "textures": {
+        "0": "parachronology:blocks/displacer1"
+      }
+    },
+    "tier=tier2": {
+      "model": "parachronology:displacer",
+      "textures": {
+        "0": "parachronology:blocks/displacer2"
+      }
+    },
+    "tier=tier3": {
+      "model": "parachronology:displacer",
+      "textures": {
+        "0": "parachronology:blocks/displacer3"
+      }
+    }
+  }
+}
+
+

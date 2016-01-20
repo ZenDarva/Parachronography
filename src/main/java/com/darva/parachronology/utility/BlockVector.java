@@ -57,10 +57,7 @@ public class BlockVector {
         if (!(obj instanceof BlockVector))
             return false;
         BlockVector targ = (BlockVector) obj;
-        if (targ.x == x && targ.y == y && targ.z == z && world.equals(targ.world)) {
-            return true;
-        }
-        return false;
+        return targ.x == x && targ.y == y && targ.z == z && world.equals(targ.world);
     }
 
 

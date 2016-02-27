@@ -45,4 +45,12 @@ public class DisplaceRecipe {
         }
         return result;
     }
+
+    public boolean matchesBlock(BlockReference ref)
+    {
+        if (from == ref ||
+                (from.metadata == -1 && ref.targBlock == from.targBlock))
+            return true;
+        return false;
+    }
 }

@@ -3,6 +3,7 @@ package com.darva.parachronology;
 import com.darva.parachronology.Configuration.ConfigurationHolder;
 import com.darva.parachronology.blocks.Displacer;
 import com.darva.parachronology.blocks.PetrifiedWood;
+
 import com.darva.parachronology.entity.DisplacerEntity;
 import com.darva.parachronology.generation.VoidWorld;
 import com.darva.parachronology.generation.VoidWorldType;
@@ -49,7 +50,7 @@ import java.util.Hashtable;
 /**
  * Created by James on 8/23/2015.
  */
-@Mod(modid = Parachronology.MODID, version = Parachronology.VERSION)
+@Mod(modid = Parachronology.MODID, version = Parachronology.VERSION, dependencies="after:Thaumcraft")
 public class Parachronology {
 
 
@@ -61,6 +62,9 @@ public class Parachronology {
     public static VoidWorldType worldType;
     public static Upgrade upgrade;
     public static PetrifiedWood petrifiedWood;
+    //public static Storage storage;
+
+    public static ConfigurationHolder config;
 
     public static boolean islandsLoaded = false;
     Hashtable<Integer, Class<? extends WorldProvider>> providers = ReflectionHelper.getPrivateValue(DimensionManager.class, null, "providers");
@@ -153,8 +157,12 @@ public class Parachronology {
         PlayerExtender prop = PlayerExtender.get(player);
         if (prop.firstConnection && !islandsLoaded) {
             prop.firstConnection = false;
-            player.inventory.addItemStackToInventory(new ItemStack(Items.dye, 64, 15));
-            player.inventory.addItemStackToInventory(new ItemStack(Blocks.sapling, 4));
+//            player.inventory.addItemStackToInventory(new ItemStack(Items.dye, 64, 15));
+//            player.inventory.addItemStackToInventory(new ItemStack(Blocks.sapling, 4));
+            for(ItemStack stack : ConfigurationHolder.getInstance().getStartingInventory())
+            {
+                player.inventory.addItemStackToInventory(stack.copy());
+            }
         }
 
 
@@ -177,8 +185,10 @@ public class Parachronology {
         moment = new Moment();
         upgrade = new Upgrade();
         capturedMoment = new CapturedMoment();
+        //storage = new Storage();
 
         ItemStack stack = new ItemStack(displacer, 1, 0);
+        ItemStack momentStack = new ItemStack(moment, 1,0);
         GameRegistry.addRecipe(stack, "aaa", "aba", "aaa", 'a', new ItemStack(Blocks.cobblestone), 'b', new ItemStack(moment));
         GameRegistry.addRecipe(new ShapedOreRecipe(stack, "aaa", "aba", "aaa", 'a', "cobblestone", 'b', new ItemStack(moment)));
         stack = new ItemStack(upgrade);
@@ -188,7 +198,8 @@ public class Parachronology {
 
         GameRegistry.addShapelessRecipe(new ItemStack(Items.water_bucket), new ItemStack(Items.bucket), new ItemStack(moment));
         GameRegistry.addShapelessRecipe(new ItemStack(Items.lava_bucket), new ItemStack(Items.bucket), new ItemStack(moment, 1, 1));
-
+        stack = new ItemStack(petrifiedWood,8);
+        GameRegistry.addRecipe(new ShapedOreRecipe(stack, "aaa", "aba", "aaa", 'a', "logWood", 'b', new ItemStack(moment)));
 
 
         GameRegistry.registerTileEntity(DisplacerEntity.class, "tileEntityDisplacer");

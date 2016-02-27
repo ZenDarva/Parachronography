@@ -13,7 +13,7 @@ public class DisplaceListBuilder {
     public static HashMap<BlockReference, DisplaceRecipe> displaceRecipes;
 
     private DisplaceListBuilder() {
-        displaceRecipes = new HashMap<BlockReference,DisplaceRecipe>();
+        displaceRecipes = new HashMap<BlockReference, DisplaceRecipe>();
     }
 
     public static DisplaceListBuilder Instance() {
@@ -24,29 +24,25 @@ public class DisplaceListBuilder {
     }
 
 
-    public void addDisplacement(int tier, BlockReference from, String[] to)
-    {
+    public void addDisplacement(int tier, BlockReference from, String[] to) {
         DisplaceRecipe recipe;
-        if (displaceRecipes.containsKey(from))
-        {
+        if (displaceRecipes.containsKey(from)) {
             recipe = displaceRecipes.get(from);
-        }
-        else
-        {
+        } else {
             recipe = new DisplaceRecipe(from);
         }
-        recipe.addDisplacement(tier,to);
-        displaceRecipes.put(from,recipe);
+        recipe.addDisplacement(tier, to);
+        displaceRecipes.put(from, recipe);
     }
 
-    public ArrayList<BlockReference> getDisplacements(int Tier, BlockReference from)
-    {
-        if (displaceRecipes.containsKey(from))
-        {
-            return displaceRecipes.get(from).getDisplacement(Tier);
+    public ArrayList<BlockReference> getDisplacements(int Tier, BlockReference from) {
+
+        for (BlockReference rec : displaceRecipes.keySet()) {
+            if (displaceRecipes.get(rec).matchesBlock(from)) {
+                return displaceRecipes.get(rec).getDisplacement(Tier);
+            }
         }
-        else
-            return null;
+        return null;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.darva.parachronology.items;
 
+import com.darva.parachronology.Configuration.ConfigurationHolder;
 import com.darva.parachronology.Parachronology;
 import com.darva.parachronology.TransformListBuilder;
 import com.darva.parachronology.utility.BlockVector;
@@ -39,15 +40,11 @@ import java.util.Random;
  * Created by James on 8/23/2015.
  */
 public class Moment extends Item {
-
-
-
     public Moment() {
         this.setMaxStackSize(64);
         GameRegistry.registerItem(this, "base-moment");
         this.setMaxDamage(0);
         this.setCreativeTab(CreativeTabs.tabMaterials);
-
     }
     @SideOnly(Side.CLIENT)
     public void registerModel() {
@@ -55,8 +52,6 @@ public class Moment extends Item {
         ModelLoader.setCustomModelResourceLocation(this, 1, new ModelResourceLocation("parachronology:moment", "moment"));
         ModelLoader.setCustomModelResourceLocation(this, 2, new ModelResourceLocation("parachronology:complexmoment", "complexmoment"));
     }
-
-
     @Override
     public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
         Block block = worldIn.getBlockState(pos).getBlock();
@@ -153,7 +148,7 @@ public class Moment extends Item {
         }
 
 
-        if (block == Blocks.end_stone && stack.getItemDamage() == 2) {
+        if (block == Blocks.end_stone && stack.getItemDamage() == 2  && ConfigurationHolder.getInstance().isGenerateEndPortal()) {
             BlockVector corner = MultiBlockHelper.findSouthWestCorner(world, targ.getX(), targ.getY(), targ.getZ());
             if (corner != null) {
                 if (MultiBlockHelper.checkMultiblock(corner)) {

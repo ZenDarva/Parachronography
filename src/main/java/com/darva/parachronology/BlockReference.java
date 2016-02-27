@@ -50,6 +50,12 @@ public class BlockReference {
     }
 
     public void placeInWorld(World world, int x, int y, int z) {
+        if (targBlock == null)
+        {
+            System.out.println("Null block in " + this.blockName +"with metadata " + metadata);
+             return;
+        }
+        System.out.println("targBlock: " + targBlock.getUnlocalizedName());
         world.setBlockState(new BlockPos(x, y, z), targBlock.getStateFromMeta(metadata));
     }
 

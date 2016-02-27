@@ -22,6 +22,7 @@ public class clientProxy extends commonProxy {
         Parachronology.displacer.registerModel();
         Parachronology.upgrade.registerModel();
         Parachronology.moment.registerModel();
+        //Parachronology.storage.registerModel();
     }
 
     public static void reg(Item item, String name) {

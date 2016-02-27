@@ -22,7 +22,15 @@ public class DisplacerWrapper implements IRecipeWrapper {
 
     public DisplacerWrapper(DisplaceRecipe recipe) {
     this.recipe = recipe;
-        this.inputs.add(recipe.from.getStack());
+        if (recipe.from.metadata != -1)
+            this.inputs.add(recipe.from.getStack());
+        else
+        {
+            for (int i=0; i<16; i++)
+            {
+                this.inputs.add(new ItemStack(recipe.from.targBlock,1,i));
+            }
+        }
 
         for (BlockReference ref : recipe.getDisplacement(2))
         {

@@ -3,13 +3,19 @@ package com.darva.parachronology.Configuration;
 import com.darva.parachronology.BlockReference;
 import com.darva.parachronology.DisplaceListBuilder;
 import com.darva.parachronology.TransformListBuilder;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -21,10 +27,7 @@ public class ConfigurationHolder {
     private List<String> defaultTier1Wood;
     private List<String> defaultTier1Cobble;
     private List<String> defaultTier1IronBlock;
-    private List<String> defaultTier1Sapling1;
-    private List<String> defaultTier1Sapling2;
-    private List<String> defaultTier1Sapling3;
-    private List<String> defaultTier1Sapling4;
+    private List<String> defaultTier1Sapling;
     private List<String> defaultTier2Dirt;
     private List<String> defaultTier2Cobble;
     private List<String> defaultTier2Stone;
@@ -39,6 +42,9 @@ public class ConfigurationHolder {
     private boolean hasLead = false;
     private boolean hasSilver = false;
     private boolean setDefaults = false;
+    private List<ItemStack> startingInventory;
+
+    private boolean generateEndPortal = true;
 
     private ConfigurationHolder() {
 
@@ -58,21 +64,25 @@ public class ConfigurationHolder {
     public void LoadConfigs() {
 
         if (checkNeedBuildDefaults(config)) {
+
             buildDefaults();
             setDisplacementsDefaults(config);
             setTransformDefaults(config);
+            setOtherDefaults(config);
         }
         else
         {
             loadTransforms(config);
             loadDisplacements(config);
+            loadOtherConfigs(config);
         }
 
 
 //        for (ModContainer container : Loader.instance().getModList()) {
 //            System.out.println(container.getModId());
 //        }
-//        for (Object block : Block.blockRegistry.getKeys()){System.out.println((String)block); }
+
+        //for (Object block : Block.blockRegistry){System.out.println(((Block)block).getRegistryName()); }
     }
 
     public void save() {
@@ -80,8 +90,52 @@ public class ConfigurationHolder {
     }
 
 
+    private void setOtherDefaults(Configuration con)
+    {
+        Property prop = con.get("Defaults", "allowGenerateEndPortal", true);
+        prop.set(true);
+
+        prop = con.get("Defaults", "startingInventory", "minecraft:dye:64:15,minecraft:sapling:4");
+        parseInventoryString(prop.getString());
+    }
+
+    private void loadOtherConfigs(Configuration con)
+    {
+        Property prop = con.get("Defaults", "allowGenerateEndPortal", true);
+        generateEndPortal = prop.getBoolean();
+
+        prop = con.get("Defaults", "startingInventory", "minecraft:dye:64:15,minecraft:sapling:0:4");
+        parseInventoryString(prop.getString());
+    }
+
+    private void parseInventoryString(String inv)
+    {
+        startingInventory = new LinkedList<ItemStack>();
+        for(String item: inv.split(","))
+        {
+            String datum[] = item.split(":");
+            int meta, count;
+            if (datum.length <4)
+            {
+                meta = 0;
+                count = Integer.parseInt(datum[2]);
+            }
+            else
+            {
+                count = Integer.parseInt(datum[2]);
+                meta = Integer.parseInt(datum[3]);
+            }
+
+            Item targ = Item.getByNameOrId(datum[0] + ":" + datum[1]);
+            ItemStack stack = new ItemStack(targ, count,meta);
+            startingInventory.add(stack);
+        }
+    }
+
     private void setDisplacementsDefaults(Configuration con)
     {
+
+
         Property prop = con.get("Displacements.Tier1", "minecraft:log", defaultTier1Wood.toArray(new String[defaultTier1Wood.size()]));
         prop.set(defaultTier1Wood.toArray(new String[defaultTier1Wood.size()]));
         DisplaceListBuilder.Instance().addDisplacement(1, BlockReference.readBlockFromString("minecraft:log"), prop.getStringList());
@@ -99,19 +153,9 @@ public class ConfigurationHolder {
         prop.set(defaultTier1IronBlock.toArray(new String[defaultTier1IronBlock.size()]));
         DisplaceListBuilder.Instance().addDisplacement(1, BlockReference.readBlockFromString("minecraft:iron_block"), prop.getStringList());
 
-        prop = con.get("Displacements.Tier1", "minecraft:sapling:1", defaultTier1Sapling1.toArray(new String[defaultTier1Sapling1.size()]));
-        prop.set(defaultTier1Sapling1.toArray(new String[defaultTier1Sapling1.size()]));
-        DisplaceListBuilder.Instance().addDisplacement(1, BlockReference.readBlockFromString("minecraft:sapling:0"), prop.getStringList());
-
-        prop = con.get("Displacements.Tier1", "minecraft:sapling:2", defaultTier1Sapling2.toArray(new String[defaultTier1Sapling2.size()]));
-        prop.set(defaultTier1Sapling2.toArray(new String[defaultTier1Sapling2.size()]));
-        DisplaceListBuilder.Instance().addDisplacement(1, BlockReference.readBlockFromString("minecraft:sapling:1"), prop.getStringList());
-        prop = con.get("Displacements.Tier1", "minecraft:sapling:3", defaultTier1Sapling3.toArray(new String[defaultTier1Sapling3.size()]));
-        prop.set(defaultTier1Sapling3.toArray(new String[defaultTier1Sapling3.size()]));
-        DisplaceListBuilder.Instance().addDisplacement(1, BlockReference.readBlockFromString("minecraft:sapling:2"), prop.getStringList());
-        prop = con.get("Displacements.Tier1", "minecraft:sapling:4", defaultTier1Sapling3.toArray(new String[defaultTier1Sapling4.size()]));
-        prop.set(defaultTier1Sapling3.toArray(new String[defaultTier1Sapling4.size()]));
-        DisplaceListBuilder.Instance().addDisplacement(1, BlockReference.readBlockFromString("minecraft:sapling:3"), prop.getStringList());
+        prop = con.get("Displacements.Tier1", "minecraft:sapling:-1", defaultTier1Sapling.toArray(new String[defaultTier1Sapling.size()]));
+        prop.set(defaultTier1Sapling.toArray(new String[defaultTier1Sapling.size()]));
+        DisplaceListBuilder.Instance().addDisplacement(1, BlockReference.readBlockFromString("minecraft:sapling:-1"), prop.getStringList());
 
 
         prop = con.get("Displacements.Tier2", "minecraft:dirt", defaultTier2Dirt.toArray(new String[defaultTier2Dirt.size()]));
@@ -141,6 +185,25 @@ public class ConfigurationHolder {
         prop = con.get("Displacements.Tier3", "minecraft:soul_sand", defaultTier3SoulSand.toArray(new String[defaultTier3SoulSand.size()]));
         prop.set(defaultTier3SoulSand.toArray(new String[defaultTier3SoulSand.size()]));
         DisplaceListBuilder.Instance().addDisplacement(3, BlockReference.readBlockFromString("minecraft:soul_sand"), prop.getStringList());
+
+        if (Loader.isModLoaded("Thaumcraft")){
+            List<String> defaultTier2LapisBlock = new ArrayList<String>(Arrays.asList("thaumcraft:crystal_aer", "thaumcraft:crystal_ignis", "thaumcraft:crystal_aqua","thaumcraft:crystal_terra", "thaumcraft:crystal_ordo", "thaumcraft:crystal_perditio", "thaumcraft:crystal_vitium"));
+            prop = con.get("Displacements.Tier2", "minecraft:lapis_block", defaultTier2LapisBlock.toArray(new String[defaultTier2LapisBlock.size()]));
+            prop.set(defaultTier2LapisBlock.toArray(new String[defaultTier2LapisBlock.size()]));
+            DisplaceListBuilder.Instance().addDisplacement(2, BlockReference.readBlockFromString("minecraft:lapis_block"), prop.getStringList());
+
+            List<String> defaultTier2NitorBlock = new ArrayList<String>(Arrays.asList("thaumcraft:nitor:-1", "thaumcraft:sapling", "thaumcraft:sapling:1","thaumcraft:shimmerleaf", "thaumcraft:cinderpearl", "thaumcraft:vishroom", "thaumcraft:bloom"));
+            prop = con.get("Displacements.Tier2", "thaumcraft:nitor:-1", defaultTier2NitorBlock.toArray(new String[defaultTier2NitorBlock.size()]));
+            prop.set(defaultTier2NitorBlock.toArray(new String[defaultTier2NitorBlock.size()]));
+            DisplaceListBuilder.Instance().addDisplacement(2, BlockReference.readBlockFromString("thaumcraft:nitor:-1"), prop.getStringList());
+
+            List<String> defaultTier1Slab = new ArrayList<String>(Arrays.asList("minecraft:stone_slab:3", "thaumcraft:ore_amber", "thaumcraft:ore_cinnabar" ));
+            prop = con.get("Displacements.Tier2", "minecraft:stone_slab:3", defaultTier1Slab.toArray(new String[defaultTier1Slab.size()]));
+            prop.set(defaultTier1Slab.toArray(new String[defaultTier1Slab.size()]));
+            DisplaceListBuilder.Instance().addDisplacement(1, BlockReference.readBlockFromString("minecraft:stone_slab:3"), prop.getStringList());
+
+        }
+
     }
 
 
@@ -199,14 +262,23 @@ public class ConfigurationHolder {
         prop.set(defaultTier2Enderman);
         TransformListBuilder.Instance().addTransform(2, "Enderman", defaultTier2Enderman);
 
+
     }
 
 
     boolean checkNeedBuildDefaults(Configuration con) {
         Property prop = con.get("Defaults", "BuildDefaultTransformsAndDisplacements", true);
         setDefaults = prop.getBoolean();
-        prop.set(false);
 
+        if (setDefaults) {
+            for (String name : config.getCategoryNames())
+            {
+                if (!"defaults".equals(name.toLowerCase()))
+                    config.getCategory(name).values().clear();
+            }
+        }
+        prop = con.get("Defaults", "BuildDefaultTransformsAndDisplacements", true);
+        prop.set(false);
         return setDefaults;
     }
 
@@ -216,10 +288,7 @@ public class ConfigurationHolder {
         defaultTier1Wood = new ArrayList<String>(Arrays.asList("minecraft:stone", "minecraft:cobblestone", "minecraft:gravel"));
         defaultTier1Cobble = new ArrayList<String>(Arrays.asList("minecraft:iron_ore", "minecraft:coal_ore", "minecraft:dirt"));
         defaultTier1IronBlock = new ArrayList<String>(Arrays.asList("minecraft:obsidian"));
-        defaultTier1Sapling1 = new ArrayList<String>(Arrays.asList("minecraft:sapling:1", "minecraft:sapling:2", "minecraft:sapling:3", "minecraft:sapling:4", " minecraft:reeds"));
-        defaultTier1Sapling2 = new ArrayList<String>(Arrays.asList("minecraft:sapling:0", "minecraft:sapling:3", "minecraft:sapling:4", "minecraft:sapling:1", " minecraft:reeds"));
-        defaultTier1Sapling3 = new ArrayList<String>(Arrays.asList("minecraft:sapling:0", "minecraft:sapling:1", "minecraft:sapling:2", "minecraft:sapling:4", " minecraft:reeds"));
-        defaultTier1Sapling4 = new ArrayList<String>(Arrays.asList("minecraft:sapling:0", "minecraft:sapling:1", "minecraft:sapling:2", "minecraft:sapling:3", " minecraft:reeds"));
+        defaultTier1Sapling = new ArrayList<String>(Arrays.asList("minecraft:sapling:0","minecraft:sapling:1", "minecraft:sapling:2", "minecraft:sapling:3", "minecraft:sapling:4", " minecraft:reeds"));
 
         defaultTier2Dirt = new ArrayList<String>(Arrays.asList("minecraft:melon_block", "minecraft:mycelium", "minecraft:pumpkin", "minecraft:waterlily"));
 
@@ -248,10 +317,20 @@ public class ConfigurationHolder {
         }
 
 
+
+
     }
 
     private int getTierFromString(String tier)
     {
         return Integer.parseInt(tier.substring(tier.length()-1));
+    }
+
+    public boolean isGenerateEndPortal() {
+        return generateEndPortal;
+    }
+
+    public List<ItemStack> getStartingInventory() {
+        return startingInventory;
     }
 }

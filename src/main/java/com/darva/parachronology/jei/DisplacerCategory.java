@@ -60,9 +60,10 @@ public class DisplacerCategory implements IRecipeCategory {
         DisplacerWrapper recipe = (DisplacerWrapper) recipeWrapper;
 
         int index =0;
-        recipeLayout.getItemStacks().init(index, true, 40, 10);
-        recipeLayout.getItemStacks().set(index, (ItemStack) recipe.getInputs().get(0));
-        index++;
+            recipeLayout.getItemStacks().init(index, true, 40, 10);
+            recipeLayout.getItemStacks().set(index, ((List<ItemStack>) recipe.getInputs()));
+            index++;
+
         recipeLayout.getItemStacks().init(index, true, 70, 10);
         recipeLayout.getItemStacks().set(index, new ItemStack(Parachronology.displacer, 1, 2));
         index++;

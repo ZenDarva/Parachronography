@@ -1,6 +1,7 @@
 package com.darva.parachronology;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -20,7 +21,10 @@ public class BlockReference {
     private BlockReference() {
     }
 
-    ;
+    @Override
+    public String toString() {
+        return (Block.blockRegistry.getNameForObject(targBlock) + ":" + metadata);
+    }
 
     public static BlockReference readBlockFromString(String str) {
         //Example.  minecraft:sapling:1
@@ -55,7 +59,6 @@ public class BlockReference {
             System.out.println("Null block in " + this.blockName +"with metadata " + metadata);
              return;
         }
-        System.out.println("targBlock: " + targBlock.getUnlocalizedName());
         world.setBlockState(new BlockPos(x, y, z), targBlock.getStateFromMeta(metadata));
     }
 
@@ -65,6 +68,22 @@ public class BlockReference {
     }
     public ItemStack getStack()
     {
-        return new ItemStack(targBlock,1, metadata);
+        ItemStack stack = new ItemStack(targBlock,1, metadata);
+        if (stack.getItem()== null)
+        {
+            return getItemFromBlockStupidly(targBlock);
+        }
+        return stack;
+    }
+
+    private ItemStack getItemFromBlockStupidly(Block block)
+    {
+        switch (block.getUnlocalizedName())
+        {
+            case "tile.reeds":
+                return new ItemStack(Items.reeds);
+        }
+        System.out.println("Failure on block: " +targBlock.getUnlocalizedName());
+        return null;
     }
 }

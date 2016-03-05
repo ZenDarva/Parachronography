@@ -4,15 +4,13 @@ import com.darva.parachronology.Configuration.ConfigurationHolder;
 import com.darva.parachronology.blocks.Displacer;
 import com.darva.parachronology.blocks.PetrifiedWood;
 
+import com.darva.parachronology.crafting.CraftingRecipes;
 import com.darva.parachronology.entity.DisplacerEntity;
 import com.darva.parachronology.generation.VoidWorld;
 import com.darva.parachronology.generation.VoidWorldType;
 import com.darva.parachronology.handlers.MobDrop;
 import com.darva.parachronology.handlers.PlayerExtender;
-import com.darva.parachronology.items.CapturedMoment;
-import com.darva.parachronology.items.DiplacerItemBlock;
-import com.darva.parachronology.items.Moment;
-import com.darva.parachronology.items.Upgrade;
+import com.darva.parachronology.items.*;
 import com.darva.parachronology.proxy.commonProxy;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -36,6 +34,7 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -62,6 +61,7 @@ public class Parachronology {
     public static VoidWorldType worldType;
     public static Upgrade upgrade;
     public static PetrifiedWood petrifiedWood;
+    public static Bias bias;
     //public static Storage storage;
 
     public static ConfigurationHolder config;
@@ -90,6 +90,7 @@ public class Parachronology {
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.TERRAIN_GEN_BUS.register(this);
 
+        FMLInterModComms.sendMessage("Waila", "register", "com.darva.parachronology.waila.ParachronologyAddon.registerAddon");
     }
 
     @SubscribeEvent
@@ -185,6 +186,7 @@ public class Parachronology {
         moment = new Moment();
         upgrade = new Upgrade();
         capturedMoment = new CapturedMoment();
+        this.bias=new Bias();
         //storage = new Storage();
 
         ItemStack stack = new ItemStack(displacer, 1, 0);
@@ -208,6 +210,8 @@ public class Parachronology {
 
         ConfigurationHolder.getInstance().save();
         proxy.registerRenderThings();
+
+        CraftingRecipes.buildBiases();
 
     }
 

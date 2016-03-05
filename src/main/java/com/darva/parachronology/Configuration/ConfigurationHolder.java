@@ -3,6 +3,7 @@ package com.darva.parachronology.Configuration;
 import com.darva.parachronology.BlockReference;
 import com.darva.parachronology.DisplaceListBuilder;
 import com.darva.parachronology.TransformListBuilder;
+import com.darva.parachronology.handlers.DropData;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,10 +14,7 @@ import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by James on 8/24/2015.
@@ -46,8 +44,10 @@ public class ConfigurationHolder {
 
     private boolean generateEndPortal = true;
 
-    private ConfigurationHolder() {
+    public static HashMap<String, DropData> mobDrops;
 
+    private ConfigurationHolder() {
+        mobDrops = new HashMap<>();
     }
 
     public static ConfigurationHolder getInstance() {
@@ -75,6 +75,15 @@ public class ConfigurationHolder {
             loadTransforms(config);
             loadDisplacements(config);
             loadOtherConfigs(config);
+        }
+
+        if (config.getCategory("MobDrops").keySet().isEmpty() == true)
+        {
+            setMobDrops(config);
+        }
+        else
+        {
+            loadMobDrops(config);
         }
 
 
@@ -209,7 +218,6 @@ public class ConfigurationHolder {
 
     private void loadDisplacements(Configuration con) {
         ConfigCategory transforms = con.getCategory("displacements");
-        ConfigCategory tiers;
 
             for(ConfigCategory category : transforms.getChildren())
                 for (String key : category.keySet()) {
@@ -220,12 +228,56 @@ public class ConfigurationHolder {
 
     private void loadTransforms(Configuration con) {
         ConfigCategory transforms = con.getCategory("transforms");
-        ConfigCategory tiers;
 
             for(ConfigCategory category : transforms.getChildren())
                 for (String key : category.keySet()) {
                     TransformListBuilder.Instance().addTransform(getTierFromString(category.getName()), key, category.get(key).getStringList());
                 }
+
+    }
+    private void loadMobDrops(Configuration con)
+    {
+        ConfigCategory mobs = con.getCategory("MobDrops");
+
+        for(String key : mobs.keySet())
+        {
+            mobDrops.put(key, new DropData(key, mobs.get(key).getIntList()[0], mobs.get(key).getIntList()[1], mobs.get(key).getIntList()[2]) );
+        }
+    }
+
+    private void setMobDrops(Configuration con)
+    {
+        Property prop = con.get("MobDrops","zombie",new int[]{2,0,0});
+        mobDrops.put(prop.getName(),new DropData(prop.getName(),prop.getIntList()[0],prop.getIntList()[1],prop.getIntList()[2]));
+        prop = con.get("MobDrops","skeleton",new int[]{2,0,0});
+        mobDrops.put(prop.getName(),new DropData(prop.getName(),prop.getIntList()[0],prop.getIntList()[1],prop.getIntList()[2]));
+        prop = con.get("MobDrops","slime",new int[]{1,0,0});
+        mobDrops.put(prop.getName(),new DropData(prop.getName(),prop.getIntList()[0],prop.getIntList()[1],prop.getIntList()[2]));
+        prop = con.get("MobDrops","creeper",new int[]{2,0,0});
+        mobDrops.put(prop.getName(),new DropData(prop.getName(),prop.getIntList()[0],prop.getIntList()[1],prop.getIntList()[2]));
+        prop = con.get("MobDrops","witch",new int[]{3,0,0});
+        mobDrops.put(prop.getName(),new DropData(prop.getName(),prop.getIntList()[0],prop.getIntList()[1],prop.getIntList()[2]));
+        prop = con.get("MobDrops","enderman",new int[]{2,1,0});
+        mobDrops.put(prop.getName(),new DropData(prop.getName(),prop.getIntList()[0],prop.getIntList()[1],prop.getIntList()[2]));
+        prop = con.get("MobDrops","wither skeleton",new int []{0,3,0});
+        mobDrops.put(prop.getName(),new DropData(prop.getName(),prop.getIntList()[0],prop.getIntList()[1],prop.getIntList()[2]));
+        prop = con.get("MobDrops","blaze",new int[]{0,3,0});
+        mobDrops.put(prop.getName(),new DropData(prop.getName(),prop.getIntList()[0],prop.getIntList()[1],prop.getIntList()[2]));
+        prop = con.get("MobDrops","zombie pigman", new int[]{0,3,0});
+        mobDrops.put(prop.getName(),new DropData(prop.getName(),prop.getIntList()[0],prop.getIntList()[1],prop.getIntList()[2]));
+        prop = con.get("MobDrops","magma cube",new int[]{0,1,0});
+        mobDrops.put(prop.getName(),new DropData(prop.getName(),prop.getIntList()[0],prop.getIntList()[1],prop.getIntList()[2]));
+        prop = con.get("MobDrops","ghast",new int[]{0,4,1});
+        mobDrops.put(prop.getName(),new DropData(prop.getName(),prop.getIntList()[0],prop.getIntList()[1],prop.getIntList()[2]));
+
+        prop = con.get("MobDrops","wither",new int[]{0,0,100});
+        mobDrops.put(prop.getName(),new DropData(prop.getName(),prop.getIntList()[0],prop.getIntList()[1],prop.getIntList()[2]));
+        prop = con.get("MobDrops","ender dragon",new int[]{0,0,100});
+        mobDrops.put(prop.getName(),new DropData(prop.getName(),prop.getIntList()[0],prop.getIntList()[1],prop.getIntList()[2]));
+
+
+
+
 
     }
 
@@ -288,7 +340,7 @@ public class ConfigurationHolder {
         defaultTier1Wood = new ArrayList<String>(Arrays.asList("minecraft:stone", "minecraft:cobblestone", "minecraft:gravel"));
         defaultTier1Cobble = new ArrayList<String>(Arrays.asList("minecraft:iron_ore", "minecraft:coal_ore", "minecraft:dirt"));
         defaultTier1IronBlock = new ArrayList<String>(Arrays.asList("minecraft:obsidian"));
-        defaultTier1Sapling = new ArrayList<String>(Arrays.asList("minecraft:sapling:0","minecraft:sapling:1", "minecraft:sapling:2", "minecraft:sapling:3", "minecraft:sapling:4", " minecraft:reeds"));
+        defaultTier1Sapling = new ArrayList<String>(Arrays.asList("minecraft:sapling:0","minecraft:sapling:1", "minecraft:sapling:2", "minecraft:sapling:3", "minecraft:sapling:4", "minecraft:sapling:5", " minecraft:reeds"));
 
         defaultTier2Dirt = new ArrayList<String>(Arrays.asList("minecraft:melon_block", "minecraft:mycelium", "minecraft:pumpkin", "minecraft:waterlily"));
 

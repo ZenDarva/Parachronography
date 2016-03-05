@@ -151,7 +151,7 @@ public class Displacer extends Block implements ITileEntityProvider {
                     BlockReference ref = BlockReference.readBlockFromString(Block.blockRegistry.getNameForObject(block) + ":" + block.getMetaFromState(world.getBlockState(tempPos)));
                     ArrayList<BlockReference> transforms = DisplaceListBuilder.Instance().getDisplacements(tier, ref);
                     if (transforms != null && transforms.size() >0) {
-                        BlockReference to = transforms.get(r.nextInt(transforms.size()));
+                        BlockReference to = getDisplaceTo(transforms, world, pos);
 
                         TransformTask tranform = new TransformTask(world,tempPos.getX(),tempPos.getY(),tempPos.getZ(),to);
                         Parachronology.proxy.getScheduler().schedule(r.nextInt(15),tranform,Side.SERVER);
@@ -159,6 +159,30 @@ public class Displacer extends Block implements ITileEntityProvider {
                 }
             }
         }
+    }
+
+    private BlockReference getDisplaceTo(ArrayList<BlockReference> transforms, World world, BlockPos pos)
+    {
+        DisplacerEntity entity = (DisplacerEntity) world.getTileEntity(pos);
+        Random r = new Random();
+        BlockReference to = transforms.get(r.nextInt(transforms.size()));
+        if (entity.getTowards() != null)
+        {
+            BlockReference ref = entity.getTowards();
+            if (transforms.contains(ref) && to != ref && r.nextInt(100) <40)
+            {
+                to = ref;
+            }
+        }
+        if (entity.getAgainst() != null && to ==entity.getAgainst())
+        {
+            BlockReference ref = entity.getTowards();
+            if (r.nextInt(100) <30)
+            {
+                to = getDisplaceTo(transforms,world,pos);
+            }
+        }
+        return to;
     }
 
     @Override

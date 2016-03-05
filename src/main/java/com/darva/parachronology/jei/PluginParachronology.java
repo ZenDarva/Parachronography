@@ -27,8 +27,9 @@ public class PluginParachronology implements IModPlugin {
         registry.addRecipeHandlers(new DisplacerHandler());
         registry.addRecipeCategories(new DisplacerCategory(jeiHelpers.getGuiHelper()));
         LinkedList<DisplaceRecipe> recipes = new LinkedList<DisplaceRecipe>();
-        for (DisplaceRecipe rec : DisplaceListBuilder.displaceRecipes.values())
+        for (DisplaceRecipe rec : DisplaceListBuilder.displaceRecipes.values()) {
             recipes.add(rec);
+        }
         registry.addRecipes(recipes);
     }
 

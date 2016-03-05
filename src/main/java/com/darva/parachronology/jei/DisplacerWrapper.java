@@ -26,16 +26,25 @@ public class DisplacerWrapper implements IRecipeWrapper {
             this.inputs.add(recipe.from.getStack());
         else
         {
-            for (int i=0; i<16; i++)
+            ItemStack from = new ItemStack(recipe.from.targBlock);
+            List<ItemStack> items = new LinkedList<ItemStack>();
+            from.getItem().getSubItems(from.getItem(),null,items);
+
+            for (ItemStack item : items)
             {
-                this.inputs.add(new ItemStack(recipe.from.targBlock,1,i));
+                this.inputs.add(item);
             }
         }
 
         for (BlockReference ref : recipe.getDisplacement(2))
         {
+            if (ref.getStack()== null)
+            {
+                System.out.println("It's null! Damnit");
+            }
             outputs.add(ref.getStack());
         }
+
     }
 
     @Override
@@ -45,6 +54,10 @@ public class DisplacerWrapper implements IRecipeWrapper {
 
     @Override
     public List getOutputs() {
+        if (outputs.size() == 0)
+        {
+            System.out.println("WTF");
+        }
         return outputs;
     }
 

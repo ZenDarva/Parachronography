@@ -11,6 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 // Source code kindly supplied by tterrag.  Many thanks.
@@ -43,7 +44,7 @@ public class Scheduler {
         }
     }
 
-    private final List<Task> tasks = new ArrayList<Task>();
+    private final List<Task> tasks = new CopyOnWriteArrayList<>();
 
     /**
      * Schedules a task to be called later
@@ -109,9 +110,9 @@ public class Scheduler {
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) {
-            runTasks(Side.CLIENT);
-        }
+//        if (event.phase == TickEvent.Phase.END) {
+//            runTasks(Side.CLIENT);
+//        }
     }
 
     private void runTasks(Side side) {

@@ -31,9 +31,11 @@ public class ConfigurationHolder {
     private List<String> defaultTier2Stone;
     private List<String> defaultTier2Netherrack;
     private List<String> defaultTier2Sand;
+    private List<String> defaultTier2GoldBlock;
     private List<String> defaultTier3Stone;
     private List<String> defaultTier3Diamond;
     private List<String> defaultTier3SoulSand;
+    private List<String> captureBlacklist;
     private Configuration config;
     private boolean hasCopper = false;
     private boolean hasTin = false;
@@ -184,6 +186,9 @@ public class ConfigurationHolder {
         prop.set(defaultTier2Sand.toArray(new String[defaultTier2Sand.size()]));
         DisplaceListBuilder.Instance().addDisplacement(2, BlockReference.readBlockFromString("minecraft:sand"), prop.getStringList());
 
+        prop.set(defaultTier2GoldBlock.toArray(new String[defaultTier2GoldBlock.size()]));
+        DisplaceListBuilder.Instance().addDisplacement(2, BlockReference.readBlockFromString("minecraft:gold_block"), prop.getStringList());
+
 
         prop = con.get("Displacements.Tier3", "minecraft:stone", defaultTier3Stone.toArray(new String[defaultTier3Stone.size()]));
         prop.set(defaultTier3Stone.toArray(new String[defaultTier3Stone.size()]));
@@ -289,6 +294,7 @@ public class ConfigurationHolder {
         String[] defaultTier1Slime = {"LavaSlime"};
         String[] defaultTier1Cube = {"Slime"};
         String[] defaultTier2Enderman = {"Villager"};
+        String[] defaultTier2Squid = {"Guardian"};
 
         Property prop = con.get("Transforms.Tier1", "Zombie", defaultTeir1Zombie);
         prop.set(defaultTeir1Zombie);
@@ -314,6 +320,9 @@ public class ConfigurationHolder {
         prop.set(defaultTier2Enderman);
         TransformListBuilder.Instance().addTransform(2, "Enderman", defaultTier2Enderman);
 
+        prop = con.get("Transforms.Tier2", "Squid", defaultTier2Squid);
+        prop.set(defaultTier2Squid);
+        TransformListBuilder.Instance().addTransform(2, "Squid", defaultTier2Squid);
 
     }
 
@@ -348,6 +357,7 @@ public class ConfigurationHolder {
         defaultTier2Stone = new ArrayList<String>(Arrays.asList("minecraft:lapis_ore", "minecraft:emerald_ore", "minecraft:redstone_ore"));
         defaultTier2Netherrack = new ArrayList<String>(Arrays.asList("minecraft:sand", "minecraft:clay", "minecraft:sand:1"));
         defaultTier2Sand = new ArrayList<String>(Arrays.asList("minecraft:cactus", "minecraft:sandstone"));
+        defaultTier2GoldBlock = new ArrayList<String>(Arrays.asList("minecraft:diamond_ore"));
 
         defaultTier3Stone = new ArrayList<String>(Arrays.asList("minecraft:diamond_ore"));
         defaultTier3Diamond = new ArrayList<String>(Arrays.asList("minecraft:mob_spawner"));

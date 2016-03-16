@@ -30,7 +30,7 @@ public class Bias extends Item {
         this.setMaxStackSize(1);
         this.setRegistryName("bias");
         GameRegistry.registerItem(this, "bias");
-        this.setUnlocalizedName("bias");
+        this.setUnlocalizedName("parachronology:bias");
         this.setHasSubtypes(true);
         this.setMaxDamage(0);
     }

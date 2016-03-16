@@ -14,6 +14,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.IBossDisplayData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -175,6 +176,10 @@ public class Moment extends Item {
         if (player.isSneaking()) {
             if (player.worldObj.isRemote) {
                 return true;
+            }
+            if (entity instanceof IBossDisplayData)
+            {
+                return false;
             }
             ItemStack captured = new ItemStack(Parachronology.capturedMoment, 1);
 

@@ -49,7 +49,7 @@ import java.util.Hashtable;
 /**
  * Created by James on 8/23/2015.
  */
-@Mod(modid = Parachronology.MODID, version = Parachronology.VERSION, dependencies="after:Thaumcraft")
+@Mod(name = "Parachronology", modid = Parachronology.MODID, version = Parachronology.VERSION, dependencies="after:Thaumcraft")
 public class Parachronology {
 
 
@@ -73,7 +73,7 @@ public class Parachronology {
     @Mod.Instance("Parachronology")
     public static Parachronology instance;
     public static final String MODID = "parachronology";
-    public static final String VERSION = "0.1.6";
+    public static final String VERSION = "0.2.4.2";
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {

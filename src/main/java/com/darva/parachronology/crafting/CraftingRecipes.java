@@ -34,14 +34,16 @@ public class CraftingRecipes {
             {
                 for(BlockReference reference : recipe.getValue() )
                 {
-                    System.out.println("Biasing " + reference.targBlock.getLocalizedName());
+                    if (reference.targBlock== null)
+                    continue;
+                    //System.out.println("Biasing " + reference.targBlock.getLocalizedName());
                     towards = new ItemStack(Parachronology.bias);
                     towards.setTagCompound(new NBTTagCompound());
                     towards.getTagCompound().setString("towards", reference.toString());
 
                     against = new ItemStack(Parachronology.bias);
                     against.setTagCompound(new NBTTagCompound());
-                    against.getTagCompound().setString("against", reference.toString());
+                    //against.getTagCompound().setString("against", reference.toString());
 
                     GameRegistry.addRecipe(towards, "aba", "bcb", "aba", 'a', reference.getStack(), 'b', redstone, 'c', moment);
                     GameRegistry.addRecipe(against, "aba", "bcb","aba", 'a', reference.getStack(), 'b',torch,'c',moment);

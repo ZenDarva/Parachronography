@@ -44,6 +44,8 @@ public class ConfigurationHolder {
     private boolean setDefaults = false;
     private List<ItemStack> startingInventory;
 
+    public static int playerDropChanceMultiplier = 5;
+
     private boolean generateEndPortal = true;
 
     public static HashMap<String, DropData> mobDrops;
@@ -108,6 +110,10 @@ public class ConfigurationHolder {
 
         prop = con.get("Defaults", "startingInventory", "minecraft:dye:64:15,minecraft:sapling:4");
         parseInventoryString(prop.getString());
+
+        prop = con.get("Defaults", "PlayerKillDropChanceMultiplyer", 5);
+        playerDropChanceMultiplier=5;
+
     }
 
     private void loadOtherConfigs(Configuration con)
@@ -117,6 +123,9 @@ public class ConfigurationHolder {
 
         prop = con.get("Defaults", "startingInventory", "minecraft:dye:64:15,minecraft:sapling:0:4");
         parseInventoryString(prop.getString());
+
+        prop = con.get("Defaults", "PlayerKillDropChanceMultiplyer", 5);
+        playerDropChanceMultiplier=prop.getInt();
     }
 
     private void parseInventoryString(String inv)
@@ -147,7 +156,7 @@ public class ConfigurationHolder {
     {
 
 
-        Property prop = con.get("Displacements.Tier1", "minecraft:log", defaultTier1Wood.toArray(new String[defaultTier1Wood.size()]));
+        Property prop = con.get("Displacements.Tier1", "minecraft:log:-1", defaultTier1Wood.toArray(new String[defaultTier1Wood.size()]));
         prop.set(defaultTier1Wood.toArray(new String[defaultTier1Wood.size()]));
         DisplaceListBuilder.Instance().addDisplacement(1, BlockReference.readBlockFromString("minecraft:log"), prop.getStringList());
         prop = con.get("Displacements.Tier1", "minecraft:cobblestone", defaultTier1Cobble.toArray(new String[defaultTier1Cobble.size()]));
@@ -186,6 +195,7 @@ public class ConfigurationHolder {
         prop.set(defaultTier2Sand.toArray(new String[defaultTier2Sand.size()]));
         DisplaceListBuilder.Instance().addDisplacement(2, BlockReference.readBlockFromString("minecraft:sand"), prop.getStringList());
 
+        prop = con.get("Displacements.Tier2", "minecraft:gold_block", defaultTier2Sand.toArray(new String[defaultTier2Sand.size()]));
         prop.set(defaultTier2GoldBlock.toArray(new String[defaultTier2GoldBlock.size()]));
         DisplaceListBuilder.Instance().addDisplacement(2, BlockReference.readBlockFromString("minecraft:gold_block"), prop.getStringList());
 

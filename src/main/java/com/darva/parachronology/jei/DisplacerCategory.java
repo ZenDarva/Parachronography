@@ -80,14 +80,9 @@ public class DisplacerCategory implements IRecipeCategory {
         int x = 100;
         int startY;
 
-        if ( 6 % output.size() >1) //We're using the fulls zpace.
-        {
-            startY=-32;
-        }
-        else
-        {
-            startY = 10  -(18 * ((output.size()-1)/2));
-        }
+
+            startY=0;
+
         y=startY;
         for (ItemStack stack : output)
         {
@@ -95,7 +90,7 @@ public class DisplacerCategory implements IRecipeCategory {
             recipeLayout.getItemStacks().set(index, stack);
             index++;
             y+=18;
-            if (y> 18*6 +-32)
+            if (y> 18*2)
             {
                 x+=16;
                 y=startY;

@@ -44,7 +44,7 @@ public class Scheduler {
         }
     }
 
-    private final List<Task> tasks = new CopyOnWriteArrayList<>();
+    private final List<Task> tasks = new ArrayList<>();
 
     /**
      * Schedules a task to be called later
@@ -117,11 +117,17 @@ public class Scheduler {
 
     private void runTasks(Side side) {
         Iterator<Task> iter = tasks.iterator();
+        ArrayList<Task> toRemove = new ArrayList<Task>();
         while (iter.hasNext()) {
             Task next = iter.next();
             if (next.side == side && next.run()) {
-                iter.remove();
+                toRemove.add(next);
             }
         }
+        for(Task task : toRemove)
+        {
+            tasks.remove(task);
+        }
+        toRemove.clear();
     }
 }

@@ -50,12 +50,12 @@ public class CapturedMoment extends Item {
             return true;
         Random r = new Random();
         Block block = worldIn.getBlockState(pos).getBlock();
-        BlockPos targPos = new BlockPos(pos.getX()+ side.getFrontOffsetX(), pos.getY() + side.getFrontOffsetY(), pos.getZ() + side.getFrontOffsetZ());
+        BlockPos targPos = new BlockPos(pos.getX()+ side.getFrontOffsetX(), pos.getY() + side.getFrontOffsetY()+ .5, pos.getZ() + side.getFrontOffsetZ());
         double d0 = 0.0D;
 
         Entity newEntity = EntityList.createEntityByID(stack.getTagCompound().getInteger("id"), worldIn);
         newEntity.readFromNBT(stack.getTagCompound().getCompoundTag("mob"));
-        newEntity.setPosition(pos.getX() + .5, pos.getY(), pos.getZ() + .5);
+        newEntity.setPosition(targPos.getX() + .5, targPos.getY(), targPos.getZ() + .5);
         worldIn.spawnEntityInWorld(newEntity);
         stack.stackSize--;
         return true;

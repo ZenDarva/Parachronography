@@ -68,6 +68,10 @@ public class BlockReference {
     }
     public ItemStack getStack()
     {
+        if (targBlock == null)
+        {
+            System.out.println("Null blockReference " + blockName  );
+        }
         ItemStack stack = new ItemStack(targBlock,1, metadata);
         if (stack.getItem()== null)
         {

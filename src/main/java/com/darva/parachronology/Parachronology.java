@@ -42,6 +42,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import java.lang.reflect.Field;
 import java.util.Hashtable;
@@ -62,6 +63,7 @@ public class Parachronology {
     public static Upgrade upgrade;
     public static PetrifiedWood petrifiedWood;
     public static Bias bias;
+    public static BasicMoment basicMoment;
     //public static Storage storage;
 
     public static ConfigurationHolder config;
@@ -73,7 +75,7 @@ public class Parachronology {
     @Mod.Instance("Parachronology")
     public static Parachronology instance;
     public static final String MODID = "parachronology";
-    public static final String VERSION = "0.2.4.2";
+    public static final String VERSION = "1.0.0";
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
@@ -187,12 +189,16 @@ public class Parachronology {
         upgrade = new Upgrade();
         capturedMoment = new CapturedMoment();
         this.bias=new Bias();
+        basicMoment = new BasicMoment();
         //storage = new Storage();
 
         ItemStack stack = new ItemStack(displacer, 1, 0);
         ItemStack momentStack = new ItemStack(moment, 1,0);
-        GameRegistry.addRecipe(stack, "aaa", "aba", "aaa", 'a', new ItemStack(Blocks.cobblestone), 'b', new ItemStack(moment));
-        GameRegistry.addRecipe(new ShapedOreRecipe(stack, "aaa", "aba", "aaa", 'a', "cobblestone", 'b', new ItemStack(moment)));
+        GameRegistry.addRecipe(stack, "aaa", "aba", "aaa", 'a', new ItemStack(Blocks.cobblestone), 'b', new ItemStack(basicMoment));
+        GameRegistry.addRecipe(new ShapedOreRecipe(stack, "aaa", "aba", "aaa", 'a', "cobblestone", 'b', new ItemStack(basicMoment)));
+
+        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(basicMoment), "treeSapling" ));
+
         stack = new ItemStack(upgrade);
         GameRegistry.addRecipe(stack, "aaa", "aba", "aaa", 'a', new ItemStack(moment), 'b', new ItemStack(moment, 1, 1));
         stack = new ItemStack(upgrade, 1, 1);

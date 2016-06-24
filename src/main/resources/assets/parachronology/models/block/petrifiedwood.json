@@ -1,6 +1,6 @@
 {
     "parent": "block/cube_all",
     "textures": {
-        "all": "parachronology:blocks/petrifiedwood"
+        "all": "parachronology:blocks/petrifiedWood"
     }
 }

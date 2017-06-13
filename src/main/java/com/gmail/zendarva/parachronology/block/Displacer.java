@@ -1,5 +1,9 @@
 package com.gmail.zendarva.parachronology.block;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import com.gmail.zendarva.parachronology.BlockReference;
 import com.gmail.zendarva.parachronology.DisplaceListBuilder;
 import com.gmail.zendarva.parachronology.Parachronology;
@@ -9,6 +13,7 @@ import com.gmail.zendarva.parachronology.item.Moment;
 import com.gmail.zendarva.parachronology.proxy.CommonProxy;
 import com.gmail.zendarva.parachronology.utility.tasks.TransformTask;
 import com.google.common.primitives.Ints;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
@@ -25,23 +30,16 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
-import scala.xml.PrettyPrinter;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 /**
  * Created by James on 8/23/2015.
@@ -54,7 +52,8 @@ public class Displacer extends Block implements ITileEntityProvider {
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer,
 			ItemStack stack) {
-		if(!world.isRemote)world.scheduleUpdate(pos, this, 20);
+		if (!world.isRemote)
+			world.scheduleUpdate(pos, this, 20);
 	}
 
 	@Override

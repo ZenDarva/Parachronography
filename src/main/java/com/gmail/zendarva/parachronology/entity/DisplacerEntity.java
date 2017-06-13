@@ -1,12 +1,13 @@
 package com.gmail.zendarva.parachronology.entity;
 
+import javax.annotation.Nullable;
+
 import com.gmail.zendarva.parachronology.BlockReference;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-
-import javax.annotation.Nullable;
 
 /**
  * Created by James on 9/12/2015.

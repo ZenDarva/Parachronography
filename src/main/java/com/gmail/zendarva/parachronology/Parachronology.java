@@ -5,8 +5,13 @@ import com.gmail.zendarva.parachronology.block.Displacer;
 import com.gmail.zendarva.parachronology.block.PetrifiedWood;
 import com.gmail.zendarva.parachronology.entity.DisplacerEntity;
 import com.gmail.zendarva.parachronology.handlers.MobDrop;
-import com.gmail.zendarva.parachronology.item.*;
+import com.gmail.zendarva.parachronology.item.BasicMoment;
+import com.gmail.zendarva.parachronology.item.Bias;
+import com.gmail.zendarva.parachronology.item.CapturedMoment;
+import com.gmail.zendarva.parachronology.item.Moment;
+import com.gmail.zendarva.parachronology.item.Upgrade;
 import com.gmail.zendarva.parachronology.proxy.CommonProxy;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;

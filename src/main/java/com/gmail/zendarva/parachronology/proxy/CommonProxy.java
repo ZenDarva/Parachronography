@@ -1,10 +1,11 @@
 package com.gmail.zendarva.parachronology.proxy;
 
-import com.gmail.zendarva.parachronology.utility.Scheduler;
-import net.minecraft.nbt.NBTTagCompound;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import com.gmail.zendarva.parachronology.utility.Scheduler;
+
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * Created by James on 9/12/2015.

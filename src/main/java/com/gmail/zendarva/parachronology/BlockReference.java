@@ -1,12 +1,12 @@
 package com.gmail.zendarva.parachronology;
 
+import java.util.HashMap;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import java.util.HashMap;
 
 /**
  * Created by James on 9/12/2015.

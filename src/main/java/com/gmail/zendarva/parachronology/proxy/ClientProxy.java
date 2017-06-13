@@ -1,10 +1,6 @@
 package com.gmail.zendarva.parachronology.proxy;
 
 import com.gmail.zendarva.parachronology.Parachronology;
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
 
 /**
  * Created by James on 9/12/2015.

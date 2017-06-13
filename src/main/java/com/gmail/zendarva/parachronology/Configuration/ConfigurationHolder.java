@@ -1,17 +1,22 @@
 package com.gmail.zendarva.parachronology.Configuration;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+
 import com.gmail.zendarva.parachronology.BlockReference;
 import com.gmail.zendarva.parachronology.DisplaceListBuilder;
 import com.gmail.zendarva.parachronology.TransformListBuilder;
 import com.gmail.zendarva.parachronology.handlers.DropData;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.Loader;
-
-import java.util.*;
 
 /**
  * Created by James on 8/24/2015.

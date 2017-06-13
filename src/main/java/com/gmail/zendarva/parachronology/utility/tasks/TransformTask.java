@@ -1,14 +1,15 @@
 package com.gmail.zendarva.parachronology.utility.tasks;
 
+import java.lang.reflect.Field;
+import java.util.Random;
+
 import com.gmail.zendarva.parachronology.BlockReference;
+
 import net.minecraft.block.BlockMobSpawner;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import java.lang.reflect.Field;
-import java.util.Random;
 
 /**
  * Created by James on 9/19/2015.

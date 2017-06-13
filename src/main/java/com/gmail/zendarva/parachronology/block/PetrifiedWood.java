@@ -1,11 +1,8 @@
 package com.gmail.zendarva.parachronology.block;
 
-import com.gmail.zendarva.parachronology.Parachronology;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;

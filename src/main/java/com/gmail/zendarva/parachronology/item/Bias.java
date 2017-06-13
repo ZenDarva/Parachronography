@@ -1,8 +1,12 @@
 package com.gmail.zendarva.parachronology.item;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import com.gmail.zendarva.parachronology.BlockReference;
 import com.gmail.zendarva.parachronology.Parachronology;
 import com.gmail.zendarva.parachronology.entity.DisplacerEntity;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
@@ -18,9 +22,6 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created by James on 2/27/2016.

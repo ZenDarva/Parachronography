@@ -1,7 +1,10 @@
 package com.gmail.zendarva.parachronology.handlers;
 
-import com.gmail.zendarva.parachronology.Configuration.ConfigurationHolder;
+import java.util.Random;
+
 import com.gmail.zendarva.parachronology.Parachronology;
+import com.gmail.zendarva.parachronology.Configuration.ConfigurationHolder;
+
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.monster.EntitySkeleton;
@@ -9,8 +12,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import java.util.Random;
 
 /**
  * Created by James on 8/23/2015.

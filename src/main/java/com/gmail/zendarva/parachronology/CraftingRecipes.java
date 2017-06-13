@@ -1,15 +1,15 @@
 package com.gmail.zendarva.parachronology;
 
+import static com.gmail.zendarva.parachronology.DisplaceListBuilder.displaceRecipes;
+
+import java.util.ArrayList;
+import java.util.Map;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-
-import java.util.ArrayList;
-import java.util.Map;
-
-import static com.gmail.zendarva.parachronology.DisplaceListBuilder.displaceRecipes;
 
 /**
  * Created by James on 2/27/2016.

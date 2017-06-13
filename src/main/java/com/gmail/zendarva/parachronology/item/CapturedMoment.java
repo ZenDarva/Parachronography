@@ -3,6 +3,8 @@ package com.gmail.zendarva.parachronology.item;
 import java.util.List;
 import java.util.Random;
 
+import com.gmail.zendarva.parachronology.Parachronology;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
@@ -29,16 +31,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class CapturedMoment extends Item {
 
 	public CapturedMoment() {
+		String name = "capturedmoment";
 		this.setMaxStackSize(1);
 		this.setMaxDamage(0);
-		this.setUnlocalizedName("parachronology:capturedmoment");
-		this.setRegistryName("capturedmoment");
+		this.setUnlocalizedName(Parachronology.MODID + "." + name);
+		this.setRegistryName(name);
+		this.setCreativeTab(Parachronology.TAB);
 
 		GameRegistry.register(this);
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean unknown) {
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean unknown) {
 
 		if (stack.getTagCompound() != null)
 			list.add("Contains a " + stack.getTagCompound().getString("captured"));

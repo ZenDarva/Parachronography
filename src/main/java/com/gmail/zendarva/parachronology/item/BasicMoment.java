@@ -27,10 +27,12 @@ import net.minecraftforge.oredict.OreDictionary;
 public class BasicMoment extends Item {
 
 	public BasicMoment() {
+		String name = "basicmoment";
 		this.setMaxStackSize(64);
-		this.setRegistryName("basicmoment");
+		this.setRegistryName(name);
+		this.setCreativeTab(Parachronology.TAB);
 		GameRegistry.register(this);
-		this.setUnlocalizedName("parachronology:basicmoment");
+		this.setUnlocalizedName(Parachronology.MODID + "." + name);
 		this.setHasSubtypes(false);
 		this.setMaxDamage(0);
 	}
@@ -38,7 +40,7 @@ public class BasicMoment extends Item {
 	@SideOnly(Side.CLIENT)
 	public void registerModel() {
 		ModelLoader.setCustomModelResourceLocation(this, 0,
-				new ModelResourceLocation("parachronology:basicmoment", "inventory"));
+				new ModelResourceLocation(getRegistryName(), "inventory"));
 
 	}
 

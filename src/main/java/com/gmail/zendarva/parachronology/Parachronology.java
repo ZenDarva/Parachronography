@@ -13,6 +13,7 @@ import com.gmail.zendarva.parachronology.item.Upgrade;
 import com.gmail.zendarva.parachronology.proxy.CommonProxy;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -31,7 +32,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 /**
  * Created by James on 6/11/2017.
  */
-@Mod(name = "Parachronology", modid = Parachronology.MODID, version = Parachronology.VERSION)
+@Mod(modid = Parachronology.MODID, name = Parachronology.MODNAME, version = Parachronology.VERSION)
 public class Parachronology {
 
 	@SidedProxy(clientSide = "com.gmail.zendarva.parachronology.proxy.ClientProxy", serverSide = "com.gmail.zendarva.parachronology.proxy.CommonProxy")
@@ -46,11 +47,21 @@ public class Parachronology {
 	//public static Storage storage;
 
 	public static ConfigurationHolder config;
-
+	
 	@Mod.Instance("Parachronology")
 	public static Parachronology instance;
 	public static final String MODID = "parachronology";
+	public static final String MODNAME = "Parachronology";
 	public static final String VERSION = "1.5.0";
+	
+	public static final CreativeTabs TAB = new CreativeTabs(Parachronology.MODID){
+
+		@Override
+		public ItemStack getTabIconItem() {
+			return new ItemStack(Parachronology.basicMoment);
+		}
+		
+	};
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {

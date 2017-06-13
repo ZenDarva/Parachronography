@@ -52,7 +52,6 @@ public class Displacer extends Block implements ITileEntityProvider {
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer,
 			ItemStack stack) {
-		if (!world.isRemote)
 			world.scheduleUpdate(pos, this, 20);
 	}
 
@@ -73,6 +72,7 @@ public class Displacer extends Block implements ITileEntityProvider {
 		this.setLightOpacity(1);
 		this.setTickRandomly(true);
 		this.setRegistryName("displacer");
+		this.setCreativeTab(Parachronology.TAB);
 		this.setSoundType(SoundType.ANVIL);
 		setDefaultState(blockState.getBaseState().withProperty(TIER, EnumTier.TIER1));
 		this.setUnlocalizedName(Parachronology.MODID + ".displacer");

@@ -36,11 +36,14 @@ import net.minecraftforge.oredict.OreDictionary;
  */
 public class Moment extends Item {
 	public Moment() {
+		String name = "moment";
 		this.setMaxStackSize(64);
-		this.setRegistryName("moment");
+		this.setRegistryName(name);
 		this.setMaxDamage(0);
-		//this.setCreativeTab(CreativeTabs.tabMaterials);
+		this.setCreativeTab(Parachronology.TAB);
+		this.setUnlocalizedName(Parachronology.MODID + "." + name);
 		GameRegistry.register(this);
+		
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -70,18 +73,10 @@ public class Moment extends Item {
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack stack) {
-		switch (stack.getItemDamage()) {
-		case 0:
-			return "parachronology:simplemoment";
-		case 1:
-			return "parachronology:moment";
-		case 2:
-			return "parachronology:complexmoment";
-
-		}
-		return null;
-	}
+    public String getUnlocalizedName(ItemStack stack)
+    {
+        return getUnlocalizedName() + "." + stack.getMetadata();
+    }
 
 	@Override
 	public boolean getHasSubtypes() {

@@ -30,10 +30,11 @@ public class Bias extends Item {
 	private LinkedList<ItemStack> subItems = new LinkedList<ItemStack>();
 
 	public Bias() {
+		String name = "bias";
 		this.setMaxStackSize(1);
-		this.setRegistryName("bias");
-
-		this.setUnlocalizedName("parachronology:bias");
+		this.setRegistryName(name);
+		this.setCreativeTab(Parachronology.TAB);
+		this.setUnlocalizedName(Parachronology.MODID + "." + name);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 		GameRegistry.register(this);

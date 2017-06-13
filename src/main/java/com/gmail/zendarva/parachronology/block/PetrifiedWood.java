@@ -1,5 +1,7 @@
 package com.gmail.zendarva.parachronology.block;
 
+import com.gmail.zendarva.parachronology.Parachronology;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -16,20 +18,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * Created by James on 9/12/2015.
  */
 public class PetrifiedWood extends Block {
-	@Override
-	public String getUnlocalizedName() {
-		return "parachronology:petrifiedwood";
-	}
 
 	public PetrifiedWood(Material p_i45394_1_) {
 		super(p_i45394_1_);
+		String name = "petrifiedwood";
 		this.setHardness(1.2f);
 		this.setLightOpacity(1);
 		this.setResistance(5f);
 		this.blockSoundType = SoundType.STONE;
 		this.setHarvestLevel("pickaxe", 0);
-		this.setCreativeTab(CreativeTabs.MISC);
-		this.setRegistryName("petrifiedwood");
+		this.setCreativeTab(Parachronology.TAB);
+		this.setRegistryName(name);
+		this.setUnlocalizedName(Parachronology.MODID + "." + name);
 		GameRegistry.register(this);
 		ItemBlock itemBlock = new ItemBlock(this);
 		itemBlock.setRegistryName("petrifiedwoodItem");

@@ -28,24 +28,21 @@ public class Upgrade extends Item {
 	public boolean getHasSubtypes() {
 		return true;
 	}
-
+	
 	@Override
-	public String getUnlocalizedName(ItemStack stack) {
-		switch (stack.getItemDamage()) {
-		case 0:
-			return "parachronology:tier2upgrade";
-		case 1:
-			return "parachronology:tier3upgrade";
-		}
-		return "nothing";
-	}
+    public String getUnlocalizedName(ItemStack stack)
+    {
+        return getUnlocalizedName() + "." + stack.getMetadata();
+    }
 
 	public Upgrade() {
+		String name = "upgrade";
 		this.setMaxStackSize(1);
 
 		this.setMaxDamage(0);
-		this.setCreativeTab(CreativeTabs.MATERIALS);
-		this.setRegistryName("upgrade");
+		this.setCreativeTab(Parachronology.TAB);
+		this.setUnlocalizedName(Parachronology.MODID + "." + name);
+		this.setRegistryName(name);
 		GameRegistry.register(this);
 	}
 

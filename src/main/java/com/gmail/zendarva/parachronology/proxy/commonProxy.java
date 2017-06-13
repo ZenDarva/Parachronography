@@ -1,42 +1,37 @@
 package com.gmail.zendarva.parachronology.proxy;
 
-
-import com.gmail.zendarva.parachronology.utility.Scheduler;
-import net.minecraft.nbt.NBTTagCompound;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import com.gmail.zendarva.parachronology.utility.Scheduler;
+
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * Created by James on 9/12/2015.
  */
-public class commonProxy {
+public class CommonProxy {
 
-    private static Scheduler scheduler;
+	private static Scheduler scheduler;
 
-    private static final Map<String, NBTTagCompound> extendedEntityData = new HashMap<String, NBTTagCompound>();
+	private static final Map<String, NBTTagCompound> extendedEntityData = new HashMap<String, NBTTagCompound>();
 
-    public void registerRenderThings() {
-    }
+	public void registerRenderThings() {
+	}
 
+	public static void storeEntityData(String id, NBTTagCompound compound) {
+		extendedEntityData.put(id, compound);
+	}
 
-    public static void storeEntityData(String id, NBTTagCompound compound) {
-        extendedEntityData.put(id, compound);
-    }
+	public static NBTTagCompound getEntityData(String name) {
+		return extendedEntityData.remove(name);
+	}
 
-
-    public static NBTTagCompound getEntityData(String name) {
-        return extendedEntityData.remove(name);
-    }
-
-    public static Scheduler getScheduler()
-    {
-        if (scheduler == null)
-        {
-            scheduler= new Scheduler();
-        }
-        return scheduler;
-    }
-
+	public static Scheduler getScheduler() {
+		if (scheduler == null) {
+			scheduler = new Scheduler();
+		}
+		return scheduler;
+	}
 
 }

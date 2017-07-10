@@ -34,7 +34,7 @@ public class DisplaceRecipe {
 
 	public ArrayList<BlockReference> getDisplacement(int Tier) {
 		ArrayList<BlockReference> result = new ArrayList<BlockReference>();
-		for (int i = Tier + 1; i > 0; i--) {
+		for (int i = Tier+1; i >= 0; i--) {
 			if (to.containsKey(i))
 				result.addAll(to.get(i));
 		}

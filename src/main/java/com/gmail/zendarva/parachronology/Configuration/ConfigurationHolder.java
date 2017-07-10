@@ -39,10 +39,6 @@ public class ConfigurationHolder {
 	private List<String> defaultTier3SoulSand;
 	private List<String> captureBlacklist;
 	private Configuration config;
-	private boolean hasCopper = false;
-	private boolean hasTin = false;
-	private boolean hasLead = false;
-	private boolean hasSilver = false;
 	private boolean setDefaults = false;
 	private List<ItemStack> startingInventory;
 
@@ -285,22 +281,22 @@ public class ConfigurationHolder {
 	}
 
 	private void setMobDrops(Configuration con) {
-		Property prop = con.get("MobDrops", "zombie", new int[] { 2, 0, 0 });
+		Property prop = con.get("MobDrops", "zombie", new int[] { 3, 0, 0 });
 		mobDrops.put(prop.getName(),
 				new DropData(prop.getName(), prop.getIntList()[0], prop.getIntList()[1], prop.getIntList()[2]));
-		prop = con.get("MobDrops", "skeleton", new int[] { 2, 0, 0 });
+		prop = con.get("MobDrops", "skeleton", new int[] { 4, 0, 0 });
 		mobDrops.put(prop.getName(),
 				new DropData(prop.getName(), prop.getIntList()[0], prop.getIntList()[1], prop.getIntList()[2]));
 		prop = con.get("MobDrops", "slime", new int[] { 1, 0, 0 });
 		mobDrops.put(prop.getName(),
 				new DropData(prop.getName(), prop.getIntList()[0], prop.getIntList()[1], prop.getIntList()[2]));
-		prop = con.get("MobDrops", "creeper", new int[] { 2, 0, 0 });
+		prop = con.get("MobDrops", "creeper", new int[] { 4, 0, 0 });
 		mobDrops.put(prop.getName(),
 				new DropData(prop.getName(), prop.getIntList()[0], prop.getIntList()[1], prop.getIntList()[2]));
-		prop = con.get("MobDrops", "witch", new int[] { 3, 0, 0 });
+		prop = con.get("MobDrops", "witch", new int[] { 5, 0, 0 });
 		mobDrops.put(prop.getName(),
 				new DropData(prop.getName(), prop.getIntList()[0], prop.getIntList()[1], prop.getIntList()[2]));
-		prop = con.get("MobDrops", "enderman", new int[] { 2, 1, 0 });
+		prop = con.get("MobDrops", "enderman", new int[] { 3, 2, 0 });
 		mobDrops.put(prop.getName(),
 				new DropData(prop.getName(), prop.getIntList()[0], prop.getIntList()[1], prop.getIntList()[2]));
 		prop = con.get("MobDrops", "wither skeleton", new int[] { 0, 3, 0 });
@@ -409,19 +405,87 @@ public class ConfigurationHolder {
 		defaultTier3Diamond = new ArrayList<String>(Arrays.asList("minecraft:mob_spawner"));
 		defaultTier3SoulSand = new ArrayList<String>(Arrays.asList("minecraft:end_stone"));
 
-		if (Loader.isModLoaded("ThermalFoundation")) {
-			defaultTier2Cobble.add("ThermalFoundation:Ore:0"); //copper
-			defaultTier2Cobble.add("ThermalFoundation:Ore:1"); //tin
-			defaultTier2Cobble.add("ThermalFoundation:Ore:2"); //silver
-			defaultTier2Cobble.add("ThermalFoundation:Ore:3"); //lead
 
-			defaultTier3Stone.add("ThermalFoundation:Ore:4"); //Ferrous.
-			hasCopper = true;
-			hasTin = true;
-			hasLead = true;
-			hasSilver = true;
+
+		if (Loader.isModLoaded("thermalfoundation")) {
+			defaultTier2Cobble.add("thermalfoundation:ore:0"); //copper
+			defaultTier2Cobble.add("thermalfoundation:ore:1"); //tin
+			defaultTier2Cobble.add("thermalfoundation:ore:2"); //silver
+			defaultTier2Cobble.add("thermalfoundation:ore:3"); //lead
+
+			defaultTier3Stone.add("thermalfoundation:ore:5"); //nickle
+			defaultTier3Stone.add("thermalfoundation:ore:6");
 			System.out.println("Parachronology just Snarfed TE's ores.");
+			ConfiguredOres.copper=true;
+			ConfiguredOres.tin=true;
+			ConfiguredOres.silver=true;
+			ConfiguredOres.lead=true;
+			ConfiguredOres.nickle=true;
 
+
+		}
+		if (Loader.isModLoaded("immersiveengineering")){
+
+			if (!ConfiguredOres.copper) {
+				defaultTier2Cobble.add("immersiveengineering:ore:0");
+				ConfiguredOres.copper =true;
+			}
+			if (!ConfiguredOres.aluminum) {
+				defaultTier2Cobble.add("immersiveengineering:ore:1");
+				ConfiguredOres.aluminum =true;
+			}
+			if (!ConfiguredOres.lead) {
+				defaultTier2Cobble.add("immersiveengineering:ore:2");
+				ConfiguredOres.lead =true;
+			}
+			if (!ConfiguredOres.silver) {
+				defaultTier2Cobble.add("immersiveengineering:ore:3");
+				ConfiguredOres.silver =true;
+			}
+			if (!ConfiguredOres.nickle) {
+				defaultTier2Cobble.add("immersiveengineering:ore:4");
+				ConfiguredOres.nickle =true;
+			}
+			if (!ConfiguredOres.uranium) {
+				defaultTier3Stone.add("immersiveengineering:ore:5");
+				ConfiguredOres.uranium =true;
+			}
+		}
+		if (Loader.isModLoaded("actuallyadditions")){
+
+				defaultTier2Stone.add("actuallyadditions:block_misc:3");//Black quartz.
+
+
+		}
+		if (Loader.isModLoaded("bigreactors")){
+			if (!ConfiguredOres.yellorium) {
+				defaultTier3Stone.add("bigreactors:brore:0");
+				ConfiguredOres.yellorium =true;
+			}
+
+		}
+		if (Loader.isModLoaded("ic2")){
+			if (!ConfiguredOres.copper) {
+				defaultTier2Cobble.add("ic2:resource:1");
+				ConfiguredOres.copper =true;
+			}
+			if (!ConfiguredOres.lead) {
+				defaultTier2Cobble.add("ic2:resource:2");
+				ConfiguredOres.lead =true;
+			}
+			if (!ConfiguredOres.tin) {
+				defaultTier2Cobble.add("ic2:resource:3");
+				ConfiguredOres.tin =true;
+			}
+			if (!ConfiguredOres.uranium) {
+				defaultTier3Stone.add("ic2:resource:4");
+				ConfiguredOres.uranium =true;
+			}
+			defaultTier1Sapling.add("ic2:sapling");
+		}
+
+		if (Loader.isModLoaded("rftools")) {
+			defaultTier3Stone.add("rftools:dimensional_shard_ore");
 		}
 
 	}

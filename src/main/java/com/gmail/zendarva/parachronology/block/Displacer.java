@@ -28,12 +28,14 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -52,12 +54,33 @@ public class Displacer extends Block implements ITileEntityProvider {
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer,
 			ItemStack stack) {
+	        if (stack.hasTagCompound())
+            {
+                DisplacerEntity entity = (DisplacerEntity) world.getTileEntity(pos);
+                entity.readFromNBT(stack.getTagCompound());
+            }
 			world.scheduleUpdate(pos, this, 20);
+	        super.onBlockPlacedBy(world,pos,state,placer,stack);
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] { TIER });
+	}
+
+	@Override
+	public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) {
+	}
+
+	@Override
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		int meta = world.getBlockState(pos).getBlock().getMetaFromState(world.getBlockState(pos));
+		ItemStack stack = new ItemStack(Parachronology.displacer,1, meta);
+		DisplacerEntity entity = (DisplacerEntity) world.getTileEntity(pos);
+		NBTTagCompound tag = new NBTTagCompound();
+		entity.writeToNBT(tag);
+		stack.setTagCompound(tag);
+		spawnAsEntity(world,pos,stack);
 	}
 
 	@Override
@@ -76,8 +99,8 @@ public class Displacer extends Block implements ITileEntityProvider {
 		this.setSoundType(SoundType.ANVIL);
 		setDefaultState(blockState.getBaseState().withProperty(TIER, EnumTier.TIER1));
 		this.setUnlocalizedName(Parachronology.MODID + ".displacer");
-		GameRegistry.register(this);
-		GameRegistry.register(new DiplacerItemBlock(this), getRegistryName());
+//		GameRegistry.register(this);
+//		GameRegistry.register(new DiplacerItemBlock(this), getRegistryName());
 	}
 
 	@Override
@@ -99,18 +122,24 @@ public class Displacer extends Block implements ITileEntityProvider {
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		AxisAlignedBB bb;
 
+		if (world.isRemote)
+		    return;
+
 		bb = new AxisAlignedBB(pos.getX() - 3, pos.getY() - 3, pos.getZ() - 3, pos.getX() + 3, pos.getY() + 3,
 				pos.getZ() + 3);
 
 		List<EntityItem> items = world.getEntitiesWithinAABB(EntityItem.class, bb);
 
 		for (EntityItem item : items) {
+			if (item.getItem().isEmpty())
+					continue;
 			if (item.getItem().getItem() instanceof Moment) {
 				item.getItem().shrink(1);
 				this.transform(world, pos);
 				world.scheduleUpdate(pos, world.getBlockState(pos).getBlock(), 20);
 				return;
 			}
+
 
 			if (Ints.contains(OreDictionary.getOreIDs(item.getItem()), OreDictionary.getOreID("logWood"))) {
 				ItemStack petrified = new ItemStack(Parachronology.petrifiedWood, item.getItem().getCount());
@@ -135,11 +164,10 @@ public class Displacer extends Block implements ITileEntityProvider {
 				new ModelResourceLocation(getRegistryName(), "tier=tier3"));
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
 		for (int ix = 0; ix < 3; ix++) {
-			list.add(new ItemStack(this, 1, ix));
+			items.add(new ItemStack(this, 1, ix));
 		}
 	}
 
@@ -147,6 +175,7 @@ public class Displacer extends Block implements ITileEntityProvider {
 	public int damageDropped(IBlockState state) {
 		return getMetaFromState(state);
 	}
+
 
 	private void transform(World world, BlockPos pos) {
 		if (world.isRemote)

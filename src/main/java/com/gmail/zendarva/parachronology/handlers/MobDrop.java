@@ -39,33 +39,26 @@ public class MobDrop {
 			droppedAmount++;
 		}
 		String modifiedName = entity.getName().toLowerCase();
-		if (entity instanceof EntitySkeleton) {
-			//                if (((EntitySkeleton)entity).getSkeletonType() != 0)
-			//                {
-			//                    modifiedName="wither skeleton";
-			//                }
-		}
 		int totalDropped = 1;
 
 		if (ConfigurationHolder.mobDrops.containsKey(modifiedName)) {
 			DropData data = ConfigurationHolder.mobDrops.get(modifiedName);
 
 			if (data.complexMomentChance != 0) {
-				if (r.nextInt(100) < (data.complexMomentChance * dropChanceBonus) + (value * 2)) {
+
+				if (checkChance((data.complexMomentChance * dropChanceBonus) + (value * 2))) {
 					entity.entityDropItem(new ItemStack(Parachronology.moment, droppedAmount, 2), 1);
-					System.out.println("Dropped");
 					return;
 				}
 			}
 			if (data.momentChance != 0) {
-				if (r.nextInt(100) < (data.momentChance * dropChanceBonus) + (value * 2)) {
+				if (checkChance((data.momentChance * dropChanceBonus) + (value * 2))) {
 					entity.entityDropItem(new ItemStack(Parachronology.moment, droppedAmount, 1), 1);
-					System.out.println("Dropped");
 					return;
 				}
 			}
 			if (data.simpleMomentChance != 0) {
-				if (r.nextInt(100) < (data.simpleMomentChance * dropChanceBonus) + (value * 2)) {
+				if (checkChance((data.simpleMomentChance * dropChanceBonus) + (value * 2))) {
 					entity.entityDropItem(new ItemStack(Parachronology.moment, droppedAmount, 0), 1);
 					return;
 				}
@@ -73,5 +66,14 @@ public class MobDrop {
 
 		}
 
+	}
+
+	boolean checkChance(int chance) {
+		Random r = new Random(System.currentTimeMillis());
+		int i = r.nextInt(100);
+		//System.out.println("Moment chance roll: " + i + " compared to " + chance);
+		if (i < chance)
+			return true;
+		return false;
 	}
 }

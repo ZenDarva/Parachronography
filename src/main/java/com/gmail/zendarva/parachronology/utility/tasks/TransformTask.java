@@ -8,6 +8,7 @@ import com.gmail.zendarva.parachronology.BlockReference;
 import net.minecraft.block.BlockMobSpawner;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -37,7 +38,8 @@ public class TransformTask implements Runnable {
 					TileEntityMobSpawner spawner = (TileEntityMobSpawner) world.getTileEntity(target);
 					try {
 						MobSpawnerBaseLogic logic = (MobSpawnerBaseLogic) f.get(spawner);
-						//logic.setEntityName(spawnableList[r.nextInt(spawnableList.length)]);
+						logic.setEntityId(new ResourceLocation(spawnableList[r.nextInt(spawnableList.length)]));
+
 					} catch (IllegalAccessException e) {
 						e.printStackTrace();
 					}

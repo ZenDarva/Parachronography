@@ -13,16 +13,13 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -42,7 +39,7 @@ public class Moment extends Item {
 		this.setMaxDamage(0);
 		this.setCreativeTab(Parachronology.TAB);
 		this.setUnlocalizedName(Parachronology.MODID + "." + name);
-		GameRegistry.register(this);
+		//GameRegistry.register(this);
 		
 	}
 
@@ -150,10 +147,11 @@ public class Moment extends Item {
 			return true;
 		stack.shrink(1);
 
-		//EntityLiving newEntity = (EntityLiving) EntityList.createEntityByName(transforms.get(r.nextInt(transforms.size())), player.getEntityWorld());
-		//newEntity.setPosition(entity.posX, entity.posY, entity.posZ);
-		//newEntity.setRotationYawHead(entity.getRotationYawHead());
-		//player.world.spawnEntity(newEntity);
+		EntityLiving newEntity = (EntityLiving) EntityList.createEntityByIDFromName(new ResourceLocation(transforms.get(r.nextInt(transforms.size()))), player.getEntityWorld());
+
+		newEntity.setPosition(entity.posX, entity.posY, entity.posZ);
+		newEntity.setRotationYawHead(entity.getRotationYawHead());
+		player.world.spawnEntity(newEntity);
 
 		entity.setDead();
 
@@ -227,10 +225,12 @@ public class Moment extends Item {
 
 	}
 
+
 	@Override
-	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		subItems.add(new ItemStack(this, 1, 0));
-		subItems.add(new ItemStack(this, 1, 1));
-		subItems.add(new ItemStack(this, 1, 2));
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+		items.add(new ItemStack(this, 1, 0));
+		items.add(new ItemStack(this, 1, 1));
+		items.add(new ItemStack(this, 1, 2));
+
 	}
 }

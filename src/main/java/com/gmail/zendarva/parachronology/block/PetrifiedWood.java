@@ -30,10 +30,10 @@ public class PetrifiedWood extends Block {
 		this.setCreativeTab(Parachronology.TAB);
 		this.setRegistryName(name);
 		this.setUnlocalizedName(Parachronology.MODID + "." + name);
-		GameRegistry.register(this);
 		ItemBlock itemBlock = new ItemBlock(this);
 		itemBlock.setRegistryName("petrifiedwoodItem");
-		GameRegistry.register(itemBlock);
+//		GameRegistry.register(this);
+//		GameRegistry.register(itemBlock);
 	}
 
 	@SideOnly(Side.CLIENT)

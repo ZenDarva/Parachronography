@@ -7,6 +7,7 @@ import com.gmail.zendarva.parachronology.Parachronology;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.boss.EntityDragon;
@@ -25,6 +26,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
+
 /**
  * Created by James on 9/3/2015.
  */
@@ -38,14 +41,14 @@ public class CapturedMoment extends Item {
 		this.setRegistryName(name);
 		this.setCreativeTab(Parachronology.TAB);
 
-		GameRegistry.register(this);
+		//GameRegistry.register(this);
 	}
 
-	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean unknown) {
 
+	@Override
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (stack.getTagCompound() != null)
-			list.add("Contains a " + stack.getTagCompound().getString("captured"));
+			tooltip.add("Contains a " + stack.getTagCompound().getString("captured"));
 	}
 
 	@Override
@@ -60,9 +63,7 @@ public class CapturedMoment extends Item {
 		BlockPos targPos = new BlockPos(pos.getX() + facing.getFrontOffsetX(),
 				pos.getY() + facing.getFrontOffsetY() + .5, pos.getZ() + facing.getFrontOffsetZ());
 		double d0 = 0.0D;
-
-		Entity newEntity = EntityList.createEntityByID(stack.getTagCompound().getInteger("id"), worldIn);
-		newEntity.readFromNBT(stack.getTagCompound().getCompoundTag("mob"));
+		Entity newEntity = EntityList.createEntityFromNBT(stack.getTagCompound().getCompoundTag("mob"), player.world);
 		newEntity.setPosition(targPos.getX() + .5, targPos.getY(), targPos.getZ() + .5);
 
 		worldIn.spawnEntity(newEntity);
@@ -82,7 +83,8 @@ public class CapturedMoment extends Item {
 		}
 		NBTTagCompound compound = new NBTTagCompound();
 		NBTTagCompound targMob = new NBTTagCompound();
-		entity.writeToNBT(targMob);
+		targMob = entity.serializeNBT();
+
 
 		compound.setString("captured", entity.getDisplayName().getFormattedText());
 		compound.setTag("mob", targMob);

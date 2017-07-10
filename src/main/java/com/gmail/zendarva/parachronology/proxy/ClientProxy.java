@@ -7,9 +7,7 @@ import com.gmail.zendarva.parachronology.Parachronology;
  */
 public class ClientProxy extends CommonProxy {
 
-	//Add this to your ClientProxy:
 	public void registerRenderThings() {
-
 		Parachronology.capturedMoment.registerModel();
 		Parachronology.petrifiedWood.registerModel();
 		Parachronology.displacer.registerModel();

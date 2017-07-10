@@ -1,0 +1,21 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "III",
+    "IiI",
+    "III"
+  ],
+  "key": {
+    "I": {
+      "type": "forge:ore_dict",
+      "ore":"cobblestone"
+    },
+    "i": {
+      "item": "parachronology:basicmoment"
+    }
+  },
+  "result": {
+    "item": "parachronology:displacer",
+    "data": 0
+  }
+}

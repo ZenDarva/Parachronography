@@ -43,7 +43,7 @@ public class Upgrade extends Item {
 		this.setCreativeTab(Parachronology.TAB);
 		this.setUnlocalizedName(Parachronology.MODID + "." + name);
 		this.setRegistryName(name);
-		GameRegistry.register(this);
+		//GameRegistry.register(this);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -54,10 +54,11 @@ public class Upgrade extends Item {
 				new ModelResourceLocation("parachronology:upgrade2", "tier3"));
 	}
 
+
 	@Override
-	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		subItems.add(new ItemStack(this, 1, 0));
-		subItems.add(new ItemStack(this, 1, 1));
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+		items.add(new ItemStack(this, 1, 0));
+		items.add(new ItemStack(this, 1, 1));
 	}
 
 	@Override

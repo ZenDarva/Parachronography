@@ -31,7 +31,6 @@ public class BasicMoment extends Item {
 		this.setMaxStackSize(64);
 		this.setRegistryName(name);
 		this.setCreativeTab(Parachronology.TAB);
-		GameRegistry.register(this);
 		this.setUnlocalizedName(Parachronology.MODID + "." + name);
 		this.setHasSubtypes(false);
 		this.setMaxDamage(0);

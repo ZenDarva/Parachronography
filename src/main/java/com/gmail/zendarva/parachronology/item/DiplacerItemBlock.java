@@ -1,5 +1,6 @@
 package com.gmail.zendarva.parachronology.item;
 
+import com.gmail.zendarva.parachronology.Parachronology;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,6 +24,7 @@ public class DiplacerItemBlock extends ItemBlock {
 		super(block);
 		setHasSubtypes(true);
 		this.setRegistryName("displacer");
+		this.setCreativeTab(Parachronology.TAB);
 	}
 	
 	@Override

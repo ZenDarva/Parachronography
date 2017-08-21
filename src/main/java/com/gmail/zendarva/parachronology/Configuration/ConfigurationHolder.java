@@ -3,7 +3,6 @@ package com.gmail.zendarva.parachronology.Configuration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 import com.gmail.zendarva.parachronology.BlockReference;
@@ -11,8 +10,6 @@ import com.gmail.zendarva.parachronology.DisplaceListBuilder;
 import com.gmail.zendarva.parachronology.TransformListBuilder;
 import com.gmail.zendarva.parachronology.handlers.DropData;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -26,7 +23,7 @@ public class ConfigurationHolder {
 	private static ConfigurationHolder instance;
 	private List<String> defaultTier1Wood;
 	private List<String> defaultTier1Cobble;
-	private List<String> defaultTier1IronBlock;
+	private List<String> defaultTier1EnrichedDirt;
 	private List<String> defaultTier1Sapling;
 	private List<String> defaultTier2Dirt;
 	private List<String> defaultTier2Cobble;
@@ -40,7 +37,7 @@ public class ConfigurationHolder {
 	private List<String> captureBlacklist;
 	private Configuration config;
 	private boolean setDefaults = false;
-	private List<ItemStack> startingInventory;
+
 
 	public static int playerDropChanceMultiplier = 5;
 
@@ -98,9 +95,6 @@ public class ConfigurationHolder {
 		Property prop = con.get("Defaults", "allowGenerateEndPortal", true);
 		prop.set(true);
 
-		prop = con.get("Defaults", "startingInventory", "minecraft:dye:64:15,minecraft:sapling:4");
-		parseInventoryString(prop.getString());
-
 		prop = con.get("Defaults", "PlayerKillDropChanceMultiplyer", 5);
 		playerDropChanceMultiplier = 5;
 
@@ -110,30 +104,8 @@ public class ConfigurationHolder {
 		Property prop = con.get("Defaults", "allowGenerateEndPortal", true);
 		generateEndPortal = prop.getBoolean();
 
-		prop = con.get("Defaults", "startingInventory", "minecraft:dye:64:15,minecraft:sapling:0:4");
-		parseInventoryString(prop.getString());
-
 		prop = con.get("Defaults", "PlayerKillDropChanceMultiplyer", 5);
 		playerDropChanceMultiplier = prop.getInt();
-	}
-
-	private void parseInventoryString(String inv) {
-		startingInventory = new LinkedList<ItemStack>();
-		for (String item : inv.split(",")) {
-			String datum[] = item.split(":");
-			int meta, count;
-			if (datum.length < 4) {
-				meta = 0;
-				count = Integer.parseInt(datum[2]);
-			} else {
-				count = Integer.parseInt(datum[2]);
-				meta = Integer.parseInt(datum[3]);
-			}
-
-			Item targ = Item.getByNameOrId(datum[0] + ":" + datum[1]);
-			ItemStack stack = new ItemStack(targ, count, meta);
-			startingInventory.add(stack);
-		}
 	}
 
 	private void setDisplacementsDefaults(Configuration con) {
@@ -156,11 +128,11 @@ public class ConfigurationHolder {
 		DisplaceListBuilder.Instance().addDisplacement(1,
 				BlockReference.readBlockFromString("parachronology:petrifiedwood"), prop.getStringList());
 
-		prop = con.get("Displacements.Tier1", "minecraft:iron_block",
-				defaultTier1IronBlock.toArray(new String[defaultTier1IronBlock.size()]));
-		prop.set(defaultTier1IronBlock.toArray(new String[defaultTier1IronBlock.size()]));
-		prop.set(defaultTier1IronBlock.toArray(new String[defaultTier1IronBlock.size()]));
-		DisplaceListBuilder.Instance().addDisplacement(1, BlockReference.readBlockFromString("minecraft:iron_block"),
+		prop = con.get("Displacements.Tier1", "parachronology:enricheddirt",
+				defaultTier1EnrichedDirt.toArray(new String[defaultTier1EnrichedDirt.size()]));
+		prop.set(defaultTier1EnrichedDirt.toArray(new String[defaultTier1EnrichedDirt.size()]));
+		prop.set(defaultTier1EnrichedDirt.toArray(new String[defaultTier1EnrichedDirt.size()]));
+		DisplaceListBuilder.Instance().addDisplacement(1, BlockReference.readBlockFromString("parachronology:enricheddirt"),
 				prop.getStringList());
 
 		prop = con.get("Displacements.Tier1", "minecraft:sapling:-1",
@@ -385,10 +357,10 @@ public class ConfigurationHolder {
 				Arrays.asList("minecraft:stone", "minecraft:cobblestone", "minecraft:gravel"));
 		defaultTier1Cobble = new ArrayList<String>(
 				Arrays.asList("minecraft:iron_ore", "minecraft:coal_ore", "minecraft:dirt"));
-		defaultTier1IronBlock = new ArrayList<String>(Arrays.asList("minecraft:obsidian"));
+		defaultTier1EnrichedDirt = new ArrayList<String>(Arrays.asList("minecraft:obsidian"));
 		defaultTier1Sapling = new ArrayList<String>(
 				Arrays.asList("minecraft:sapling:0", "minecraft:sapling:1", "minecraft:sapling:2",
-						"minecraft:sapling:3", "minecraft:sapling:4", "minecraft:sapling:5", " minecraft:reeds"));
+						"minecraft:sapling:3", "minecraft:sapling:4", "minecraft:sapling:5", "minecraft:reeds"));
 
 		defaultTier2Dirt = new ArrayList<String>(Arrays.asList("minecraft:melon_block", "minecraft:mycelium",
 				"minecraft:pumpkin", "minecraft:waterlily"));
@@ -413,9 +385,9 @@ public class ConfigurationHolder {
 			defaultTier2Cobble.add("thermalfoundation:ore:2"); //silver
 			defaultTier2Cobble.add("thermalfoundation:ore:3"); //lead
 
-			defaultTier3Stone.add("thermalfoundation:ore:5"); //nickle
+			defaultTier2Stone.add("thermalfoundation:ore:5"); //nickle
 			defaultTier3Stone.add("thermalfoundation:ore:6");
-			System.out.println("Parachronology just Snarfed TE's ores.");
+
 			ConfiguredOres.copper=true;
 			ConfiguredOres.tin=true;
 			ConfiguredOres.silver=true;
@@ -443,7 +415,7 @@ public class ConfigurationHolder {
 				ConfiguredOres.silver =true;
 			}
 			if (!ConfiguredOres.nickle) {
-				defaultTier2Cobble.add("immersiveengineering:ore:4");
+				defaultTier2Stone.add("immersiveengineering:ore:4");
 				ConfiguredOres.nickle =true;
 			}
 			if (!ConfiguredOres.uranium) {
@@ -454,6 +426,7 @@ public class ConfigurationHolder {
 		if (Loader.isModLoaded("actuallyadditions")){
 
 				defaultTier2Stone.add("actuallyadditions:block_misc:3");//Black quartz.
+				defaultTier1Sapling.add("actuallyadditions:item_canola_seed:0");
 
 
 		}
@@ -498,7 +471,5 @@ public class ConfigurationHolder {
 		return generateEndPortal;
 	}
 
-	public List<ItemStack> getStartingInventory() {
-		return startingInventory;
-	}
+
 }

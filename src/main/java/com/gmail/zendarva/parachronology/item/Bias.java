@@ -42,7 +42,7 @@ public class Bias extends Item {
 		this.setUnlocalizedName(Parachronology.MODID + "." + name);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
-		//GameRegistry.register(this);
+
 	}
 
 	public void addSubItem(ItemStack item) {
@@ -52,7 +52,9 @@ public class Bias extends Item {
 
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-		items.addAll(this.subItems);
+		if (tab == Parachronology.TAB) {
+			items.addAll(this.subItems);
+		}
 	}
 
 	@Override

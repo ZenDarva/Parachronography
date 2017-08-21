@@ -32,8 +32,7 @@ public class PetrifiedWood extends Block {
 		this.setUnlocalizedName(Parachronology.MODID + "." + name);
 		ItemBlock itemBlock = new ItemBlock(this);
 		itemBlock.setRegistryName("petrifiedwoodItem");
-//		GameRegistry.register(this);
-//		GameRegistry.register(itemBlock);
+		this.setCreativeTab(Parachronology.TAB);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -41,7 +40,6 @@ public class PetrifiedWood extends Block {
 
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0,
 				new ModelResourceLocation(getRegistryName(), "inventory"));
-		//Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Parachronology.MODID + ":" + getRegistryName(), "inventory"));
 	}
 
 }

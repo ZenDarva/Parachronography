@@ -55,8 +55,12 @@ public class BlockReference {
 
 	public void placeInWorld(World world, int x, int y, int z) {
 		if (targBlock == null) {
-			System.out.println("Null block in " + this.blockName + "with metadata " + metadata);
+			//We may have loaded late... lets try again.
+			this.targBlock = Block.getBlockFromName(this.blockName);
+			if (targBlock == null) { //Still failed.
+				System.out.println("Null block in " + this.blockName + " with metadata " + metadata);
 			return;
+		}
 		}
 		world.setBlockState(new BlockPos(x, y, z), targBlock.getStateFromMeta(metadata));
 	}
@@ -67,6 +71,7 @@ public class BlockReference {
 
 	public ItemStack getStack() {
 		if (targBlock == null) {
+			this.targBlock = Block.getBlockFromName(this.blockName);
 			System.out.println("Null blockReference " + blockName);
 		}
 		ItemStack stack = new ItemStack(targBlock, 1, metadata);

@@ -26,7 +26,7 @@ public class BiasRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRe
 
     @Override
     public String getGroup() {
-        return "";
+        return "parachronology";
    }
 
     @Override
@@ -54,9 +54,9 @@ public class BiasRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRe
         this.target=target.copy();
         this.against=against;
         if (against)
-            this.setRegistryName("biasagainst" + target.getDisplayName());
+            this.setRegistryName("biasagainst" + target.getDisplayName().replace(" ",""));
         else
-            this.setRegistryName("biastowards" + target.getDisplayName());
+            this.setRegistryName("biastowards" + target.getDisplayName().replace(" ",""));
     }
 
     @Override

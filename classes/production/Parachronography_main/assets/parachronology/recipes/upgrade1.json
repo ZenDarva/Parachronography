@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "parachronology:upgrade",
+    "data":0
+  },
+  "pattern": [
+    "aaa",
+    "aba",
+    "aaa"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "a":{
+      "item": "parachronology:moment",
+      "data": 0
+    },
+    "b":{
+      "item":"parachronology:moment",
+      "data":1
+    }
+  }
+}

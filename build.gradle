@@ -11,7 +11,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = "1.5.0"
+version = "1.5.2"
 group = "com.gmail.zendarva.parachronology" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Parachronology"
 
@@ -21,7 +21,7 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12-14.21.1.2387"
+    version = "1.12.1-14.22.0.2459"
     runDir = "run"
     mappings = "snapshot_20170702"
 }
@@ -51,11 +51,16 @@ dependencies {
     //deobfCompile "mezz.jei:jei_1.11.2:4.3.5.277:api"
     //deobfCompile name: 'Thaumcraft', version: "5.1.3", ext: 'jar'
     //compile "mcp.mobius.waila:Waila:1.6.0-B3_1.8.8"
+
+        compile fileTree(dir: 'lib', include: '*.jar')
+        deobfProvided "mezz.jei:jei_1.12.1:4.7.5.88:api"
+        runtime "mezz.jei:jei_1.12.1:4.7.5.88"
 }
 
 repositories {
     maven {
         url "http://dvs1.progwml6.com/files/maven"
+
     }
 }
 

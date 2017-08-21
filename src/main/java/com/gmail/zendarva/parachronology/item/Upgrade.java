@@ -43,7 +43,7 @@ public class Upgrade extends Item {
 		this.setCreativeTab(Parachronology.TAB);
 		this.setUnlocalizedName(Parachronology.MODID + "." + name);
 		this.setRegistryName(name);
-		//GameRegistry.register(this);
+		this.setCreativeTab(Parachronology.TAB);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -57,8 +57,10 @@ public class Upgrade extends Item {
 
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-		items.add(new ItemStack(this, 1, 0));
-		items.add(new ItemStack(this, 1, 1));
+		if (tab == Parachronology.TAB) {
+			items.add(new ItemStack(this, 1, 0));
+			items.add(new ItemStack(this, 1, 1));
+		}
 	}
 
 	@Override

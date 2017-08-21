@@ -1,20 +1,21 @@
 {
-  "type": "shapedorerecipe",
+  "type": "forge:ore_shaped",
   "pattern": [
     "III",
-    " i ",
-    "iii"
+    "IiI",
+    "III"
   ],
   "key": {
     "I": {
-      "item": "minecraft:iron_block"
+      "type": "forge:ore_dict",
+      "ore":"cobblestone"
     },
     "i": {
-      "item": "minecraft:iron_ingot"
+      "item": "parachronology:basicmoment"
     }
   },
   "result": {
-    "item": "minecraft:anvil",
+    "item": "parachronology:displacer",
     "data": 0
   }
 }

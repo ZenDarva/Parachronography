@@ -40,8 +40,6 @@ public class CapturedMoment extends Item {
 		this.setUnlocalizedName(Parachronology.MODID + "." + name);
 		this.setRegistryName(name);
 		this.setCreativeTab(Parachronology.TAB);
-
-		//GameRegistry.register(this);
 	}
 
 

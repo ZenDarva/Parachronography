@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  X",
+    " # ",
+    "#  "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:stick"
+    },
+    "X": {
+      "item": "parachronology:moment",
+      "data":0
+    }
+  },
+  "result": {
+    "item": "parachronology:timelesswand"
+  }
+}

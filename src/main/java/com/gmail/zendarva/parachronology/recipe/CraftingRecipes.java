@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 /**
  * Created by James on 2/27/2016.
@@ -31,6 +32,8 @@ public class CraftingRecipes {
 
 			event.getRegistry().register(recipe);
 		}
+
+		event.getRegistry().register(new ShapelessTimelessRecipe().setRegistryName("rechargetimeless"));
 	}
 
 	private List<IRecipe> buildBiases() {
@@ -57,6 +60,8 @@ public class CraftingRecipes {
 
 					results.add(new BiasRecipe(against,reference.getStack(),true));
 					results.add(new BiasRecipe(towards,reference.getStack(),false));
+
+					//new ShapedOreRecipe()
 
 					Parachronology.bias.addSubItem(towards);
 					Parachronology.bias.addSubItem(against);

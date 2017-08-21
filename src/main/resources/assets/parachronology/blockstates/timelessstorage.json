@@ -1,0 +1,26 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "parachronology:timelessstorage-closed"
+  },
+  "variants": {
+    "normal": [
+      {}
+    ],
+    "inventory": {
+      "model": "parachronology:timelessstorage-closed"
+    },
+    "open": {
+      "false": {},
+      "true": {
+        "model": "parachronology:timelessstorage-open"
+      }
+    },
+    "facing": {
+      "east":{},
+      "west":{"y":180},
+      "south":{"y":90},
+      "north":{"y":270}
+    }
+  }
+}

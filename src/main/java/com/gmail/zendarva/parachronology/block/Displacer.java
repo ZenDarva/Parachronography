@@ -81,6 +81,7 @@ public class Displacer extends Block implements ITileEntityProvider {
 		entity.writeToNBT(tag);
 		stack.setTagCompound(tag);
 		spawnAsEntity(world,pos,stack);
+		this.setCreativeTab(Parachronology.TAB);
 	}
 
 	@Override
@@ -150,6 +151,7 @@ public class Displacer extends Block implements ITileEntityProvider {
 				item.setDead();
 			}
 		}
+
 		world.scheduleUpdate(pos, world.getBlockState(pos).getBlock(), 20);
 
 	}
@@ -165,9 +167,11 @@ public class Displacer extends Block implements ITileEntityProvider {
 	}
 
 	@Override
-	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
-		for (int ix = 0; ix < 3; ix++) {
-			items.add(new ItemStack(this, 1, ix));
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> items) {
+		if (tab == Parachronology.TAB) {
+			for (int ix = 0; ix < 3; ix++) {
+				items.add(new ItemStack(this, 1, ix));
+			}
 		}
 	}
 

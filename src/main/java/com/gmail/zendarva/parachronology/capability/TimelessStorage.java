@@ -19,9 +19,11 @@ public class TimelessStorage implements Capability.IStorage<ITimeless> {
         compound.setInteger("curEnergy", instance.getCurrentEnergy());
         compound.setInteger("maxEnergy",instance.getMaxEnergy());
         compound.setInteger("tier",instance.getTier());
-        writeBlockPos(compound,"target",instance.getTarget());
+        if (instance.getTarget() != null)
+            writeBlockPos(compound,"target",instance.getTarget());
         compound.setInteger("worldId",instance.getWorldId());
         compound.setInteger("slot",instance.getSelectedSlot());
+        compound.setInteger("data",instance.getExtraData());
         return compound;
     }
 
@@ -34,12 +36,11 @@ public class TimelessStorage implements Capability.IStorage<ITimeless> {
         instance.setTarget(getBlockPos(compound,"target"));
         instance.setWorldId(compound.getInteger("worldId"));
         instance.setSelectedSlot(compound.getInteger("slot"));
+        instance.setExtraData(compound.getInteger("data"));
     }
 
 
     private void writeBlockPos(NBTTagCompound tag, String name, BlockPos pos) {
-        if (pos == null)
-            return;
         NBTTagCompound posTag = new NBTTagCompound();
         posTag.setInteger("x", pos.getX());
         posTag.setInteger("y", pos.getY());
@@ -54,4 +55,6 @@ public class TimelessStorage implements Capability.IStorage<ITimeless> {
         BlockPos pos = new BlockPos(posTag.getInteger("x"), posTag.getInteger("y"), posTag.getInteger("z"));
         return pos;
     }
+
+
 }

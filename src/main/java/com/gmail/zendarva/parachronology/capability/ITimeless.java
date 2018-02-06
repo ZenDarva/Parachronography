@@ -20,6 +20,7 @@ public interface ITimeless {
     public void setWorldId(int id);
     public int getSelectedSlot();
     public void setSelectedSlot(int slot);
-
+    public int getExtraData();
+    public void setExtraData(int data);
 
 }

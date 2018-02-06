@@ -1,9 +1,7 @@
 package com.gmail.zendarva.parachronology.utility;
 
 import com.gmail.zendarva.parachronology.capability.ITimeless;
-import com.gmail.zendarva.parachronology.capability.Timeless;
 import com.gmail.zendarva.parachronology.capability.TimelessProvider;
-import com.gmail.zendarva.parachronology.capability.TimelessStorage;
 import com.gmail.zendarva.parachronology.entity.StorageEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,7 +11,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
 /**
  * Created by James on 8/10/2017.
@@ -42,19 +39,13 @@ public class TimelessUtility {
     {
         StorageEntity entity = getTargetStorage(stack);
         if (entity == null)
-            return null;
-        if (!stack.hasTagCompound()){
-            NBTTagCompound compound = new NBTTagCompound();
-            compound.setInteger("slotIndex",0);
-            stack.setTagCompound(new NBTTagCompound());
-        }
-
-        int slot = getSelectedStorageSlot(null,stack);
+            return ItemStack.EMPTY;
+        int slot = getSelectedStorageSlot(stack);
         IItemHandler items = entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,null);
         return items.getStackInSlot(slot);
     }
 
-    public static int getSelectedStorageSlot(World world, ItemStack stack)
+    public static int getSelectedStorageSlot(ItemStack stack)
     {
         StorageEntity entity = getTargetStorage(stack);
         if (entity == null)

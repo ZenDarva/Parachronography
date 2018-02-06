@@ -23,8 +23,8 @@ public class ShapelessTimelessRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
     ItemStack timelessObject = ItemStack.EMPTY;
 
     @Override
-    public boolean isHidden() {
-        return true;
+    public boolean isDynamic() {
+        return false;
     }
 
     @Override

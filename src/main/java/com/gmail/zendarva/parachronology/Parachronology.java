@@ -5,7 +5,11 @@ import com.gmail.zendarva.parachronology.block.Displacer;
 import com.gmail.zendarva.parachronology.block.EnrichedDirt;
 import com.gmail.zendarva.parachronology.block.PetrifiedWood;
 import com.gmail.zendarva.parachronology.block.Storage;
+import com.gmail.zendarva.parachronology.capability.ITimeless;
+import com.gmail.zendarva.parachronology.capability.Timeless;
+import com.gmail.zendarva.parachronology.capability.TimelessStorage;
 import com.gmail.zendarva.parachronology.handlers.CapabilityHandler;
+import com.gmail.zendarva.parachronology.handlers.LoadingCallback;
 import com.gmail.zendarva.parachronology.handlers.MobDrop;
 import com.gmail.zendarva.parachronology.handlers.Registration;
 import com.gmail.zendarva.parachronology.item.*;
@@ -13,10 +17,15 @@ import com.gmail.zendarva.parachronology.proxy.CommonProxy;
 import com.gmail.zendarva.parachronology.recipe.CraftingRecipes;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -27,7 +36,7 @@ import net.minecraftforge.oredict.OreDictionary;
 /**
  * Created by James on 6/11/2017.
  */
-@Mod(modid = Parachronology.MODID, name = Parachronology.MODNAME, version = Parachronology.VERSION,acceptedMinecraftVersions = "[1.12,1.13)",dependencies="after:thermalfoundation,rftools,ic2,bigreactors,actuallyadditions,immersiveengineering ")
+@Mod(modid = Parachronology.MODID, name = Parachronology.MODNAME, version = Parachronology.VERSION,acceptedMinecraftVersions = "[1.12,1.13)")
 public class Parachronology {
 
 	@SidedProxy(clientSide = "com.gmail.zendarva.parachronology.proxy.ClientProxy", serverSide = "com.gmail.zendarva.parachronology.proxy.CommonProxy")
@@ -51,7 +60,7 @@ public class Parachronology {
 	public static Parachronology instance;
 	public static final String MODID = "parachronology";
 	public static final String MODNAME = "Parachronology";
-	public static final String VERSION = "1.5.2";
+	public static final String VERSION = "1.5.3";
 	
 	public static final CreativeTabs TAB = new CreativeTabs(Parachronology.MODID){
 
@@ -70,6 +79,10 @@ public class Parachronology {
 //		FMLInterModComms.sendMessage("Waila", "register",
 //				"com.darva.parachronology.waila.ParachronologyAddon.registerAddon");
 		proxy.init();
+		ForgeChunkManager.setForcedChunkLoadingCallback(this,new LoadingCallback());
+		if (Loader.isModLoaded("actuallyadditions")) {
+			MinecraftForge.addGrassSeed(new ItemStack(Item.getByNameOrId("actuallyadditions:item_canola_seed")),2);
+		}
 
 	}
 
@@ -104,6 +117,9 @@ public class Parachronology {
 		ConfigurationHolder.getInstance().save();
 
 		proxy.preInit();
+
+		CapabilityManager.INSTANCE.register(ITimeless.class,new TimelessStorage(),Timeless.class);
+
 	}
 	@SubscribeEvent
 	public void ModelRegistry(ModelRegistryEvent event) {

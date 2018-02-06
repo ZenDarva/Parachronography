@@ -4,10 +4,13 @@ import com.gmail.zendarva.parachronology.Configuration.ConfigurationHolder;
 import com.gmail.zendarva.parachronology.DisplaceListBuilder;
 import com.gmail.zendarva.parachronology.Parachronology;
 import com.gmail.zendarva.parachronology.handlers.DropData;
+import com.gmail.zendarva.parachronology.jei.bias.BiasHandler;
+import com.gmail.zendarva.parachronology.jei.displace.DisplaceCatagory;
+import com.gmail.zendarva.parachronology.jei.displace.DisplaceHandler;
+import com.gmail.zendarva.parachronology.recipe.CraftingRecipes;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
-import mezz.jei.api.gui.IDrawableStatic;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
@@ -21,6 +24,8 @@ public class ParachronologyPlugin implements IModPlugin {
     public void register(IModRegistry registry) {
      registry.addRecipeHandlers(new DisplaceHandler());
      registry.addRecipeCategories(new DisplaceCatagory(registry.getJeiHelpers().getGuiHelper()));
+     registry.addRecipeHandlers(new BiasHandler());
+     registry.addRecipes(CraftingRecipes.recipes);
 
      registry.addRecipes(DisplaceListBuilder.displaceRecipes.values());
 
@@ -30,6 +35,9 @@ public class ParachronologyPlugin implements IModPlugin {
      registry.addDescription(new ItemStack(Parachronology.moment),getDropedByInfo(new ItemStack(Parachronology.moment)));
      registry.addDescription(new ItemStack(Parachronology.moment,1,1),getDropedByInfo(new ItemStack(Parachronology.moment,1,1)));
      registry.addDescription(new ItemStack(Parachronology.moment,1,2),getDropedByInfo(new ItemStack(Parachronology.moment,1,2)));
+     registry.addDescription(new ItemStack(Parachronology.pickaxe),"Link with a Timeless Storage by right clicking it.", "Mined blocks will appear in the storage.");
+     registry.addDescription(new ItemStack(Parachronology.wand), "Link with a Timeless Storage by right clicking it.", "Will place blocks from linked storage.");
+     registry.addDescription(new ItemStack(Parachronology.storage), "Single chunk, chunkloader.", "Links with timeless tools.");
     }
 
     public String[] getDropedByInfo(ItemStack stack){

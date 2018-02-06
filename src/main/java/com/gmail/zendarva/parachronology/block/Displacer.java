@@ -26,6 +26,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -42,6 +43,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
+
+import javax.annotation.Nullable;
 
 /**
  * Created by James on 8/23/2015.
@@ -67,22 +70,7 @@ public class Displacer extends Block implements ITileEntityProvider {
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] { TIER });
 	}
-
-	@Override
-	public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) {
-	}
-
-	@Override
-	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-		int meta = world.getBlockState(pos).getBlock().getMetaFromState(world.getBlockState(pos));
-		ItemStack stack = new ItemStack(Parachronology.displacer,1, meta);
-		DisplacerEntity entity = (DisplacerEntity) world.getTileEntity(pos);
-		NBTTagCompound tag = new NBTTagCompound();
-		entity.writeToNBT(tag);
-		stack.setTagCompound(tag);
-		spawnAsEntity(world,pos,stack);
-		this.setCreativeTab(Parachronology.TAB);
-	}
+	
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -100,8 +88,6 @@ public class Displacer extends Block implements ITileEntityProvider {
 		this.setSoundType(SoundType.ANVIL);
 		setDefaultState(blockState.getBaseState().withProperty(TIER, EnumTier.TIER1));
 		this.setUnlocalizedName(Parachronology.MODID + ".displacer");
-//		GameRegistry.register(this);
-//		GameRegistry.register(new DiplacerItemBlock(this), getRegistryName());
 	}
 
 	@Override
@@ -223,6 +209,36 @@ public class Displacer extends Block implements ITileEntityProvider {
 			}
 		}
 		return to;
+	}
+
+	@Override
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+
+		TileEntity t = world.getTileEntity(pos);
+
+		if (t instanceof DisplacerEntity) {
+			DisplacerEntity tile = (DisplacerEntity) t;
+			int meta = world.getBlockState(pos).getBlock().getMetaFromState(world.getBlockState(pos));
+
+			ItemStack stack = new ItemStack(Parachronology.displacer, 1, meta);
+			stack.setTagCompound(tile.getTileData());
+
+			drops.add(stack);
+		}
+
+	}
+
+	@Override
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		if (willHarvest)
+			return true;
+		return super.removedByPlayer(state,world,pos,player,willHarvest);
+	}
+
+	@Override
+	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack) {
+		super.harvestBlock(worldIn, player, pos, state, te, stack);
+		worldIn.setBlockToAir(pos);
 	}
 
 	@Override

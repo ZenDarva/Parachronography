@@ -1,8 +1,0 @@
-{
-  "parent": "block/farmland",
-  "textures": {
-    "particle": "parachronology:blocks/enricheddirt",
-    "dirt": "parachronology:blocks/enricheddirt",
-    "top": "parachronology:blocks/enricheddirt"
-  }
-}

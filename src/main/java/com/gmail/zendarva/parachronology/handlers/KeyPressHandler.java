@@ -30,25 +30,43 @@ public class KeyPressHandler {
         EntityPlayer player = Minecraft.getMinecraft().player;
         ItemStack wand = player.getHeldItem(EnumHand.MAIN_HAND);
         if (wand.getItem() instanceof TimelessWand){
+            ITimeless timeless = TimelessUtility.getTimeless(wand);
             if (ClientProxy.keyBindings[1].isPressed()) {
-                ITimeless timeless = TimelessUtility.getTimeless(wand);
-                int slot = timeless.getSelectedSlot();
-                slot++;
-                if (slot > 26)
-                    slot=0;
-                timeless.setSelectedSlot(slot);
-                UpdateWandSlotPacket packetOut = new UpdateWandSlotPacket(slot);
-                PacketHandler.INSTANCE.sendToServer(packetOut);
+                if (player.isSneaking()) {
+                    int data = timeless.getExtraData();
+                    if (data < 4)
+                        data++;
+                    timeless.setExtraData(data);
+
+                }
+                else {
+
+                    int slot = timeless.getSelectedSlot();
+                    slot++;
+                    if (slot > 26)
+                        slot = 0;
+                    timeless.setSelectedSlot(slot);
+                    UpdateWandSlotPacket packetOut = new UpdateWandSlotPacket(slot);
+                    PacketHandler.INSTANCE.sendToServer(packetOut);
+                }
+
             }
             if (ClientProxy.keyBindings[0].isPressed()) {
-                ITimeless timeless = TimelessUtility.getTimeless(wand);
-                int slot = timeless.getSelectedSlot();
-                slot--;
-                if (slot < 0)
-                    slot=26;
-                timeless.setSelectedSlot(slot);
-                UpdateWandSlotPacket packetOut = new UpdateWandSlotPacket(slot);
-                PacketHandler.INSTANCE.sendToServer(packetOut);
+                if (player.isSneaking()) {
+                    int data = timeless.getExtraData();
+                    if (data > 0)
+                        data--;
+                    timeless.setExtraData(data);
+
+                }else {
+                    int slot = timeless.getSelectedSlot();
+                    slot--;
+                    if (slot < 0)
+                        slot = 26;
+                    timeless.setSelectedSlot(slot);
+                    UpdateWandSlotPacket packetOut = new UpdateWandSlotPacket(slot);
+                    PacketHandler.INSTANCE.sendToServer(packetOut);
+                }
             }
         }
     }

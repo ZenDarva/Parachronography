@@ -1,6 +1,8 @@
 package com.gmail.zendarva.parachronology.capability;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * Created by James on 7/30/2017.
@@ -13,6 +15,11 @@ public class Timeless implements ITimeless {
     private BlockPos target;
     private int worldId;
     private int slot=0;
+    private int data;
+
+    public Timeless() {
+    }
+
     @Override
     public int getCurrentEnergy() {
         return curEnergy;
@@ -76,5 +83,15 @@ public class Timeless implements ITimeless {
     @Override
     public void setSelectedSlot(int slot) {
         this.slot = slot;
+    }
+
+    @Override
+    public int getExtraData() {
+        return data;
+    }
+
+    @Override
+    public void setExtraData(int data) {
+        this.data = data;
     }
 }

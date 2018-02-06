@@ -18,6 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
@@ -43,18 +44,18 @@ public class TimelessPickaxe extends ItemPickaxe{
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
-        ITimeless timeless = stack.getCapability(TimelessProvider.timeless,null);
-        if (timeless.getTarget() == null)
+        NBTTagCompound tag = stack.getTagCompound();
+        if (tag == null)
             tooltip.add("Unlinked");
-        else
+        else if (tag.getBoolean("linked"))
             tooltip.add("Linked");
     }
 
     @Override
-    public float getStrVsBlock(ItemStack stack, IBlockState state) {
+    public float getDestroySpeed(ItemStack stack, IBlockState state) {
         ITimeless timeless = stack.getCapability(TimelessProvider.timeless,null);
         if (timeless.getCurrentEnergy() > 0)
-            return super.getStrVsBlock(stack,state);
+            return super.getDestroySpeed(stack,state);
         return -1;
     }
 

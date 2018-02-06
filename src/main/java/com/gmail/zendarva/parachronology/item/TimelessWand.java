@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -42,10 +43,10 @@ public class TimelessWand extends Item {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
-        ITimeless timeless = stack.getCapability(TimelessProvider.timeless,null);
-        if (timeless.getTarget() == null)
+        NBTTagCompound tag = stack.getTagCompound();
+        if (tag == null)
             tooltip.add("Unlinked");
-        else
+        else if (tag.getBoolean("linked"))
             tooltip.add("Linked");
     }
 
@@ -80,9 +81,33 @@ public class TimelessWand extends Item {
         ItemStack wand = player.getHeldItem(EnumHand.MAIN_HAND);
         if (TimelessUtility.getTimeless(wand).getCurrentEnergy() >0) {
             World targWorld = DimensionManager.getWorld(TimelessUtility.getTimeless(wand).getWorldId());
-            BlockPos storagePos = TimelessUtility.getTargetStorage(wand).getPos();
+            ITimeless timeless = TimelessUtility.getTimeless(wand);
+            int slot = timeless.getSelectedSlot();
 
-            PacketHandler.INSTANCE.sendToServer(new UseWandPacket(storagePos, pos.offset(facing), TimelessUtility.getSelectedStorageSlot(targWorld, wand), facing));
+            PacketHandler.INSTANCE.sendToServer(new UseWandPacket(pos.offset(facing), slot, facing));
+
+
+            EnumFacing offset = player.getHorizontalFacing().rotateAround(EnumFacing.Axis.Y);
+            int count = Parachronology.proxy.wandStack.getCount()-1;
+            for (int i = 1; i <= timeless.getExtraData();i++ ) {
+            BlockPos temp;
+                if (count > 0) {
+                    temp = pos.offset(facing).offset(offset,i);
+                    if (worldIn.isAirBlock(temp)) {
+                        PacketHandler.INSTANCE.sendToServer(new UseWandPacket(temp, slot, offset.getOpposite()));
+                        count--;
+                    }
+                }
+
+                if (count > 0) {
+                    temp=pos.offset(facing).offset(offset.getOpposite(),i);
+                    if (worldIn.isAirBlock(temp)) {
+                        PacketHandler.INSTANCE.sendToServer(new UseWandPacket(temp, slot, offset));
+                        count--;
+                    }
+                }
+            }
+
             return EnumActionResult.SUCCESS;
         }
         return EnumActionResult.FAIL;

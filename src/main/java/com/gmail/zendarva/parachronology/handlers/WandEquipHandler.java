@@ -1,5 +1,6 @@
 package com.gmail.zendarva.parachronology.handlers;
 
+import com.gmail.zendarva.parachronology.capability.ITimeless;
 import com.gmail.zendarva.parachronology.item.TimelessWand;
 import com.gmail.zendarva.parachronology.network.PacketHandler;
 import com.gmail.zendarva.parachronology.network.SendWandBlockPacket;
@@ -9,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -28,7 +30,8 @@ public class WandEquipHandler {
         if (!(wand.getItem() instanceof TimelessWand))
             return;
 
-        ItemStack stack = TimelessUtility.getSelectedStorageSlotStack(player.world,wand);
+        ITimeless timeless = TimelessUtility.getTimeless(wand);
+        ItemStack stack = TimelessUtility.getSelectedStorageSlotStack(DimensionManager.getWorld(timeless.getWorldId()),wand);
         SendWandBlockPacket packet = new SendWandBlockPacket(stack);
         PacketHandler.INSTANCE.sendTo(packet, (EntityPlayerMP) event.getEntity());
     }

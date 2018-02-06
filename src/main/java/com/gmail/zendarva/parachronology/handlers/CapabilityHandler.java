@@ -4,6 +4,7 @@ import com.gmail.zendarva.parachronology.capability.Timeless;
 import com.gmail.zendarva.parachronology.capability.TimelessProvider;
 import com.gmail.zendarva.parachronology.item.TimelessPickaxe;
 import com.gmail.zendarva.parachronology.item.TimelessWand;
+import com.gmail.zendarva.parachronology.utility.TimelessUtility;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -22,7 +23,9 @@ public class CapabilityHandler {
     public void AttachItemStack(AttachCapabilitiesEvent<ItemStack> event) {
         if ((event.getObject() instanceof ItemStack)
              && (event.getObject().getItem() instanceof TimelessPickaxe ||
-                event.getObject().getItem() instanceof TimelessWand)) {
+                event.getObject().getItem() instanceof TimelessWand)
+                && TimelessUtility.getTimeless(event.getObject()) ==null
+                ) {
             event.addCapability(timeless, new TimelessProvider());
         }
     }

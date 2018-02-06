@@ -24,10 +24,12 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
  */
 public class CraftingRecipes {
 
+	public static List<IRecipe> recipes;
+
 	@SubscribeEvent
 	public void registerEvent(RegistryEvent.Register<IRecipe> event) {
 
-		List<IRecipe> recipes = buildBiases();
+		recipes = buildBiases();
 		for (IRecipe recipe: recipes) {
 
 			event.getRegistry().register(recipe);

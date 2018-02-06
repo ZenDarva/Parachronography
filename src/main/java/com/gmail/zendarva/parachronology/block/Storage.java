@@ -22,6 +22,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -62,9 +64,14 @@ public class Storage extends Block implements ITileEntityProvider {
         {
             worldIn.setBlockState(pos,blockState.getBaseState().withProperty(stateProperty, false).withProperty(FACING,EnumFacing.EAST));
         }
-        System.out.println(num);
+
         worldIn.markChunkDirty(pos, null);
         this.needsRandomTick=true;
+        TileEntity entity = worldIn.getTileEntity(pos);
+        if (!(entity instanceof StorageEntity)) //What the fuck?
+            return;
+        StorageEntity storage = (StorageEntity) entity;
+        storage.tickChunkloading();
     }
 
     public Storage() {
@@ -93,8 +100,7 @@ public class Storage extends Block implements ITileEntityProvider {
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (worldIn.isRemote)
-            return true;
+
         TileEntity entity = worldIn.getTileEntity(pos);
 
         if (!(entity instanceof StorageEntity))
@@ -103,9 +109,15 @@ public class Storage extends Block implements ITileEntityProvider {
         if (playerIn.getHeldItemMainhand().getItem() instanceof TimelessPickaxe ||
                 playerIn.getHeldItemMainhand().getItem() instanceof TimelessWand) {
             ITimeless timeless = playerIn.getHeldItemMainhand().getCapability(TimelessProvider.timeless,null);
+            ItemStack targ = playerIn.getHeldItemMainhand();
             if (timeless.getTarget() == null) {
                 timeless.setTarget(pos);
                 timeless.setWorldId(playerIn.dimension);
+                if (targ.getTagCompound() == null) {
+                    NBTTagCompound tag = new NBTTagCompound();
+                    tag.setBoolean("linked", true);
+                    targ.setTagCompound(tag);
+                }
                 return true;
             }
         }
@@ -164,5 +176,19 @@ public class Storage extends Block implements ITileEntityProvider {
     @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;
+    }
+
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+        if (worldIn.isRemote)
+                return;
+        TileEntity entity = worldIn.getTileEntity(pos);
+        if (!(entity instanceof StorageEntity)) //What the fuck?
+            return;
+        StorageEntity storage = (StorageEntity) entity;
+        if (!(placer instanceof EntityPlayer))
+            return;
+        storage.setChunkloading((EntityPlayer) placer);
     }
 }

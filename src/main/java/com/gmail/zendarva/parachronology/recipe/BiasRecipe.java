@@ -31,7 +31,15 @@ public class BiasRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRe
 
     @Override
     public boolean matches(InventoryCrafting inv, World worldIn) {
-        return false;
+        for (int x =0; x<inv.getSizeInventory();x++)
+        {
+            Ingredient target = this.getIngredients().get(x);
+            if (!target.apply(inv.getStackInSlot(x))){
+                return false;
+            }
+
+        }
+        return true;
     }
 
     @Override
@@ -46,7 +54,7 @@ public class BiasRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRe
 
     @Override
     public ItemStack getRecipeOutput() {
-        return result;
+        return result.copy();
     }
 
     public BiasRecipe(ItemStack output, ItemStack target, boolean against ){

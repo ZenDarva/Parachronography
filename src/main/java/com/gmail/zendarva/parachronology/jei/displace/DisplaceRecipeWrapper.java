@@ -45,10 +45,6 @@ public class DisplaceRecipeWrapper extends BlankRecipeWrapper {
             inputList.add(inputs);
             iIngredients.setInputLists(ItemStack.class,inputList);
         }
-
-
-
-
         for (BlockReference ref : wrappedRecipe.getDisplacement(2)){
             if (ref.getStack() == null) {
                 System.out.println("Error in recipe");
@@ -58,6 +54,16 @@ public class DisplaceRecipeWrapper extends BlankRecipeWrapper {
 
         iIngredients.setOutputs(ItemStack.class,outputs);
 
+    }
+    public List<ItemStack> getOutputForTier(int tier){
+        List<ItemStack> outputs = new LinkedList<>();
+        for (BlockReference ref : wrappedRecipe.getDisplacement(tier)){
+            if (ref.getStack() == null) {
+                System.out.println("Error in recipe");
+            }
+            outputs.add(ref.getStack());
+        }
+        return outputs;
     }
 
     public DisplaceRecipeWrapper(DisplaceRecipe wrappedRecipe) {

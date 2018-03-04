@@ -2,8 +2,10 @@ package com.gmail.zendarva.parachronology.item;
 
 import com.gmail.zendarva.parachronology.Parachronology;
 import com.gmail.zendarva.parachronology.capability.ITimeless;
+import com.gmail.zendarva.parachronology.capability.Timeless;
 import com.gmail.zendarva.parachronology.capability.TimelessProvider;
 import com.gmail.zendarva.parachronology.network.PacketHandler;
+import com.gmail.zendarva.parachronology.network.UpdateWandSlotPacket;
 import com.gmail.zendarva.parachronology.network.UseWandPacket;
 import com.gmail.zendarva.parachronology.utility.TimelessUtility;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -74,11 +76,21 @@ public class TimelessWand extends Item {
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (player.isSneaking())
-            return EnumActionResult.FAIL;
         if (!worldIn.isRemote)
             return EnumActionResult.SUCCESS;
         ItemStack wand = player.getHeldItem(EnumHand.MAIN_HAND);
+        if (player.isSneaking()){
+            ITimeless timeless = TimelessUtility.getTimeless(wand);
+            if (timeless == null)
+                return EnumActionResult.FAIL;
+            int slot = 0;
+            timeless.setSelectedSlot(slot);
+            UpdateWandSlotPacket packetOut = new UpdateWandSlotPacket(slot);
+            PacketHandler.INSTANCE.sendToServer(packetOut);
+            return EnumActionResult.SUCCESS;
+        }
+
+
         if (TimelessUtility.getTimeless(wand).getCurrentEnergy() >0) {
             World targWorld = DimensionManager.getWorld(TimelessUtility.getTimeless(wand).getWorldId());
             ITimeless timeless = TimelessUtility.getTimeless(wand);
@@ -112,6 +124,7 @@ public class TimelessWand extends Item {
         }
         return EnumActionResult.FAIL;
     }
+
 
 
 

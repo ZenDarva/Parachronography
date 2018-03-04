@@ -21,6 +21,8 @@ import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -45,7 +47,7 @@ public class TimelessPickaxe extends ItemPickaxe{
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         NBTTagCompound tag = stack.getTagCompound();
-        if (tag == null)
+        if (tag == null || !tag.getBoolean("linked"))
             tooltip.add("Unlinked");
         else if (tag.getBoolean("linked"))
             tooltip.add("Linked");
@@ -93,6 +95,9 @@ public class TimelessPickaxe extends ItemPickaxe{
             return true;
         }
         if (!stack.canHarvestBlock(worldIn.getBlockState(pos))){
+            return true;
+        }
+        if (entityLiving.isSneaking()){
             return true;
         }
 
@@ -157,4 +162,18 @@ public class TimelessPickaxe extends ItemPickaxe{
     }
 
 
+    @Override
+    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        TileEntity entity = worldIn.getTileEntity(pos);
+        if (entity == null)
+            return EnumActionResult.FAIL;
+        ITimeless timeless = player.getHeldItemMainhand().getCapability(TimelessProvider.timeless,null);
+        ItemStack targ = player.getHeldItemMainhand();
+        if (timeless == null) //Wha?
+            return EnumActionResult.FAIL;
+        timeless.setTarget(null);
+        if (targ.getTagCompound() != null) //Should always be the case, but... NPE's suck.
+            targ.getTagCompound().setBoolean("linked", false);
+        return EnumActionResult.SUCCESS;
+    }
 }

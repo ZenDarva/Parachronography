@@ -110,7 +110,7 @@ public class Storage extends Block implements ITileEntityProvider {
                 playerIn.getHeldItemMainhand().getItem() instanceof TimelessWand) {
             ITimeless timeless = playerIn.getHeldItemMainhand().getCapability(TimelessProvider.timeless,null);
             ItemStack targ = playerIn.getHeldItemMainhand();
-            if (timeless.getTarget() == null) {
+            if (timeless.getTarget() == null || (targ.getTagCompound() != null && !targ.getTagCompound().getBoolean("linked"))) {
                 timeless.setTarget(pos);
                 timeless.setWorldId(playerIn.dimension);
                 if (targ.getTagCompound() == null) {
@@ -119,6 +119,10 @@ public class Storage extends Block implements ITileEntityProvider {
                     targ.setTagCompound(tag);
                 }
                 return true;
+            } else if (playerIn.isSneaking()){
+                timeless.setTarget(null);
+                if (targ.getTagCompound() != null) //Should always be the case, but... NPE's suck.
+                    targ.getTagCompound().setBoolean("linked", false);
             }
         }
 
@@ -126,6 +130,8 @@ public class Storage extends Block implements ITileEntityProvider {
         playerIn.openGui(Parachronology.instance, GUI_ID,worldIn,pos.getX(),pos.getY(),pos.getZ());
         return true;
     }
+
+
 
     public static boolean isOpen(int meta)
     {

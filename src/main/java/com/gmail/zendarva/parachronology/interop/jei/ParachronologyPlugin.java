@@ -1,12 +1,12 @@
-package com.gmail.zendarva.parachronology.jei;
+package com.gmail.zendarva.parachronology.interop.jei;
 
 import com.gmail.zendarva.parachronology.Configuration.ConfigurationHolder;
 import com.gmail.zendarva.parachronology.DisplaceListBuilder;
 import com.gmail.zendarva.parachronology.Parachronology;
 import com.gmail.zendarva.parachronology.handlers.DropData;
-import com.gmail.zendarva.parachronology.jei.bias.BiasHandler;
-import com.gmail.zendarva.parachronology.jei.displace.DisplaceCatagory;
-import com.gmail.zendarva.parachronology.jei.displace.DisplaceHandler;
+import com.gmail.zendarva.parachronology.interop.jei.bias.BiasHandler;
+import com.gmail.zendarva.parachronology.interop.jei.displace.DisplaceCatagory;
+import com.gmail.zendarva.parachronology.interop.jei.displace.DisplaceHandler;
 import com.gmail.zendarva.parachronology.recipe.CraftingRecipes;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;

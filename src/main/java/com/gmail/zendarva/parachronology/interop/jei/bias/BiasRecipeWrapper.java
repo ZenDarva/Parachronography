@@ -1,8 +1,7 @@
-package com.gmail.zendarva.parachronology.jei.bias;
+package com.gmail.zendarva.parachronology.interop.jei.bias;
 
 import com.gmail.zendarva.parachronology.recipe.BiasRecipe;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeWrapper;
 import mezz.jei.api.recipe.wrapper.IShapedCraftingRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;

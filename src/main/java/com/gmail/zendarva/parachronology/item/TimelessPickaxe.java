@@ -10,6 +10,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -42,6 +43,11 @@ import java.util.Set;
  * Created by James on 7/30/2017.
  */
 public class TimelessPickaxe extends ItemPickaxe{
+    @Override
+    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+    }
+
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
@@ -85,9 +91,7 @@ public class TimelessPickaxe extends ItemPickaxe{
 
     @Override
     public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
-        if (worldIn.isRemote) {
-            return true;
-        }
+
         ITimeless timeless = stack.getCapability(TimelessProvider.timeless,null);
 
 
@@ -98,6 +102,10 @@ public class TimelessPickaxe extends ItemPickaxe{
             return true;
         }
         if (entityLiving.isSneaking()){
+            return true;
+        }
+        if (worldIn.isRemote) {
+            timeless.addEnergy(-1);
             return true;
         }
 
@@ -121,6 +129,7 @@ public class TimelessPickaxe extends ItemPickaxe{
             }
         }
         timeless.addEnergy(-1);
+        System.out.println("isRemote: " + worldIn.isRemote + " Energy: " + timeless.getCurrentEnergy());
         return false;
     }
 

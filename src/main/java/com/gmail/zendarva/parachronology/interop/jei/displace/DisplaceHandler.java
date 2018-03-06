@@ -1,4 +1,4 @@
-package com.gmail.zendarva.parachronology.jei.displace;
+package com.gmail.zendarva.parachronology.interop.jei.displace;
 
 import com.gmail.zendarva.parachronology.DisplaceRecipe;
 import mezz.jei.api.recipe.IRecipeHandler;

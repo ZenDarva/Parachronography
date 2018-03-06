@@ -23,8 +23,8 @@ public class StorageContainer extends Container {
 
         this.playerInventory = playerInventory;
         this.entity = entity;
-        addPlayerSlots(playerInventory);
         addOwnSlots();
+        addPlayerSlots(playerInventory);
     }
     private void addPlayerSlots(IInventory playerInventory) {
         // Slots for the main inventory
@@ -64,25 +64,23 @@ public class StorageContainer extends Container {
         }
     }
 
-    @Nullable
     @Override
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
-        ItemStack itemstack = null;
-        Slot slot = this.inventorySlots.get(index);
 
-        if (slot != null && slot.getHasStack()) {
+        ItemStack itemstack = ItemStack.EMPTY;
+        Slot slot = (Slot)this.inventorySlots.get(index);
+        if(slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
-
-            if (index < StorageEntity.SIZE) {
-                if (!this.mergeItemStack(itemstack1, StorageEntity.SIZE, this.inventorySlots.size(), true)) {
-                    return null;
+            if(index < StorageEntity.SIZE) {
+                if(!this.mergeItemStack(itemstack1, StorageEntity.SIZE, this.inventorySlots.size(), true)) {
+                    return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemstack1, 0, StorageEntity.SIZE, false)) {
-                return null;
+            } else if(!this.mergeItemStack(itemstack1, 0, StorageEntity.SIZE, false)) {
+                return ItemStack.EMPTY;
             }
 
-            if (itemstack1.isEmpty()) {
+            if(itemstack1.isEmpty()) {
                 slot.putStack(ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();

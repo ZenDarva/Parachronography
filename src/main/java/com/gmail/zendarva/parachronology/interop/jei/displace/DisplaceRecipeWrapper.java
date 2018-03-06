@@ -1,14 +1,11 @@
-package com.gmail.zendarva.parachronology.jei.displace;
+package com.gmail.zendarva.parachronology.interop.jei.displace;
 
 import com.gmail.zendarva.parachronology.BlockReference;
 import com.gmail.zendarva.parachronology.DisplaceRecipe;
-import com.gmail.zendarva.parachronology.Parachronology;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 
 import java.util.LinkedList;

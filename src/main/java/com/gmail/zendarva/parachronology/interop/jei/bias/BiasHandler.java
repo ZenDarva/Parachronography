@@ -1,6 +1,5 @@
-package com.gmail.zendarva.parachronology.jei.bias;
+package com.gmail.zendarva.parachronology.interop.jei.bias;
 
-import com.gmail.zendarva.parachronology.DisplaceRecipe;
 import com.gmail.zendarva.parachronology.recipe.BiasRecipe;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;

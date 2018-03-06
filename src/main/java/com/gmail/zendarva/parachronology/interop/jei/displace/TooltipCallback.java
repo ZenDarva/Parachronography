@@ -1,4 +1,4 @@
-package com.gmail.zendarva.parachronology.jei.displace;
+package com.gmail.zendarva.parachronology.interop.jei.displace;
 
 import mezz.jei.api.gui.ITooltipCallback;
 import net.minecraft.item.ItemStack;

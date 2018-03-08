@@ -48,6 +48,7 @@ public class TimelessPickaxe extends ItemPickaxe{
         super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
     }
 
+
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
@@ -62,7 +63,7 @@ public class TimelessPickaxe extends ItemPickaxe{
     @Override
     public float getDestroySpeed(ItemStack stack, IBlockState state) {
         ITimeless timeless = stack.getCapability(TimelessProvider.timeless,null);
-        if (timeless.getCurrentEnergy() > 0)
+        if (getCurrentEnergy(stack) > 0)
             return super.getDestroySpeed(stack,state);
         return -1;
     }
@@ -93,8 +94,6 @@ public class TimelessPickaxe extends ItemPickaxe{
     public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
 
         ITimeless timeless = stack.getCapability(TimelessProvider.timeless,null);
-
-
         if (timeless.getTarget() == null) {
             return true;
         }
@@ -105,11 +104,8 @@ public class TimelessPickaxe extends ItemPickaxe{
             return true;
         }
         if (worldIn.isRemote) {
-            timeless.addEnergy(-1);
             return true;
         }
-
-
         if (worldIn.isBlockLoaded(timeless.getTarget())) {
             TileEntity entity = TimelessUtility.getTargetStorage(stack);
             if (entity instanceof StorageEntity) {
@@ -129,7 +125,6 @@ public class TimelessPickaxe extends ItemPickaxe{
             }
         }
         timeless.addEnergy(-1);
-        System.out.println("isRemote: " + worldIn.isRemote + " Energy: " + timeless.getCurrentEnergy());
         return false;
     }
 
@@ -138,10 +133,20 @@ public class TimelessPickaxe extends ItemPickaxe{
         return true;
     }
 
+    private int getCurrentEnergy(ItemStack stack){
+        NBTTagCompound tag = stack.getTagCompound();
+        if (tag == null || !tag.hasKey("durability")) {
+            ITimeless timeless = stack.getCapability(TimelessProvider.timeless,null);
+            return timeless.getCurrentEnergy();
+        }
+        return tag.getInteger("durability");
+    }
+
     @Override
     public double getDurabilityForDisplay(ItemStack stack) {
         ITimeless timeless = stack.getCapability(TimelessProvider.timeless,null);
-        return (timeless.getMaxEnergy() - (double)timeless.getCurrentEnergy()) / (double)timeless.getMaxEnergy();
+        int curEnergy = getCurrentEnergy(stack);
+        return (timeless.getMaxEnergy() - (double) curEnergy) / (double) timeless.getMaxEnergy();
     }
 
     @Override
@@ -170,7 +175,6 @@ public class TimelessPickaxe extends ItemPickaxe{
         return new ItemStack(item, 1, i);
     }
 
-
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         TileEntity entity = worldIn.getTileEntity(pos);
@@ -180,9 +184,31 @@ public class TimelessPickaxe extends ItemPickaxe{
         ItemStack targ = player.getHeldItemMainhand();
         if (timeless == null) //Wha?
             return EnumActionResult.FAIL;
-        timeless.setTarget(null);
-        if (targ.getTagCompound() != null) //Should always be the case, but... NPE's suck.
-            targ.getTagCompound().setBoolean("linked", false);
+        if (player.isSneaking()) {
+            timeless.setTarget(null);
+            if (targ.getTagCompound() != null) //Should always be the case, but... NPE's suck.
+                targ.getTagCompound().setBoolean("linked", false);
+        }
         return EnumActionResult.SUCCESS;
     }
+
+    @Override
+    public boolean getShareTag() {
+        return true;
+    }
+
+    @Nullable
+    @Override
+    public NBTTagCompound getNBTShareTag(ItemStack stack) {
+        NBTTagCompound tag = stack.getTagCompound();
+        if (tag== null){
+            tag = new NBTTagCompound();
+        }
+        ITimeless timeless = stack.getCapability(TimelessProvider.timeless,null);
+        if (timeless != null && tag != null)
+            tag.setInteger("durability",timeless.getCurrentEnergy());
+        return tag;
+    }
+
+
 }

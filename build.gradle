@@ -1,3 +1,4 @@
+apply plugin: 'idea'
 buildscript {
     repositories {
         jcenter()
@@ -11,7 +12,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = "1.5.6"
+version = "1.5.7"
 group = "com.gmail.zendarva.parachronology" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Parachronology"
 
@@ -55,9 +56,12 @@ dependencies {
 
         compile fileTree(dir: 'lib', include: '*.jar')
         deobfProvided "mezz.jei:jei_1.12.1:4.7.5.88:api"
+        runtime "mezz.jei:jei_1.12.1:4.7.5.88"
         deobfProvided ("mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.19-11") {transitive=false}
         runtime ("mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.19-11") {transitive=false}
-        runtime "mezz.jei:jei_1.12.1:4.7.5.88"
+        deobfProvided "mcp.mobius.waila:Hwyla:1.8.23-B38_1.12"
+        runtime ("mcp.mobius.waila:Hwyla:1.8.23-B38_1.12")
+
 }
 
 repositories {
@@ -65,12 +69,16 @@ repositories {
         url "http://dvs1.progwml6.com/files/maven"
 
     }
-    maven { // TOP
-
+    maven {
         name 'tterrag maven'
-
         url "http://maven.tterrag.com/"
-
+    }
+    maven {
+        url "https://minecraft.curseforge.com/api/maven/"
+    }
+    maven {
+        name 'TehNut Maven'
+        url "http://tehnut.info/maven/"
     }
 
 }

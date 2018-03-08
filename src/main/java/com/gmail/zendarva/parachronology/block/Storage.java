@@ -102,6 +102,7 @@ public class Storage extends Block implements ITileEntityProvider {
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 
         TileEntity entity = worldIn.getTileEntity(pos);
+        NBTTagCompound tag;
 
         if (!(entity instanceof StorageEntity))
             return false;
@@ -114,19 +115,17 @@ public class Storage extends Block implements ITileEntityProvider {
                 timeless.setTarget(pos);
                 timeless.setWorldId(playerIn.dimension);
                 if (targ.getTagCompound() == null) {
-                    NBTTagCompound tag = new NBTTagCompound();
+                    tag = new NBTTagCompound();
+                } else
+                {
+                    tag = targ.getTagCompound();
+                }
                     tag.setBoolean("linked", true);
                     targ.setTagCompound(tag);
-                }
+
                 return true;
-            } else if (playerIn.isSneaking()){
-                timeless.setTarget(null);
-                if (targ.getTagCompound() != null) //Should always be the case, but... NPE's suck.
-                    targ.getTagCompound().setBoolean("linked", false);
             }
         }
-
-
         playerIn.openGui(Parachronology.instance, GUI_ID,worldIn,pos.getX(),pos.getY(),pos.getZ());
         return true;
     }

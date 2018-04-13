@@ -5,7 +5,6 @@ import com.gmail.zendarva.parachronology.capability.ITimeless;
 import com.gmail.zendarva.parachronology.capability.TimelessProvider;
 import com.gmail.zendarva.parachronology.entity.StorageEntity;
 import com.gmail.zendarva.parachronology.utility.TimelessUtility;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
@@ -18,10 +17,8 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -37,7 +34,6 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by James on 7/30/2017.
@@ -58,6 +54,8 @@ public class TimelessPickaxe extends ItemPickaxe{
             tooltip.add("Unlinked");
         else if (tag.getBoolean("linked"))
             tooltip.add("Linked");
+
+
     }
 
     @Override
@@ -210,5 +208,8 @@ public class TimelessPickaxe extends ItemPickaxe{
         return tag;
     }
 
-
+    @Override
+    public boolean updateItemStackNBT(NBTTagCompound nbt) {
+        return super.updateItemStackNBT(nbt);
+    }
 }

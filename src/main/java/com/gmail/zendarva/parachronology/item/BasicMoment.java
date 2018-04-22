@@ -1,7 +1,11 @@
 package com.gmail.zendarva.parachronology.item;
 
+import java.util.List;
 import java.util.Random;
 
+import com.gmail.zendarva.parachronology.Configuration.ConfigManager;
+import com.gmail.zendarva.parachronology.Configuration.domain.BaseBlockReference;
+import com.gmail.zendarva.parachronology.Configuration.domain.BlockReference;
 import com.gmail.zendarva.parachronology.Parachronology;
 
 import net.minecraft.block.Block;
@@ -43,72 +47,6 @@ public class BasicMoment extends Item {
 
 	}
 
-	private int spread(World world, BlockPos from, int times) {
-
-		if (times == 0)
-			return 0;
-		if (OreDictionary.itemMatches(new ItemStack(Blocks.LOG),
-				new ItemStack(world.getBlockState(from.add(0, -1, 0)).getBlock()), false)) {
-			world.destroyBlock(from.add(0, -1, 0), false);
-			world.setBlockState(from.add(0, -1, 0), Parachronology.petrifiedWood.getDefaultState());
-			world.markChunkDirty(from, null);
-			times--;
-			times = spread(world, from.add(0, -1, 0), times);
-		}
-		if (times == 0)
-			return 0;
-		if (OreDictionary.itemMatches(new ItemStack(Blocks.LOG),
-				new ItemStack(world.getBlockState(from.add(0, 1, 0)).getBlock()), false)) {
-			world.destroyBlock(from.add(0, 1, 0), false);
-			world.setBlockState(from.add(0, 1, 0), Parachronology.petrifiedWood.getDefaultState());
-			world.markChunkDirty(from, null);
-			times--;
-			times = spread(world, from.add(0, 1, 0), times);
-		}
-		if (times == 0)
-			return 0;
-		if (OreDictionary.itemMatches(new ItemStack(Blocks.LOG),
-				new ItemStack(world.getBlockState(from.add(-1, 0, 0)).getBlock()), false)) {
-			world.destroyBlock(from.add(-1, 0, 0), false);
-			world.setBlockState(from.add(-1, 0, 0), Parachronology.petrifiedWood.getDefaultState());
-			world.markChunkDirty(from, null);
-			times--;
-			times = spread(world, from.add(-1, 0, 0), times);
-		}
-		if (times == 0)
-			return 0;
-		if (OreDictionary.itemMatches(new ItemStack(Blocks.LOG),
-				new ItemStack(world.getBlockState(from.add(1, 0, 0)).getBlock()), false)) {
-			world.destroyBlock(from.add(1, 0, 0), false);
-			world.setBlockState(from.add(1, 0, 0), Parachronology.petrifiedWood.getDefaultState());
-			world.markChunkDirty(from, null);
-			times--;
-			times = spread(world, from.add(1, 0, 0), times);
-		}
-		if (times == 0)
-			return 0;
-		if (OreDictionary.itemMatches(new ItemStack(Blocks.LOG),
-				new ItemStack(world.getBlockState(from.add(0, 0, -1)).getBlock()), false)) {
-			world.destroyBlock(from.add(0, 0, -1), false);
-			world.setBlockState(from.add(0, 0, -1), Parachronology.petrifiedWood.getDefaultState());
-			world.markChunkDirty(from, null);
-			times--;
-			times = spread(world, from.add(0, 0, -1), times);
-		}
-		if (times == 0)
-			return 0;
-		if (OreDictionary.itemMatches(new ItemStack(Blocks.LOG),
-				new ItemStack(world.getBlockState(from.add(0, 0, 1)).getBlock()), false)) {
-			world.destroyBlock(from.add(0, 0, 1), false);
-			world.setBlockState(from.add(0, 0, 1), Parachronology.petrifiedWood.getDefaultState());
-			world.markChunkDirty(from, null);
-			times--;
-			times = spread(world, from.add(0, 0, 1), times);
-		}
-		return times;
-
-	}
-
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
 			EnumFacing facing, float hitX, float hitY, float hitZ) {
@@ -118,22 +56,37 @@ public class BasicMoment extends Item {
 
 		int amount = 2;
 
-		return transformUse(player, worldIn, stack, pos, amount);
+
+		BlockReference target = BlockReference.fromBlockWorld(pos,worldIn);
+		List<BlockReference> targets = ConfigManager.getMomentTransforms(target);
+		if (!targets.isEmpty()){
+			transformUse(worldIn,pos, 2,targets);
+		}
+		return EnumActionResult.SUCCESS;
+
 	}
 
-	private EnumActionResult transformUse(EntityPlayer player, World world, ItemStack stack, BlockPos targ,
-			int amount) {
+	public static EnumActionResult transformUse(World world, BlockPos target, int amount, List<BlockReference> possibleResults){
 		Random r = new Random();
-		Block block = world.getBlockState(targ).getBlock();
+		possibleResults.get(r.nextInt(possibleResults.size())).setBlockInWorld(world,target);
+		spread(world,target,amount--);
+		return EnumActionResult.SUCCESS;
+	}
 
-		if (OreDictionary.itemMatches(new ItemStack(Blocks.LOG), new ItemStack(block), false)) {
-			world.destroyBlock(targ, false);
-			world.setBlockState(targ, Parachronology.petrifiedWood.getDefaultState());
-			world.markChunkDirty(targ, null);
-			stack.shrink(1);
-			spread(world, targ, amount);
-			return EnumActionResult.SUCCESS;
+	private static int spread(World world, BlockPos target, int amount){
+		Random r = new Random(System.currentTimeMillis());
+
+		for (EnumFacing face : EnumFacing.values()){
+			if (amount == 0)
+				return 0;
+			BlockReference ref = BlockReference.fromBlockWorld(target.offset(face), world);
+			List<BlockReference> targets = ConfigManager.getMomentTransforms(ref);
+			if (!targets.isEmpty()){
+				targets.get(r.nextInt(targets.size())).setBlockInWorld(world,target.offset(face));
+				amount--;
+				amount = spread(world,target.offset(face),amount);
+			}
 		}
-		return EnumActionResult.FAIL;
+		return amount;
 	}
 }

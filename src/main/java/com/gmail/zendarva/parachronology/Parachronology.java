@@ -1,5 +1,6 @@
 package com.gmail.zendarva.parachronology;
 
+import com.gmail.zendarva.parachronology.Configuration.ConfigManager;
 import com.gmail.zendarva.parachronology.Configuration.ConfigurationHolder;
 import com.gmail.zendarva.parachronology.block.Displacer;
 import com.gmail.zendarva.parachronology.block.EnrichedDirt;
@@ -33,6 +34,8 @@ import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.io.File;
 
 /**
  * Created by James on 6/11/2017.
@@ -98,6 +101,16 @@ public class Parachronology {
 
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
+		ConfigManager.configDir= new File(event.getSuggestedConfigurationFile().getParentFile(), "parachronology");
+		if (!ConfigManager.configDir.exists()){
+			ConfigManager.configDir.mkdir();
+			ConfigManager.createMomentTransforms();
+			ConfigManager.writeConfigs();
+		}
+		else
+		{
+			ConfigManager.readConfigs();
+		}
 
 		ConfigurationHolder.getInstance().setupConfigs(config);
 

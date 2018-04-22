@@ -1,9 +1,11 @@
 package com.gmail.zendarva.parachronology.proxy;
 
 import com.gmail.zendarva.parachronology.Parachronology;
+import com.gmail.zendarva.parachronology.commands.ParaCommand;
 import com.gmail.zendarva.parachronology.handlers.DrawBlockHandler;
 import com.gmail.zendarva.parachronology.handlers.KeyPressHandler;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -30,7 +32,7 @@ public class ClientProxy extends CommonProxy {
 			ClientRegistry.registerKeyBinding(keyBindings[i]);
 		}
 		MinecraftForge.EVENT_BUS.register(new KeyPressHandler());
-
+		ClientCommandHandler.instance.registerCommand(new ParaCommand());
 	}
 	@SideOnly(Side.CLIENT)
 	public void registerRenderThings() {

@@ -1,8 +1,11 @@
 package com.gmail.zendarva.parachronology.item;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import com.gmail.zendarva.parachronology.Configuration.ConfigManager;
+import com.gmail.zendarva.parachronology.Configuration.domain.BlockReference;
 import com.gmail.zendarva.parachronology.Parachronology;
 import com.gmail.zendarva.parachronology.TransformListBuilder;
 import com.gmail.zendarva.parachronology.Configuration.ConfigurationHolder;
@@ -66,7 +69,13 @@ public class Moment extends Item {
 		case 2:
 			amount = 31;
 		}
-		return transformUse(player, worldIn, stack, pos, amount);
+		BlockReference target = BlockReference.fromBlockWorld(pos,worldIn);
+		List<BlockReference> targets = ConfigManager.getMomentTransforms(target);
+		if (!targets.isEmpty()){
+			return BasicMoment.transformUse(worldIn,pos,amount,targets);
+		}
+
+		return EnumActionResult.FAIL;
 	}
 
 	@Override

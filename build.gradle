@@ -12,7 +12,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = "1.5.7"
+version = "1.5.8"
 group = "com.gmail.zendarva.parachronology" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Parachronology"
 
@@ -92,5 +92,14 @@ processResources {
     }
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+    }
+    rename '(.+_at.cfg)', 'META-INF/$1'
+}
+
+jar {
+
+    manifest {
+
+        attributes 'FMLAT': 'parachronology_at.cfg'
     }
 }

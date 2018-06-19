@@ -1,6 +1,7 @@
 package com.gmail.zendarva.parachronology.Configuration.domain;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -8,6 +9,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.Random;
 
 /**
  * Created by James on 4/12/2018.
@@ -24,8 +27,13 @@ public class BlockReference extends BaseBlockReference {
 
     private ItemStack myStack = ItemStack.EMPTY;
 
-    public BlockReference() {
-        System.out.println("Noop");
+    protected BlockReference() {
+        super();
+    }
+
+    @Override
+    public String getDisplayName() {
+        return getItemStack().getDisplayName();
     }
 
     @Override
@@ -35,30 +43,31 @@ public class BlockReference extends BaseBlockReference {
 
     public static BlockReference fromItemStack(ItemStack stack){
         BlockReference reference = new BlockReference();
-        reference.metadata = stack.getMetadata();
-        reference.blockName = stack.getItem().getRegistryName().getResourcePath();
-        reference.domain = stack.getItem().getRegistryName().getResourceDomain();
+        int metadata = stack.getMetadata();
+        String blockName = stack.getItem().getRegistryName().getResourcePath();
+        String domain = stack.getItem().getRegistryName().getResourceDomain();
+        String nbt= null;
         if (stack.hasTagCompound()){
-            reference.compound = stack.getTagCompound();
+            nbt = stack.getTagCompound().toString();
         }
 
-        return reference;
+        return (BlockReference) BaseBlockReference.getReference(metadata,blockName,domain, nbt);
     }
 
     public static BlockReference fromBlockWorld(BlockPos pos, World world){
-        BlockReference reference = new BlockReference();
         Block block = world.getBlockState(pos).getBlock();
 
-        reference.metadata = world.getBlockState(pos).getBlock().getMetaFromState(world.getBlockState(pos));
-        reference.blockName=block.getRegistryName().getResourcePath();
-        reference.domain=block.getRegistryName().getResourceDomain();
+        int metadata = world.getBlockState(pos).getBlock().getMetaFromState(world.getBlockState(pos));
+        String blockName=block.getRegistryName().getResourcePath();
+        String domain=block.getRegistryName().getResourceDomain();
         TileEntity entity = world.getTileEntity(pos);
+        String compound=null;
         if (entity != null){
-            reference.compound=entity.serializeNBT();
+
+            compound = entity.serializeNBT().toString();
         }
 
-        reference.register();
-        return reference;
+        return (BlockReference) BaseBlockReference.getReference(metadata,blockName,domain, compound);
     }
 
     @Override
@@ -93,6 +102,10 @@ public class BlockReference extends BaseBlockReference {
         if (myStack.isEmpty()){
             Block targBlock = Block.getBlockFromName(domain+":"+blockName);
             myStack = new ItemStack(targBlock,1,metadata);
+            if (myStack.isEmpty()) {
+                //Reeds.  I hate reeds.
+                myStack = new ItemStack(targBlock.getItemDropped(targBlock.getDefaultState(),new Random(),0),1,metadata);
+            }
         }
         return myStack;
     }

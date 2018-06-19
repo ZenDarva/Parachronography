@@ -10,6 +10,11 @@ import java.util.List;
  */
 public class DisplaceResult {
     public BlockReference to;
-    public int weight;
+    public int weight =1;
 
+
+    public DisplaceResult(BlockReference to, int weight){
+        this.to = to;
+        this.weight = weight;
+    }
 }

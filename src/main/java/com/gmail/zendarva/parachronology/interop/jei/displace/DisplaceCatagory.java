@@ -1,26 +1,28 @@
 package com.gmail.zendarva.parachronology.interop.jei.displace;
 
+import com.gmail.zendarva.parachronology.Configuration.domain.DisplaceResult;
 import com.gmail.zendarva.parachronology.Parachronology;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeCategory;
+import mezz.jei.api.recipe.IRecipeCategory;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.awt.*;
 import java.util.List;
 
 /**
  * Created by James on 8/20/2017.
  */
-public class DisplaceCatagory extends BlankRecipeCategory<DisplaceRecipeWrapper> {
+public class DisplaceCatagory implements IRecipeCategory<DisplaceRecipe> {
     IDrawable background;
     IDrawable icon;
+    private int tier;
     @Override
     public String getUid() {
         return "parachronology.displace";
@@ -50,13 +52,13 @@ public class DisplaceCatagory extends BlankRecipeCategory<DisplaceRecipeWrapper>
     }
 
     @Override
-    public void setRecipe(IRecipeLayout iRecipeLayout, DisplaceRecipeWrapper displaceRecipeWrapper, IIngredients iIngredients) {
+    public void setRecipe(IRecipeLayout iRecipeLayout, DisplaceRecipe displaceRecipeWrapper, IIngredients iIngredients) {
         IGuiItemStackGroup displayStacks = iRecipeLayout.getItemStacks();
-
+        tier = displaceRecipeWrapper.getTier();
         int index = 0;
 
         List input =iIngredients.getInputs(ItemStack.class);
-        List output = iIngredients.getOutputs(ItemStack.class);;
+        List<List<ItemStack>> output = iIngredients.getOutputs(ItemStack.class);;
 
         for(int i =0; i< input.size();i++){
             displayStacks.init(index,true,16,i*18);
@@ -73,31 +75,30 @@ public class DisplaceCatagory extends BlankRecipeCategory<DisplaceRecipeWrapper>
         displayStacks.set(index-1,new ItemStack(Parachronology.displacer));
         displayStacks.set(index,new ItemStack(Parachronology.moment,1,0));
 
-        ArrayList<LinkedList<ItemStack>> tiers = new ArrayList<>(3);
-        for (int tier =0;tier<3;tier++){
-            int x = 100 + (27*tier);
-            int y = 0;
-            tiers.add(tier,new LinkedList<>());
-            for (ItemStack stack : displaceRecipeWrapper.getOutputForTier(tier)){
-                if (tier == 0 || (tier > 0 && !isDupe(stack,displaceRecipeWrapper,tier-1))) {
-                    tiers.get(tier).add(stack);
-                    displayStacks.init(index, false, x, y);
-                    displayStacks.set(index, stack);
-                    index++;
-                    y += 18;
-                }
+        int x = 110;
+        int y = 0;
+        int count=0;
+        displayStacks.addTooltipCallback(new WeightToolTip(displaceRecipeWrapper));
+        for (List<ItemStack> l : output) {
+            displayStacks.init(index,false,x,y);
+            displayStacks.set(index,l.get(0));
+
+            index++;
+            y+=18;
+            count++;
+            if (count >= 5){
+                count = 0;
+                x+=25;
+                y=0;
             }
-            y=18;
         }
-        displayStacks.addTooltipCallback(new TooltipCallback(tiers));
     }
 
-    public boolean isDupe(ItemStack targ, DisplaceRecipeWrapper wrapper, int tier){
-        for (ItemStack stack : wrapper.getOutputForTier(tier)){
-            if (stack.isItemEqual(targ) && stack.getMetadata() == targ.getMetadata())
-                return true;
-        }
-        return false;
+
+
+    @Override
+    public void drawExtras(Minecraft minecraft) {
+        minecraft.currentScreen.drawString(minecraft.fontRenderer,"Tier: " + tier, 168/2-15,20, Color.WHITE.getRGB());
     }
 
     public DisplaceCatagory(IGuiHelper helper) {

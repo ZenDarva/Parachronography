@@ -2,15 +2,18 @@ package com.gmail.zendarva.parachronology.handlers;
 
 import java.util.Random;
 
+import com.gmail.zendarva.parachronology.Configuration.ConfigManager;
+import com.gmail.zendarva.parachronology.Configuration.domain.DropData;
 import com.gmail.zendarva.parachronology.Parachronology;
 import com.gmail.zendarva.parachronology.Configuration.ConfigurationHolder;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -40,21 +43,12 @@ public class MobDrop {
 		if (r.nextInt(10) < value) {
 			droppedAmount++;
 		}
-		String modifiedName;
-		if (entity.getEntityString() == null)
-			return;
-		if (entity.getEntityString().contains(":")) {
-			modifiedName = entity.getEntityString().substring(entity.getEntityString().indexOf(":") + 1);
-		}
-		else{
-			modifiedName=entity.getEntityString();
-		}
-
-		modifiedName = modifiedName.replaceAll("_"," ");
+		ResourceLocation mobName = EntityList.getKey(entity);
+		String rawMobName = mobName.toString();
 		int totalDropped = 1;
 
-		if (ConfigurationHolder.mobDrops.containsKey(modifiedName)) {
-			DropData data = ConfigurationHolder.mobDrops.get(modifiedName);
+		if (ConfigManager.mobDrops.containsKey(rawMobName)) {
+			DropData data = ConfigManager.mobDrops.get(rawMobName);
 
 			if (data.complexMomentChance != 0) {
 

@@ -3,8 +3,8 @@ package com.gmail.zendarva.parachronology.utility.tasks;
 import java.lang.reflect.Field;
 import java.util.Random;
 
-import com.gmail.zendarva.parachronology.BlockReference;
 
+import com.gmail.zendarva.parachronology.Configuration.domain.BlockReference;
 import net.minecraft.block.BlockMobSpawner;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntityMobSpawner;
@@ -26,27 +26,7 @@ public class TransformTask implements Runnable {
 		Random r = new Random();
 
 		world.destroyBlock(target, false);
-
-		block.placeInWorld(world, target.getX(), target.getY(), target.getZ());
-
-		if (block.targBlock instanceof BlockMobSpawner) {
-			for (Field f : TileEntityMobSpawner.class.getDeclaredFields()) {
-				if (f.getGenericType() == MobSpawnerBaseLogic.class) {
-					world.markChunkDirty(target, null);
-					f.setAccessible(true);
-
-					TileEntityMobSpawner spawner = (TileEntityMobSpawner) world.getTileEntity(target);
-					try {
-						MobSpawnerBaseLogic logic = (MobSpawnerBaseLogic) f.get(spawner);
-						logic.setEntityId(new ResourceLocation(spawnableList[r.nextInt(spawnableList.length)]));
-
-					} catch (IllegalAccessException e) {
-						e.printStackTrace();
-					}
-
-				}
-			}
-		}
+		block.setBlockInWorld(world,target);
 		world.markChunkDirty(target, null);
 	}
 

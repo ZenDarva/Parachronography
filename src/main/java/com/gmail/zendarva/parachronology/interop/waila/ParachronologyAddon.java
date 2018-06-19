@@ -50,14 +50,6 @@ public class ParachronologyAddon implements IWailaDataProvider {
             }
             list.add(tierStr);
 
-            if (entity.getAgainst() != null)
-            {
-                list.add ("Biased Against: " + entity.getAgainst().getStack().getDisplayName());
-            }
-            if (entity.getTowards() != null)
-            {
-                list.add ("Biased Towards: " + entity.getTowards().getStack().getDisplayName());
-            }
         }
         return list;
     }

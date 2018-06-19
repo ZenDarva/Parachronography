@@ -34,7 +34,6 @@ public class Registration {
     public void RegisterItems(RegistryEvent.Register<Item> event) {
         event.getRegistry().register(Parachronology.basicMoment);
         event.getRegistry().register(Parachronology.moment);
-        event.getRegistry().register(Parachronology.bias);
         event.getRegistry().register(Parachronology.capturedMoment);
         event.getRegistry().register(Parachronology.upgrade);
         event.getRegistry().register(new DiplacerItemBlock(Parachronology.displacer));

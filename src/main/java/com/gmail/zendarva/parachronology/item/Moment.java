@@ -7,7 +7,6 @@ import java.util.Random;
 import com.gmail.zendarva.parachronology.Configuration.ConfigManager;
 import com.gmail.zendarva.parachronology.Configuration.domain.BlockReference;
 import com.gmail.zendarva.parachronology.Parachronology;
-import com.gmail.zendarva.parachronology.TransformListBuilder;
 import com.gmail.zendarva.parachronology.Configuration.ConfigurationHolder;
 import com.gmail.zendarva.parachronology.utility.BlockVector;
 import com.gmail.zendarva.parachronology.utility.MultiBlockHelper;
@@ -26,7 +25,6 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
@@ -63,20 +61,21 @@ public class Moment extends Item {
 		int amount = 7;
 		switch (stack.getItemDamage()) {
 
-		case 1:
-			amount = 15;
-			break;
-		case 2:
-			amount = 31;
+			case 1:
+				amount = 15;
+				break;
+			case 2:
+				amount = 31;
 		}
-		BlockReference target = BlockReference.fromBlockWorld(pos,worldIn);
-		List<BlockReference> targets = ConfigManager.getMomentTransforms(target);
-		if (!targets.isEmpty()){
-			return BasicMoment.transformUse(worldIn,pos,amount,targets);
+		BlockReference target = BlockReference.fromBlockWorld(pos, worldIn);
+		List<BlockReference> targets = ConfigManager.getDislocates(target);
+		if (!targets.isEmpty()) {
+			return BasicMoment.transformUse(worldIn, pos, amount, targets);
 		}
+		return transformUse(player, worldIn, stack, pos, 27);
 
-		return EnumActionResult.FAIL;
 	}
+
 
 	@Override
     public String getUnlocalizedName(ItemStack stack)
@@ -93,15 +92,6 @@ public class Moment extends Item {
 			int amount) {
 		Random r = new Random();
 		Block block = world.getBlockState(targ).getBlock();
-
-		if (OreDictionary.itemMatches(new ItemStack(Blocks.LOG), new ItemStack(block), false)) {
-			world.destroyBlock(targ, false);
-			world.setBlockState(targ, Parachronology.petrifiedWood.getDefaultState());
-			world.markChunkDirty(targ, null);
-			stack.shrink(1);
-			spread(world, targ, amount);
-			return EnumActionResult.SUCCESS;
-		}
 
 		if (block == Blocks.END_STONE && stack.getItemDamage() == 2
 				&& ConfigurationHolder.getInstance().isGenerateEndPortal()) {
@@ -144,10 +134,11 @@ public class Moment extends Item {
 				return true;
 			}
 		}
-		ArrayList<String> transforms = TransformListBuilder.Instance().getTransforms(stack.getItemDamage(),
-				EntityList.getEntityString(entity));
-		if (transforms.size() == 0)
-			return false;
+
+
+		EntityLiving result = ConfigManager.getTransformResult(entity,stack.getItemDamage());
+		if (result == null)
+				return false;
 		for (int i = 0; i < 25; i++) {
 			entity.world.spawnParticle(EnumParticleTypes.PORTAL, entity.posX - .5 + r.nextFloat(), entity.posY,
 					entity.posZ - .5 + +r.nextFloat(), r.nextFloat() * .5, r.nextFloat() * .5, r.nextFloat() * .5);
@@ -155,12 +146,9 @@ public class Moment extends Item {
 		if (player.world.isRemote)
 			return true;
 		stack.shrink(1);
-
-		EntityLiving newEntity = (EntityLiving) EntityList.createEntityByIDFromName(new ResourceLocation(transforms.get(r.nextInt(transforms.size()))), player.getEntityWorld());
-
-		newEntity.setPosition(entity.posX, entity.posY, entity.posZ);
-		newEntity.setRotationYawHead(entity.getRotationYawHead());
-		player.world.spawnEntity(newEntity);
+		result.setPosition(entity.posX, entity.posY, entity.posZ);
+		result.setRotationYawHead(entity.getRotationYawHead());
+		player.world.spawnEntity(result);
 
 		entity.setDead();
 

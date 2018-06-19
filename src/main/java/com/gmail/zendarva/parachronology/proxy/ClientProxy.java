@@ -41,7 +41,6 @@ public class ClientProxy extends CommonProxy {
 		Parachronology.displacer.registerModel();
 		Parachronology.upgrade.registerModel();
 		Parachronology.moment.registerModel();
-		Parachronology.bias.registerModel();
 		Parachronology.basicMoment.registerModel();
 		Parachronology.enrichedDirt.registerModel();
 		Parachronology.storage.registerModel();

@@ -1,4 +1,4 @@
-package com.gmail.zendarva.parachronology.handlers;
+package com.gmail.zendarva.parachronology.Configuration.domain;
 
 /**
  * Created by James on 3/3/2016.

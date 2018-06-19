@@ -4,14 +4,12 @@ import java.util.List;
 import java.util.Random;
 
 import com.gmail.zendarva.parachronology.Configuration.ConfigManager;
-import com.gmail.zendarva.parachronology.Configuration.domain.BaseBlockReference;
 import com.gmail.zendarva.parachronology.Configuration.domain.BlockReference;
 import com.gmail.zendarva.parachronology.Parachronology;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -20,10 +18,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * Created by James on 3/22/2016.
@@ -58,10 +54,12 @@ public class BasicMoment extends Item {
 
 
 		BlockReference target = BlockReference.fromBlockWorld(pos,worldIn);
-		List<BlockReference> targets = ConfigManager.getMomentTransforms(target);
+		List<BlockReference> targets = ConfigManager.getDislocates(target);
 		if (!targets.isEmpty()){
 			transformUse(worldIn,pos, 2,targets);
+			stack.shrink(1);
 		}
+
 		return EnumActionResult.SUCCESS;
 
 	}
@@ -80,7 +78,7 @@ public class BasicMoment extends Item {
 			if (amount == 0)
 				return 0;
 			BlockReference ref = BlockReference.fromBlockWorld(target.offset(face), world);
-			List<BlockReference> targets = ConfigManager.getMomentTransforms(ref);
+			List<BlockReference> targets = ConfigManager.getDislocates(ref);
 			if (!targets.isEmpty()){
 				targets.get(r.nextInt(targets.size())).setBlockInWorld(world,target.offset(face));
 				amount--;

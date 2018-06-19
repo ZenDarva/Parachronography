@@ -21,7 +21,9 @@ public class BlockReferenceSerializer implements JsonSerializer<BaseBlockReferen
             BlockReference ref = (BlockReference) src;
             JsonObject refObject = new JsonObject();
             refObject.addProperty("Block", ref.toString());
-            refObject.addProperty("compareNBT", ref.compareNBT);
+            if (ref.compareNBT) {
+                refObject.addProperty("compareNBT", ref.compareNBT);
+            }
             if (ref.compound != null) {
                 refObject.add("NBT", context.serialize(ref.compound));
             }

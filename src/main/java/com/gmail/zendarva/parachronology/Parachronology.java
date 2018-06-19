@@ -18,7 +18,6 @@ import com.gmail.zendarva.parachronology.proxy.CommonProxy;
 import com.gmail.zendarva.parachronology.recipe.CraftingRecipes;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -50,7 +49,6 @@ public class Parachronology {
 	public static Displacer displacer;
 	public static Upgrade upgrade;
 	public static PetrifiedWood petrifiedWood;
-	public static Bias bias;
 	public static BasicMoment basicMoment;
 	public static EnrichedDirt enrichedDirt;
 	public static Storage storage;
@@ -104,7 +102,10 @@ public class Parachronology {
 		ConfigManager.configDir= new File(event.getSuggestedConfigurationFile().getParentFile(), "parachronology");
 		if (!ConfigManager.configDir.exists()){
 			ConfigManager.configDir.mkdir();
-			ConfigManager.createMomentTransforms();
+			ConfigManager.createDislocations();
+			ConfigManager.createDisplacements();
+			ConfigManager.createTransforms();
+			ConfigManager.createMobDrops();
 			ConfigManager.writeConfigs();
 		}
 		else
@@ -113,6 +114,8 @@ public class Parachronology {
 		}
 
 		ConfigurationHolder.getInstance().setupConfigs(config);
+		ConfigurationHolder.getInstance().save();
+
 
 		petrifiedWood = new PetrifiedWood(Material.ROCK);
 
@@ -121,14 +124,13 @@ public class Parachronology {
 		moment = new Moment();
 		upgrade = new Upgrade();
 		capturedMoment = new CapturedMoment();
-		this.bias = new Bias();
 		basicMoment = new BasicMoment();
 		enrichedDirt = new EnrichedDirt();
 		storage = new Storage();
 		pickaxe= new TimelessPickaxe();
 		wand = new TimelessWand();
-		ConfigurationHolder.getInstance().LoadConfigs();
-		ConfigurationHolder.getInstance().save();
+//		ConfigurationHolder.getInstance().LoadConfigs();
+//		ConfigurationHolder.getInstance().save();
 
 		proxy.preInit();
 

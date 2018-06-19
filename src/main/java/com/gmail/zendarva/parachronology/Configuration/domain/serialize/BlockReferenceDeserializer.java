@@ -1,12 +1,8 @@
 package com.gmail.zendarva.parachronology.Configuration.domain.serialize;
 
 import com.gmail.zendarva.parachronology.Configuration.domain.BaseBlockReference;
-import com.gmail.zendarva.parachronology.Configuration.domain.BlockReference;
 import com.gmail.zendarva.parachronology.Configuration.domain.OreDictReference;
 import com.google.gson.*;
-import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.nbt.NBTException;
-import net.minecraft.nbt.NBTTagCompound;
 
 import java.lang.reflect.Type;
 
@@ -22,33 +18,25 @@ public class BlockReferenceDeserializer implements JsonDeserializer<BaseBlockRef
             if (!str.contains(":"))
                 return null;
             String[] chunks = str.split(":");
-            BlockReference ref = new BlockReference();
+            //BlockReference ref = new BlockReference();
 
-            ref.domain = chunks[0];
-            ref.blockName = chunks[1];
+            String domain = chunks[0];
+            String blockName = chunks[1];
+            int metadata = 0;
             if (chunks.length == 3) {
-                ref.metadata = Integer.parseInt(chunks[2]);
+                metadata = Integer.parseInt(chunks[2]);
             }
 
-            if (objRef.has("compareNBT")) {
-                ref.compareNBT = objRef.get("compareNBT").getAsBoolean();
-            }
-
+            String compound = null;
             if (objRef.has("NBT")) {
                 JsonElement obj = objRef.get("NBT");
-                try {
-                    ref.compound = JsonToNBT.getTagFromJson(obj.toString());
-                } catch (NBTException e) {
-                    e.printStackTrace();
-                }
+                    compound = obj.toString();
             }
-            ref.register();
-            return ref;
+
+            return BaseBlockReference.getReference(metadata,blockName,domain,compound);
         }
         if (objRef.has("oreDictionary")){
-            OreDictReference ref = new OreDictReference();
-            ref.oreDictName= objRef.get("oreDictionary").getAsString();
-            ref.register();
+            OreDictReference ref = (OreDictReference) BaseBlockReference.getReference(objRef.get("oreDictionary").getAsString());
             return ref;
         }
         return null;

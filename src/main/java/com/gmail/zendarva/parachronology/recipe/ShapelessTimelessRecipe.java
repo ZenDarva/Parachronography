@@ -1,11 +1,9 @@
 package com.gmail.zendarva.parachronology.recipe;
 
 import com.gmail.zendarva.parachronology.capability.ITimeless;
-import com.gmail.zendarva.parachronology.capability.Timeless;
 import com.gmail.zendarva.parachronology.capability.TimelessProvider;
 import com.gmail.zendarva.parachronology.item.Moment;
 import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;

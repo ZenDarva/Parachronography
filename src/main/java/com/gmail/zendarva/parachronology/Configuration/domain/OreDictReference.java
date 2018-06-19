@@ -27,8 +27,16 @@ public class OreDictReference extends BaseBlockReference {
         return false;
     }
 
-    public OreDictReference() {
-        System.out.println("orenoop");
+    protected OreDictReference() {
+    }
+
+    @Override
+    public String getDisplayName() {
+        return oreDictName;
+    }
+
+    protected OreDictReference(String oreDictName){
+        this.oreDictName = oreDictName;
     }
 
     public String oreDictName;

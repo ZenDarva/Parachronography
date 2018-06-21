@@ -3,10 +3,10 @@ package com.gmail.zendarva.parachronology.Configuration.domain.serialize;
 import com.gmail.zendarva.parachronology.Configuration.domain.BaseBlockReference;
 import com.gmail.zendarva.parachronology.Configuration.domain.BlockReference;
 import com.gmail.zendarva.parachronology.Configuration.domain.OreDictReference;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
+import com.google.gson.*;
+import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.nbt.NBTTagCompound;
+import scala.util.parsing.json.JSON;
 import scala.xml.dtd.impl.Base;
 
 import java.lang.reflect.Type;
@@ -25,7 +25,8 @@ public class BlockReferenceSerializer implements JsonSerializer<BaseBlockReferen
                 refObject.addProperty("compareNBT", ref.compareNBT);
             }
             if (ref.compound != null) {
-                refObject.add("NBT", context.serialize(ref.compound));
+
+                refObject.add("NBT", new JsonParser().parse(ref.compound.toString()));
             }
             return refObject;
         }

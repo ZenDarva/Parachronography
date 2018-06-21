@@ -5,8 +5,12 @@ import java.util.Random;
 
 import com.gmail.zendarva.parachronology.Configuration.ConfigManager;
 import com.gmail.zendarva.parachronology.Configuration.domain.BlockReference;
+import com.gmail.zendarva.parachronology.Configuration.domain.OreDictReference;
+import com.gmail.zendarva.parachronology.Configuration.domain.serialize.BlockReferenceSerializer;
 import com.gmail.zendarva.parachronology.Parachronology;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
@@ -55,6 +59,7 @@ public class BasicMoment extends Item {
 
 		BlockReference target = BlockReference.fromBlockWorld(pos,worldIn);
 		List<BlockReference> targets = ConfigManager.getDislocates(target);
+
 		if (!targets.isEmpty()){
 			transformUse(worldIn,pos, 2,targets);
 			stack.shrink(1);
@@ -63,6 +68,7 @@ public class BasicMoment extends Item {
 		return EnumActionResult.SUCCESS;
 
 	}
+
 
 	public static EnumActionResult transformUse(World world, BlockPos target, int amount, List<BlockReference> possibleResults){
 		Random r = new Random();

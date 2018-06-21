@@ -92,7 +92,11 @@ public class BlockReference extends BaseBlockReference {
         if (compound != null) {
             TileEntity te = world.getTileEntity(target);
             if (te != null){
-                te.deserializeNBT(compound);
+                NBTTagCompound temp = compound.copy();
+                temp.setInteger("x",target.getX());
+                temp.setInteger("y",target.getY());
+                temp.setInteger("z",target.getZ());
+                te.deserializeNBT(temp);
             }
         }
         world.markChunkDirty(target, null);

@@ -35,6 +35,10 @@ public class Transform {
                 }
             }
         }
+        if (rawResult.isEmpty())
+            return null;
+        if (rawResult.size() == 1)
+            return (EntityLiving) EntityList.createEntityByIDFromName(new ResourceLocation(rawResult.get(0)), world);
         int index = random.nextInt(rawResult.size()-1);
         return (EntityLiving) EntityList.createEntityByIDFromName(new ResourceLocation(rawResult.get(index)), world);
 

@@ -30,7 +30,7 @@ public class BlockReferenceDeserializer implements JsonDeserializer<BaseBlockRef
             String compound = null;
             if (objRef.has("NBT")) {
                 JsonElement obj = objRef.get("NBT");
-                    compound = obj.toString();
+                    compound = obj.toString().replaceAll("^\"|\"$", "");;
             }
 
             return BaseBlockReference.getReference(metadata,blockName,domain,compound);

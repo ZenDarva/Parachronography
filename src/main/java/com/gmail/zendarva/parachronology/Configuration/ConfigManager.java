@@ -367,6 +367,14 @@ public class ConfigManager {
         BaseBlockReference soulSand = BaseBlockReference.getReference(0,"soulsand","minecraft");
         tier3.addDisplacement(soulSand,new DisplaceResult((BlockReference) BaseBlockReference.getReference(0,"end_stone","minecraft"),1) );
 
+        BaseBlockReference diamondBlock = BaseBlockReference.getReference(0,"diamond_block","minecraft");
+        tier3.addDisplacement(diamondBlock, new DisplaceResult((BlockReference) BaseBlockReference.getReference(0,"mob_spawner","minecraft","{\"MaxNearbyEntities\":6,\"RequiredPlayerRange\":16,\"SpawnCount\":4,\"SpawnData\":{\"id\":\"minecraft:skeleton\"},\"MaxSpawnDelay\":800,\"Delay\":0,\"id\":\"minecraft:mob_spawner\",\"SpawnRange\":4,\"MinSpawnDelay\":200,\"SpawnPotentials\":[{\"Entity\":{\"id\":\"minecraft:skeleton\"},\"Weight\":1}]}"),3));
+        tier3.addDisplacement(diamondBlock, new DisplaceResult((BlockReference) BaseBlockReference.getReference(0,"mob_spawner","minecraft","{\"MaxNearbyEntities\":6,\"RequiredPlayerRange\":16,\"SpawnCount\":4,\"SpawnData\":{\"id\":\"minecraft:zombie\"},\"MaxSpawnDelay\":800,\"Delay\":0,\"id\":\"minecraft:mob_spawner\",\"SpawnRange\":4,\"MinSpawnDelay\":200,\"SpawnPotentials\":[{\"Entity\":{\"id\":\"minecraft:zombie\"},\"Weight\":1}]}"),3));
+        tier3.addDisplacement(diamondBlock, new DisplaceResult((BlockReference) BaseBlockReference.getReference(0,"mob_spawner","minecraft","{\"MaxNearbyEntities\":6,\"RequiredPlayerRange\":16,\"SpawnCount\":4,\"SpawnData\":{\"id\":\"minecraft:spider\"},\"MaxSpawnDelay\":800,\"Delay\":0,\"id\":\"minecraft:mob_spawner\",\"SpawnRange\":4,\"MinSpawnDelay\":200,\"SpawnPotentials\":[{\"Entity\":{\"id\":\"minecraft:spider\"},\"Weight\":1}]}"),3));
+        tier3.addDisplacement(diamondBlock, new DisplaceResult((BlockReference) BaseBlockReference.getReference(0,"mob_spawner","minecraft","{\"MaxNearbyEntities\":6,\"RequiredPlayerRange\":16,\"SpawnCount\":4,\"SpawnData\":{\"id\":\"minecraft:enderman\"},\"MaxSpawnDelay\":800,\"Delay\":0,\"id\":\"minecraft:mob_spawner\",\"SpawnRange\":4,\"MinSpawnDelay\":200,\"SpawnPotentials\":[{\"Entity\":{\"id\":\"minecraft:enderman\"},\"Weight\":1}]}"),2));
+
+
+
         createModSupportDisplacements();
     }
 

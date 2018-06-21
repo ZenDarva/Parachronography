@@ -91,24 +91,9 @@ public class Moment extends Item {
 	private EnumActionResult transformUse(EntityPlayer player, World world, ItemStack stack, BlockPos targ,
 			int amount) {
 		Random r = new Random();
-		Block block = world.getBlockState(targ).getBlock();
-
-		if (block == Blocks.END_STONE && stack.getItemDamage() == 2
-				&& ConfigurationHolder.getInstance().isGenerateEndPortal()) {
-			BlockVector corner = MultiBlockHelper.findSouthWestCorner(world, targ.getX(), targ.getY(), targ.getZ());
-			if (corner != null) {
-				if (MultiBlockHelper.checkMultiblock(corner)) {
-					corner = corner.East().North();
-					corner.setBlock(Blocks.END_PORTAL);
-					corner.North().setBlock(Blocks.END_PORTAL);
-					corner.East().setBlock(Blocks.END_PORTAL);
-					corner.East().North().setBlock(Blocks.END_PORTAL);
-				}
-			}
-			stack.shrink(1);
-			return EnumActionResult.SUCCESS;
-		}
-		return EnumActionResult.FAIL;
+		possibleResults.get(r.nextInt(possibleResults.size())).setBlockInWorld(world,target);
+		spread(world,target,amount--);
+		return EnumActionResult.SUCCESS;
 	}
 
 	@Override

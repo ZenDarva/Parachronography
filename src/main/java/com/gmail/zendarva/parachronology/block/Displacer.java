@@ -194,7 +194,7 @@ public class Displacer extends Block implements ITileEntityProvider {
 		if (results.size() == 1)
 			return results.get(0);
 
-		int selected = world.rand.nextInt(results.size()-1);
+		int selected = world.rand.nextInt(results.size());
 		return results.get(selected);
 	}
 

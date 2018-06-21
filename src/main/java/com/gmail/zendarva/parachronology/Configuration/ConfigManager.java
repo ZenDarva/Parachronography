@@ -268,7 +268,7 @@ public class ConfigManager {
         BlockReference target = (BlockReference) BaseBlockReference.getReference(0,"petrifiedwood","parachronology",null);
         dislocates.get(ref).add(target);
 
-        BlockReference whiteWool = (BlockReference) BaseBlockReference.getReference(0,"wool","minecraft");
+        BlockReference whiteWool = (BlockReference) BaseBlockReference.getReference(-1,"wool","minecraft");
         dislocates.put(whiteWool,new LinkedList<>());
         for (int x = 1; x<16;x++)
             dislocates.get(whiteWool).add((BlockReference) BaseBlockReference.getReference(x,"wool","minecraft"));

@@ -54,8 +54,12 @@ public class DislocateCatagory implements IRecipeCategory<DislocateRecipe>{
         List<List<ItemStack>> input =iIngredients.getInputs(ItemStack.class);
         List<List<ItemStack>> output = iIngredients.getOutputs(ItemStack.class);;
 
+
         displayStacks.init(index,true,16,0);
-        displayStacks.set(index,input.get(0).get(0));
+        if (input.get(0).size()== 1)
+            displayStacks.set(index,input.get(0).get(0));
+        else
+            displayStacks.set(index,input.get(0));
         index++;
 
 

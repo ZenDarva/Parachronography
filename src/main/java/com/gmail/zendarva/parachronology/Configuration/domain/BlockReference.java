@@ -78,6 +78,11 @@ public class BlockReference extends BaseBlockReference {
             NonNullList<ItemStack> dict = OreDictionary.getOres(targRef.oreDictName);
             return OreDictionary.containsMatch(targRef.compareNBT,dict,getItemStack());
         }
+        BlockReference ref = (BlockReference) target;
+        if (metadata == -1 || ref.metadata == -1){
+            return (ref.domain.equals(domain) && ref.blockName.equals(blockName));
+        }
+
         return target==this;
     }
 
@@ -103,12 +108,17 @@ public class BlockReference extends BaseBlockReference {
     }
 
     public ItemStack getItemStack(){
+        int localMeta;
+        if (metadata== -1)
+            localMeta = OreDictionary.WILDCARD_VALUE;
+        else
+            localMeta=metadata;
         if (myStack.isEmpty()){
             Block targBlock = Block.getBlockFromName(domain+":"+blockName);
-            myStack = new ItemStack(targBlock,1,metadata);
+            myStack = new ItemStack(targBlock,1,localMeta);
             if (myStack.isEmpty()) {
                 //Reeds.  I hate reeds.
-                myStack = new ItemStack(targBlock.getItemDropped(targBlock.getDefaultState(),new Random(),0),1,metadata);
+                myStack = new ItemStack(targBlock.getItemDropped(targBlock.getDefaultState(),new Random(),0),1,localMeta);
             }
         }
         return myStack;

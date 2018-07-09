@@ -364,7 +364,7 @@ public class ConfigManager {
 
         tier3.addDisplacement(oreStone,new DisplaceResult((BlockReference) BaseBlockReference.getReference(0,"diamond_ore","minecraft"),1) );
 
-        BaseBlockReference soulSand = BaseBlockReference.getReference(0,"soulsand","minecraft");
+        BaseBlockReference soulSand = BaseBlockReference.getReference(0,"soul_sand","minecraft");
         tier3.addDisplacement(soulSand,new DisplaceResult((BlockReference) BaseBlockReference.getReference(0,"end_stone","minecraft"),1) );
 
         BaseBlockReference diamondBlock = BaseBlockReference.getReference(0,"diamond_block","minecraft");

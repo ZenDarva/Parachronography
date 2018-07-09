@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.gmail.zendarva.parachronology.Configuration.ConfigManager;
+import com.gmail.zendarva.parachronology.Configuration.domain.BaseBlockReference;
 import com.gmail.zendarva.parachronology.Configuration.domain.BlockReference;
 import com.gmail.zendarva.parachronology.Configuration.domain.OreDictReference;
 import com.gmail.zendarva.parachronology.Configuration.domain.serialize.BlockReferenceSerializer;
@@ -54,43 +55,48 @@ public class BasicMoment extends Item {
 		Random rand = new Random();
 		ItemStack stack = player.getHeldItem(hand);
 
-		int amount = 2;
 
 
 		BlockReference target = BlockReference.fromBlockWorld(pos,worldIn);
-		List<BlockReference> targets = ConfigManager.getDislocates(target);
 
-		if (!targets.isEmpty()){
-			transformUse(worldIn,pos, 2,targets);
-			stack.shrink(1);
+		if (checkTree(target)){
+			eatTree(worldIn, pos);
+			return EnumActionResult.SUCCESS;
 		}
 
-		return EnumActionResult.SUCCESS;
+
+
+		return EnumActionResult.FAIL;
+	}
+
+	private void eatTree(World worldIn, BlockPos pos) {
 
 	}
 
+	private boolean checkTree(BlockReference target) {
+		BaseBlockReference wood = BlockReference.getReference("logWood");
+		BaseBlockReference leaves = BlockReference.getReference("treeLeaves");
 
-	public static EnumActionResult transformUse(World world, BlockPos target, int amount, List<BlockReference> possibleResults){
-		Random r = new Random();
-		possibleResults.get(r.nextInt(possibleResults.size())).setBlockInWorld(world,target);
-		spread(world,target,amount--);
-		return EnumActionResult.SUCCESS;
+		return (wood.matches(target) || leaves.matches(target));
+
 	}
 
-	private static int spread(World world, BlockPos target, int amount){
-		Random r = new Random(System.currentTimeMillis());
+	
 
-		for (EnumFacing face : EnumFacing.values()){
-			if (amount == 0)
-				return 0;
-			BlockReference ref = BlockReference.fromBlockWorld(target.offset(face), world);
-			List<BlockReference> targets = ConfigManager.getDislocates(ref);
-			if (!targets.isEmpty()){
-				targets.get(r.nextInt(targets.size())).setBlockInWorld(world,target.offset(face));
-				amount--;
-				amount = spread(world,target.offset(face),amount);
-			}
-		}
-		return amount;
-	}
+//	private static int spread(World world, BlockPos target, int amount){
+//		Random r = new Random(System.currentTimeMillis());
+//
+//		for (EnumFacing face : EnumFacing.values()){
+//			if (amount == 0)
+//				return 0;
+//			BlockReference ref = BlockReference.fromBlockWorld(target.offset(face), world);
+//			List<BlockReference> targets = ConfigManager.getDislocates(ref);
+//			if (!targets.isEmpty()){
+//				targets.get(r.nextInt(targets.size())).setBlockInWorld(world,target.offset(face));
+//				amount--;
+//				amount = spread(world,target.offset(face),amount);
+//			}
+//		}
+//		return amount;
+//	}
 }

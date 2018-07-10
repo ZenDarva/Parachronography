@@ -22,6 +22,9 @@ public class BlockReferenceDeserializer implements JsonDeserializer<BaseBlockRef
 
             String domain = chunks[0];
             String blockName = chunks[1];
+            //Temporary compatability hack.  Remove next version
+            if (blockName.equals("soulsand"))
+                blockName = "soul_sand";
             int metadata = 0;
             if (chunks.length == 3) {
                 metadata = Integer.parseInt(chunks[2]);

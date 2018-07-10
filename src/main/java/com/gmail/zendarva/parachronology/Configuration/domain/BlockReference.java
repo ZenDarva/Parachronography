@@ -89,6 +89,11 @@ public class BlockReference extends BaseBlockReference {
     public void setBlockInWorld(World world, BlockPos target){
         world.destroyBlock(target, false);
 
+        if (getBlock() == null)
+        {
+            System.out.println(String.format("Error, Attempt to displace to a null block. Reference: %s:%s:%d",domain,blockName,metadata));
+        }
+
         if (metadata != 0) {
             world.setBlockState(target, getBlock().getStateFromMeta(metadata));
         }

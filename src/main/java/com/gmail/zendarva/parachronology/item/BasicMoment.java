@@ -10,6 +10,7 @@ import com.gmail.zendarva.parachronology.Configuration.domain.OreDictReference;
 import com.gmail.zendarva.parachronology.Configuration.domain.serialize.BlockReferenceSerializer;
 import com.gmail.zendarva.parachronology.Parachronology;
 
+import com.gmail.zendarva.parachronology.utility.TreeStructure;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.minecraft.block.Block;
@@ -60,7 +61,10 @@ public class BasicMoment extends Item {
 		BlockReference target = BlockReference.fromBlockWorld(pos,worldIn);
 
 		if (checkTree(target)){
-			eatTree(worldIn, pos);
+			if (!worldIn.isRemote) {
+				TreeStructure ts = new TreeStructure(worldIn, pos);
+				ts.poof();
+			}
 			return EnumActionResult.SUCCESS;
 		}
 

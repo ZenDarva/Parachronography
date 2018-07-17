@@ -149,7 +149,10 @@ public class Storage extends Block implements ITileEntityProvider {
     }
     public static EnumFacing getFacing(int meta)
     {
-        return EnumFacing.getFront(meta & 7);
+        EnumFacing facing = EnumFacing.getFront(meta & 7);
+        if (facing.getAxis() != EnumFacing.Axis.Y)
+            return facing;
+        return EnumFacing.NORTH;
     }
 
     @Override

@@ -23,7 +23,7 @@ compileJava {
 
 minecraft {
 
-    version = "1.12.2-14.23.3.2655"
+    version = "1.12.2-14.23.4.2705"
     runDir = "run"
     mappings = "snapshot_20180131"
 }
@@ -55,8 +55,8 @@ dependencies {
     //compile "mcp.mobius.waila:Waila:1.6.0-B3_1.8.8"
 
         compile fileTree(dir: 'lib', include: '*.jar')
-        deobfProvided "mezz.jei:jei_1.12.1:4.7.5.88:api"
-        runtime "mezz.jei:jei_1.12.1:4.7.5.88"
+        deobfProvided "mezz.jei:jei_1.12.2:4.8.5.147:api"
+        runtime "mezz.jei:jei_1.12.2:4.8.5.147"
         deobfProvided ("mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.19-11") {transitive=false}
         runtime ("mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.19-11") {transitive=false}
         deobfProvided "mcp.mobius.waila:Hwyla:1.8.23-B38_1.12"

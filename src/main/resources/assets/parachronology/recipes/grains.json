@@ -1,0 +1,33 @@
+{
+  "conditions":[
+    {
+      "type": "mod_loaded",
+      "mod": "enderio"
+    },
+    {
+      "type": "flag_set",
+      "name": "EnableEnderIOGrainsRecipe"
+    }
+  ],
+  "result": {
+    "item": "enderio:item_material",
+    "data":20,
+    "count":8
+  },
+  "pattern": [
+    "aaa",
+    "aba",
+    "aaa"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "a":{
+      "item": "minecraft:redstone",
+      "data": 0
+    },
+    "b":{
+      "item":"parachronology:moment",
+      "data":0
+    }
+  }
+}

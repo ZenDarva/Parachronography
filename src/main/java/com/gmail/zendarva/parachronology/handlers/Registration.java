@@ -5,6 +5,7 @@ import com.gmail.zendarva.parachronology.block.PetrifiedWood;
 import com.gmail.zendarva.parachronology.entity.DisplacerEntity;
 import com.gmail.zendarva.parachronology.entity.StorageEntity;
 import com.gmail.zendarva.parachronology.item.DiplacerItemBlock;
+import com.gmail.zendarva.parachronology.utility.ItemBlockOverride;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -44,8 +45,9 @@ public class Registration {
         enrichedDirt.setRegistryName("enricheddirt");
         event.getRegistry().register(enrichedDirt);
 
-        ItemBlock storageItem = new ItemBlock(Parachronology.storage);
+        ItemBlock storageItem = new ItemBlockOverride(Parachronology.storage);
         storageItem.setRegistryName("storage");
+
         event.getRegistry().register(storageItem);
 
         event.getRegistry().register(Parachronology.pickaxe);

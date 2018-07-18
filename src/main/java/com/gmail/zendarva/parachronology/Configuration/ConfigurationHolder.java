@@ -19,7 +19,7 @@ public class ConfigurationHolder {
     public static int playerDropChanceMultiplier = 5;
 
     private boolean generateEndPortal = true;
-
+    public static  HashMap<String, Boolean> flags = new HashMap<>();
 
     private ConfigurationHolder() {
             }
@@ -46,21 +46,17 @@ public class ConfigurationHolder {
         config.save();
     }
 
-    private void setOtherDefaults(Configuration con) {
-        Property prop = con.get("Defaults", "allowGenerateEndPortal", true);
-        prop.set(true);
-
-        prop = con.get("Defaults", "PlayerKillDropChanceMultiplyer", 5);
-        playerDropChanceMultiplier = 5;
-
-    }
-
     private void loadOtherConfigs(Configuration con) {
         Property prop = con.get("Defaults", "allowGenerateEndPortal", true);
         generateEndPortal = prop.getBoolean();
 
         prop = con.get("Defaults", "PlayerKillDropChanceMultiplyer", 5);
         playerDropChanceMultiplier = prop.getInt();
+
+        prop = con.get("Defaults", "EnableEnderIOGrainsRecipe", true);
+        flags.put("EnableEnderIOGrainsRecipe", prop.getBoolean());
+        save();
+
     }
 
 

@@ -1,0 +1,6 @@
+{
+  "conditions":{
+    "mod_loaded":"com.gmail.zendarva.parachronology.recipe.isModLoaded",
+    "flag_set":"com.gmail.zendarva.parachronology.recipe.isFlagSet"
+  }
+}

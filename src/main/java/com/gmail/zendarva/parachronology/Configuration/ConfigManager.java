@@ -432,6 +432,7 @@ public class ConfigManager {
 
     }
 
+
     private static void addThaumcraftStuff(){
         BlockReference quartzBlock = (BlockReference) BaseBlockReference.getReference(0,"quartz_block","minecraft");
         BaseBlockReference treeSapling = BlockReference.getReference("treeSapling");

@@ -68,6 +68,24 @@ public class Moment extends Item {
 				amount = 31;
 		}
 		BlockReference target = BlockReference.fromBlockWorld(pos, worldIn);
+
+		Block block = worldIn.getBlockState(pos).getBlock();
+		if (block == Blocks.END_STONE && stack.getItemDamage() == 2
+				&& ConfigurationHolder.getInstance().isGenerateEndPortal()) {
+			BlockVector corner = MultiBlockHelper.findSouthWestCorner(worldIn, pos.getX(), pos.getY(), pos.getZ());
+			if (corner != null) {
+				if (MultiBlockHelper.checkMultiblock(corner)) {
+					corner = corner.East().North();
+					corner.setBlock(Blocks.END_PORTAL);
+					corner.North().setBlock(Blocks.END_PORTAL);
+					corner.East().setBlock(Blocks.END_PORTAL);
+					corner.East().North().setBlock(Blocks.END_PORTAL);
+				}
+			}
+			stack.shrink(1);
+			return EnumActionResult.SUCCESS;
+		}
+
 		List<BlockReference> targets = ConfigManager.getDislocates(target);
 		if (!targets.isEmpty()) {
 			stack.shrink(1);

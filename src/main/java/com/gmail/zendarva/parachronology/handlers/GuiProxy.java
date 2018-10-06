@@ -1,7 +1,7 @@
 package com.gmail.zendarva.parachronology.handlers;
 
 import com.gmail.zendarva.parachronology.container.StorageContainer;
-import com.gmail.zendarva.parachronology.entity.StorageEntity;
+import com.gmail.zendarva.parachronology.tileEntity.StorageEntity;
 import com.gmail.zendarva.parachronology.gui.StorageGui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;

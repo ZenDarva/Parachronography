@@ -50,8 +50,6 @@ public class ConfigurationHolder {
         Property prop = con.get("Defaults", "allowGenerateEndPortal", true);
         generateEndPortal = prop.getBoolean();
 
-        prop = con.get("Defaults", "PlayerKillDropChanceMultiplyer", 5);
-        playerDropChanceMultiplier = prop.getInt();
 
         prop = con.get("Defaults", "EnableEnderIOGrainsRecipe", true);
         flags.put("EnableEnderIOGrainsRecipe", prop.getBoolean());

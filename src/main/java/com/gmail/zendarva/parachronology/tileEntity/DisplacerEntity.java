@@ -1,4 +1,4 @@
-package com.gmail.zendarva.parachronology.entity;
+package com.gmail.zendarva.parachronology.tileEntity;
 
 import javax.annotation.Nullable;
 

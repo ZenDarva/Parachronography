@@ -3,7 +3,7 @@ package com.gmail.zendarva.parachronology.item;
 import com.gmail.zendarva.parachronology.Parachronology;
 import com.gmail.zendarva.parachronology.capability.ITimeless;
 import com.gmail.zendarva.parachronology.capability.TimelessProvider;
-import com.gmail.zendarva.parachronology.entity.StorageEntity;
+import com.gmail.zendarva.parachronology.tileEntity.StorageEntity;
 import com.gmail.zendarva.parachronology.utility.TimelessUtility;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;

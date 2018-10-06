@@ -9,9 +9,9 @@ import com.gmail.zendarva.parachronology.block.Storage;
 import com.gmail.zendarva.parachronology.capability.ITimeless;
 import com.gmail.zendarva.parachronology.capability.Timeless;
 import com.gmail.zendarva.parachronology.capability.TimelessStorage;
+import com.gmail.zendarva.parachronology.entity.FadingBlock;
 import com.gmail.zendarva.parachronology.handlers.CapabilityHandler;
 import com.gmail.zendarva.parachronology.handlers.LoadingCallback;
-import com.gmail.zendarva.parachronology.handlers.MobDrop;
 import com.gmail.zendarva.parachronology.handlers.Registration;
 import com.gmail.zendarva.parachronology.item.*;
 import com.gmail.zendarva.parachronology.proxy.CommonProxy;
@@ -20,6 +20,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -32,6 +33,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.io.File;
@@ -54,6 +56,7 @@ public class Parachronology {
 	public static Storage storage;
 	public static TimelessPickaxe pickaxe;
 	public static TimelessWand wand;
+	public static TimeSyphon timeSyphon;
 
 
 	public static ConfigurationHolder config;
@@ -76,7 +79,7 @@ public class Parachronology {
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
-		MinecraftForge.EVENT_BUS.register(new MobDrop());
+//		MinecraftForge.EVENT_BUS.register(new MobDrop());
 		OreDictionary.registerOre("cobblestone", petrifiedWood);
 		FMLInterModComms.sendMessage("waila", "register",
 				"com.gmail.zendarva.parachronology.interop.waila.ParachronologyAddon.registerAddon");
@@ -86,6 +89,8 @@ public class Parachronology {
 			MinecraftForge.addGrassSeed(new ItemStack(Item.getByNameOrId("actuallyadditions:item_canola_seed")),2);
 		}
 
+		int id = 1;
+		EntityRegistry.registerModEntity(new ResourceLocation("parachronology:FadingBlockEntity"), FadingBlock.class, "FadingBlock", id++, this, 64, 1, false);
 	}
 
 	@Mod.EventHandler
@@ -105,7 +110,6 @@ public class Parachronology {
 			ConfigManager.createDislocations();
 			ConfigManager.createDisplacements();
 			ConfigManager.createTransforms();
-			ConfigManager.createMobDrops();
 			ConfigManager.writeConfigs();
 		}
 		else
@@ -129,8 +133,7 @@ public class Parachronology {
 		storage = new Storage();
 		pickaxe= new TimelessPickaxe();
 		wand = new TimelessWand();
-//		ConfigurationHolder.getInstance().LoadConfigs();
-//		ConfigurationHolder.getInstance().save();
+		timeSyphon = new TimeSyphon();
 
 		proxy.preInit();
 

@@ -1,13 +1,11 @@
 package com.gmail.zendarva.parachronology.Configuration;
 
 import com.gmail.zendarva.parachronology.Configuration.domain.*;
-import com.gmail.zendarva.parachronology.Configuration.domain.BlockReference;
 import com.gmail.zendarva.parachronology.Configuration.domain.serialize.BlockReferenceDeserializer;
 import com.gmail.zendarva.parachronology.Configuration.domain.serialize.BlockReferenceSerializer;
-import com.gmail.zendarva.parachronology.handlers.MobDrop;
 import com.gmail.zendarva.parachronology.interop.jei.ParachronologyPlugin;
-import com.gmail.zendarva.parachronology.interop.jei.displace.DisplaceRecipe;
 import com.gmail.zendarva.parachronology.interop.jei.dislocate.DislocateRecipe;
+import com.gmail.zendarva.parachronology.interop.jei.displace.DisplaceRecipe;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -35,7 +33,6 @@ public class ConfigManager {
 
     public static HashMap<BaseBlockReference, List<BlockReference>> dislocates = new HashMap<>();
     public static HashMap<String, Transform> mobTransforms = new HashMap<>();
-    public static HashMap<String, DropData> mobDrops = new HashMap<>();
     private static List<DisplaceTier> displaceTiers = new LinkedList<>();
 
     private static DisplaceTier tier1 = new DisplaceTier(1);
@@ -49,7 +46,6 @@ public class ConfigManager {
             readDisplacements();
             readDislocates();
             readTransforms();
-            readMobDrops();
             buildRecipes();
 
         } catch (FileNotFoundException e) {
@@ -76,51 +72,9 @@ public class ConfigManager {
             writeDisplacements();
             buildRecipes();
             writeTransforms();
-            writeMobDrops();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private static void writeMobDrops() throws IOException {
-        File file = new File(configDir,"mobdrops.json");
-        if (!file.exists()) {
-            file.createNewFile();
-        }
-        GsonBuilder builder = new GsonBuilder();
-        builder.setPrettyPrinting();
-        builder.enableComplexMapKeySerialization();
-        Gson gson = builder.create();
-        OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file));
-        gson.toJson(mobDrops,writer);
-        writer.flush();
-        writer.close();
-    }
-    private static void readMobDrops() throws FileNotFoundException {
-        File file = new File(configDir,"mobdrops.json");
-        if (file == null || file.exists()== false)
-            return;
-        GsonBuilder builder = new GsonBuilder();
-        Gson gson = builder.create();
-        InputStreamReader reader = new InputStreamReader(new FileInputStream(file));
-        Type ListType = new TypeToken<HashMap<String, DropData>>(){}.getType();
-        mobDrops =gson.fromJson(reader,ListType);
-    }
-    public static void createMobDrops(){
-        mobDrops.put("minecraft:blaze",new DropData("minecraft:blaze",0,3,0));
-        mobDrops.put("minecraft:creeper",new DropData("minecraft:creeper",4,0,0));
-        mobDrops.put("minecraft:ender_dragon",new DropData("minecraft:enderdragon",0,0,100));
-        mobDrops.put("minecraft:enderman",new DropData("minecraft:enderman",3,2,0));
-        mobDrops.put("minecraft:ghast",new DropData("minecraft:ghast",0,0,0));
-        mobDrops.put("minecraft:magma_cube",new DropData("minecraft:lavaslime",0,1,0));
-        mobDrops.put("minecraft:skeleton",new DropData("minecraft:skeleton",4,0,0));
-        mobDrops.put("minecraft:slime",new DropData("minecraft:slime",1,0,0));
-        mobDrops.put("minecraft:witch",new DropData("minecraft:witch",5,0,0));
-        mobDrops.put("minecraft:wither_skeleton",new DropData("minecraft:witherskeleton",0,3,0));
-        mobDrops.put("minecraft:zombie",new DropData("minecraft:zombie",3,0,0));
-        mobDrops.put("minecraft:pigzombie",new DropData("minecraft:pigzombie",0,3,0));
-        mobDrops.put("minecraft:wither",new DropData("minecraft:wither",0,0,100));
-
     }
 
     private static void readTransforms() throws FileNotFoundException {

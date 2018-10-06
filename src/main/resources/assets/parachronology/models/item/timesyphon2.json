@@ -1,7 +1,7 @@
 {
   "parent":"builtin/generated",
   "textures": {
-    "layer0":"parachronology:items/bias"
+    "layer0":"parachronology:items/timesyphon2"
   },
   "display": {
     "thirdperson": {

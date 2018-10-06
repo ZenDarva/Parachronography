@@ -1,7 +1,7 @@
 package com.gmail.zendarva.parachronology.interop.waila;
 
 import com.gmail.zendarva.parachronology.block.Displacer;
-import com.gmail.zendarva.parachronology.entity.DisplacerEntity;
+import com.gmail.zendarva.parachronology.tileEntity.DisplacerEntity;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;

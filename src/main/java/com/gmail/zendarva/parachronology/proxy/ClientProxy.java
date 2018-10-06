@@ -2,12 +2,15 @@ package com.gmail.zendarva.parachronology.proxy;
 
 import com.gmail.zendarva.parachronology.Parachronology;
 import com.gmail.zendarva.parachronology.commands.ParaCommand;
+import com.gmail.zendarva.parachronology.entity.FadingBlock;
+import com.gmail.zendarva.parachronology.entity.FadingBlockRender;
 import com.gmail.zendarva.parachronology.handlers.DrawBlockHandler;
 import com.gmail.zendarva.parachronology.handlers.KeyPressHandler;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
@@ -46,6 +49,9 @@ public class ClientProxy extends CommonProxy {
 		Parachronology.storage.registerModel();
 		Parachronology.pickaxe.registerModel();
 		Parachronology.wand.registerModel();
+		Parachronology.timeSyphon.registerModel();
+
+		RenderingRegistry.registerEntityRenderingHandler(FadingBlock.class, new FadingBlockRender.Factory());
 	}
 
 }

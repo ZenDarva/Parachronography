@@ -1,6 +1,6 @@
 package com.gmail.zendarva.parachronology.container;
 
-import com.gmail.zendarva.parachronology.entity.StorageEntity;
+import com.gmail.zendarva.parachronology.tileEntity.StorageEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -9,8 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
-
-import javax.annotation.Nullable;
 
 /**
  * Created by James on 7/30/2017.

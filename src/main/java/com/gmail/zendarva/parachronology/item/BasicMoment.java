@@ -52,55 +52,25 @@ public class BasicMoment extends Item {
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
 			EnumFacing facing, float hitX, float hitY, float hitZ) {
-		Block block = worldIn.getBlockState(pos).getBlock();
-		Random rand = new Random();
-		ItemStack stack = player.getHeldItem(hand);
-
-
 
 		BlockReference target = BlockReference.fromBlockWorld(pos,worldIn);
 
 		if (checkTree(target)){
 			if (!worldIn.isRemote) {
-				TreeStructure ts = new TreeStructure(worldIn, pos);
+				TreeStructure ts = new TreeStructure(worldIn, pos, new ItemStack(Parachronology.moment,1,0));
 				ts.poof();
 			}
 			return EnumActionResult.SUCCESS;
 		}
 
-
-
 		return EnumActionResult.FAIL;
 	}
 
-	private void eatTree(World worldIn, BlockPos pos) {
-
-	}
 
 	private boolean checkTree(BlockReference target) {
 		BaseBlockReference wood = BlockReference.getReference("logWood");
 		BaseBlockReference leaves = BlockReference.getReference("treeLeaves");
-
 		return (wood.matches(target) || leaves.matches(target));
-
 	}
 
-	
-
-//	private static int spread(World world, BlockPos target, int amount){
-//		Random r = new Random(System.currentTimeMillis());
-//
-//		for (EnumFacing face : EnumFacing.values()){
-//			if (amount == 0)
-//				return 0;
-//			BlockReference ref = BlockReference.fromBlockWorld(target.offset(face), world);
-//			List<BlockReference> targets = ConfigManager.getDislocates(ref);
-//			if (!targets.isEmpty()){
-//				targets.get(r.nextInt(targets.size())).setBlockInWorld(world,target.offset(face));
-//				amount--;
-//				amount = spread(world,target.offset(face),amount);
-//			}
-//		}
-//		return amount;
-//	}
 }

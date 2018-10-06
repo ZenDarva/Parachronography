@@ -2,8 +2,11 @@ package com.gmail.zendarva.parachronology.utility;
 
 import com.gmail.zendarva.parachronology.Configuration.domain.BaseBlockReference;
 import com.gmail.zendarva.parachronology.Configuration.domain.BlockReference;
+import com.gmail.zendarva.parachronology.entity.FadingBlock;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -21,6 +24,8 @@ public class TreeStructure {
     public List<BlockPos> leaves;
     public List<BlockPos> roots;
     public World world;
+    private final ItemStack possibleDrop;
+    private int dropChance =13;
 
     private Queue<BlockPos> open;
     private static final BaseBlockReference treeLeaves = BlockReference.getReference("treeLeaves");
@@ -28,9 +33,10 @@ public class TreeStructure {
     private BlockReference trunkBlock;
     private BlockReference leavesBlock;
 
-    public TreeStructure(World world, BlockPos pos){
+    public TreeStructure(World world, BlockPos pos, ItemStack possibleDrop){
         this.world = world;
-            trunk = new LinkedList<>();
+        this.possibleDrop = possibleDrop;
+        trunk = new LinkedList<>();
             leaves = new LinkedList<>();
             roots= new LinkedList<>();
             open = new LinkedList<>();
@@ -39,6 +45,7 @@ public class TreeStructure {
         }
             findTree();
     }
+
 
     private void findTree() {
         while (open.size() > 0 && getSize() < maxSize){
@@ -69,10 +76,18 @@ public class TreeStructure {
     }
 
     public void poof(){
-        leaves.forEach(world::setBlockToAir);
-        trunk.forEach(world::setBlockToAir);
+        leaves.forEach(this::replaceWithEntity);
+        trunk.forEach(this::replaceWithEntity);
         leaves.clear();
         trunk.clear();
+    }
+    public void poof(int dropChance){
+        this.dropChance=dropChance;
+        leaves.forEach(this::replaceWithEntity);
+        trunk.forEach(this::replaceWithEntity);
+        leaves.clear();
+        trunk.clear();
+
     }
 
     public int getSize(){
@@ -81,14 +96,18 @@ public class TreeStructure {
 
     private boolean checkWood(BlockPos pos) {
         BlockReference target = BlockReference.fromBlockWorld(pos,world);
-
-
         return (treeWood.matches(target));
 
     }
     private boolean checkLeaves(BlockPos pos) {
         BlockReference target = BlockReference.fromBlockWorld(pos,world);
         return (treeLeaves.matches(target));
+    }
+
+    private void replaceWithEntity(BlockPos target){
+        FadingBlock entity = new FadingBlock(world,target,world.getBlockState(target), possibleDrop,dropChance);
+        world.setBlockToAir(target);
+        world.spawnEntity(entity);
     }
 
     private boolean checkDirt(BlockPos pos) {

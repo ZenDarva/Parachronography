@@ -2,9 +2,8 @@ package com.gmail.zendarva.parachronology.utility;
 
 import com.gmail.zendarva.parachronology.capability.ITimeless;
 import com.gmail.zendarva.parachronology.capability.TimelessProvider;
-import com.gmail.zendarva.parachronology.entity.StorageEntity;
+import com.gmail.zendarva.parachronology.tileEntity.StorageEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

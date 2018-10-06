@@ -1,13 +1,11 @@
 package com.gmail.zendarva.parachronology.network;
 
 import com.gmail.zendarva.parachronology.capability.ITimeless;
-import com.gmail.zendarva.parachronology.entity.StorageEntity;
 import com.gmail.zendarva.parachronology.utility.TimelessUtility;
 import com.gmail.zendarva.parachronology.utility.WorldUtil;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;

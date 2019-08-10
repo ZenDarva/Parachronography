@@ -1,7 +1,9 @@
 package com.gmail.zendarva.parachronology.Configuration.domain;
 
+import com.gmail.zendarva.parachronology.Parachronology;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -122,8 +124,17 @@ public class BlockReference extends BaseBlockReference {
             Block targBlock = Block.getBlockFromName(domain+":"+blockName);
             myStack = new ItemStack(targBlock,1,localMeta);
             if (myStack.isEmpty()) {
-                //Reeds.  I hate reeds.
                 myStack = new ItemStack(targBlock.getItemDropped(targBlock.getDefaultState(),new Random(),0),1,localMeta);
+            }
+            if (myStack.isEmpty()) { //Still? Damn.
+                switch (blockName)
+                {
+                    case "cocoa":
+                        myStack = new ItemStack(Items.DYE,1,3);
+                        break;
+                    default:
+                        System.out.println("Unable to find stack for :" + this.domain + ":" + this.blockName + ":" + metadata);
+                }
             }
         }
         return myStack;

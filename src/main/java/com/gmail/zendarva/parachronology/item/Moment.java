@@ -1,6 +1,7 @@
 package com.gmail.zendarva.parachronology.item;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -95,23 +96,30 @@ public class Moment extends Item {
 	}
 	public static EnumActionResult transformUse(World world, BlockPos target, int amount, List<BlockReference> possibleResults){
 		Random r = new Random();
+		BlockReference targRef = BlockReference.fromBlockWorld(target,world);
 		possibleResults.get(r.nextInt(possibleResults.size())).setBlockInWorld(world,target);
-		spread(world,target,amount--);
+		spread(world,target,amount--,targRef);
 		return EnumActionResult.SUCCESS;
 	}
 
-	private static int spread(World world, BlockPos target, int amount){
+	private static int spread(World world, BlockPos target, int amount, BlockReference targRef){
+		if (targRef == null)
+			targRef = BlockReference.fromBlockWorld(target,world);
 		Random r = new Random(System.currentTimeMillis());
-
-		for (EnumFacing face : EnumFacing.values()){
+		List<EnumFacing> directions = new ArrayList<>();
+		Collections.addAll(directions,EnumFacing.values());
+		Collections.shuffle(directions);
+		for (EnumFacing face : directions){
 			if (amount == 0)
 				return 0;
 			BlockReference ref = BlockReference.fromBlockWorld(target.offset(face), world);
+			if (!ref.matches(targRef))
+				continue;
 			List<BlockReference> targets = ConfigManager.getDislocates(ref);
 			if (!targets.isEmpty()){
 				targets.get(r.nextInt(targets.size())).setBlockInWorld(world,target.offset(face));
 				amount--;
-				amount = spread(world,target.offset(face),amount);
+				amount = spread(world,target.offset(face),amount,targRef);
 			}
 		}
 		return amount;

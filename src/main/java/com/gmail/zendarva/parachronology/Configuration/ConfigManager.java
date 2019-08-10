@@ -217,16 +217,59 @@ public class ConfigManager {
     }
 
     public static void createDislocations(){
-        OreDictReference ref = (OreDictReference) BaseBlockReference.getReference("logWood");
-        dislocates.put(ref,new LinkedList<>());
-        BlockReference target = (BlockReference) BaseBlockReference.getReference(0,"petrifiedwood","parachronology",null);
-        dislocates.get(ref).add(target);
 
         BlockReference whiteWool = (BlockReference) BaseBlockReference.getReference(-1,"wool","minecraft");
         dislocates.put(whiteWool,new LinkedList<>());
         for (int x = 1; x<16;x++)
             dislocates.get(whiteWool).add((BlockReference) BaseBlockReference.getReference(x,"wool","minecraft"));
 
+        OreDictReference sapling = (OreDictReference) BaseBlockReference.getReference("treeSapling");
+        dislocates.put(sapling,new LinkedList<>());
+        for (int x = 1; x< 6;x++)
+            addDislocate(sapling,"sapling","minecraft",x);
+
+        BlockReference tallGrass = (BlockReference) BaseBlockReference.getReference(1,"tallgrass","minecraft");
+        createDislocation("tallgrass","minecraft",1,"reeds","minecraft");
+        addDislocate(tallGrass,"brown_mushroom","minecraft",0);
+        addDislocate(tallGrass,"red_mushroom","minecraft",0);
+        addDislocate(tallGrass, "cactus","minecraft",0);
+        addDislocate(tallGrass, "waterlily","minecraft",0);
+        addDislocate(tallGrass, "cocoa","minecraft",0);
+
+        createOreDictDislocation("logWood","petrifiedwood","parachronology");
+        createOreDictDislocation("treeLeaves","dirt","minecraft");
+        createDislocation("dirt","minecraft","grass","minecraft");
+        createDislocation("grass","minecraft","mycelium","minecraft");
+        createOreDictDislocation("plankWood","gravel","minecraft");
+        createOreDictDislocation("stone","sand","minecraft");
+        createOreDictDislocation("sand","clay","minecraft");
+        createDislocation("clay","minecraft","snow","minecraft");
+        createDislocation("snow","minecraft","slime","minecraft");
+        createDislocation( "brick_block","minecraft","netherrack","minecraft");
+        createDislocation("quartz_block","minecraft","soul_sand","minecraft");
+        createDislocation("obsidian","minecraft","end_stone","minecraft");
+
+        addDislocate(BaseBlockReference.getReference("stone"),"sand","minecraft",1);
+
+    }
+
+    private static void addDislocate(BaseBlockReference ref, String to, String toDomain, int metadata){
+        dislocates.get(ref).add((BlockReference) BaseBlockReference.getReference(metadata,to,toDomain));
+    }
+
+    private static void createOreDictDislocation(String oreDictFrom, String to, String toDomain){
+        OreDictReference from = (OreDictReference) BaseBlockReference.getReference(oreDictFrom);
+        dislocates.put(from, new LinkedList<>());
+        dislocates.get(from).add((BlockReference) BaseBlockReference.getReference(0,to,toDomain));
+    }
+
+    private static void createDislocation(String from, String fromDomain, String to, String toDomain){
+        createDislocation(from,fromDomain,0,to,toDomain);
+    }
+    private static void createDislocation(String from, String fromDomain, int fromMetadata, String to, String toDomain){
+        BaseBlockReference fromBlock = BaseBlockReference.getReference(fromMetadata,from,fromDomain);
+        dislocates.put(fromBlock,new LinkedList<>());
+        dislocates.get(fromBlock).add((BlockReference) BaseBlockReference.getReference(0,to,toDomain));
     }
 
     public static List<BlockReference> getDislocates(BaseBlockReference block){

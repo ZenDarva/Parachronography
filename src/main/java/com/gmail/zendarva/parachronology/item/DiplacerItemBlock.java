@@ -53,7 +53,15 @@ public class DiplacerItemBlock extends ItemBlock {
 			{
 				tooltip.add("Biased Against: " + tag.getString("against"));
 			}
+
+
 		}
+		if (this.getDamage(stack) == 0)
+			tooltip.add("Tier 1");
+		if (this.getDamage(stack) == 1)
+			tooltip.add("Tier 2");
+		if (this.getDamage(stack) == 2)
+			tooltip.add("Tier 3");
 		super.addInformation(stack, worldIn,tooltip, flagIn);
 	}
 }

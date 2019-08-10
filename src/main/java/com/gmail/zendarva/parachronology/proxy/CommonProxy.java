@@ -33,7 +33,6 @@ public class CommonProxy extends BaseProxy {
 
 	@Override
 	public void preInit(){
-		//CapabilityManager.INSTANCE.register(ITimeless.class, new TimelessStorage(), Timeless.class);
 		MinecraftForge.EVENT_BUS.register(new WandEquipHandler());
 		PacketHandler.registerMessages("parachronology");
 	}

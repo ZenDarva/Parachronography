@@ -148,7 +148,7 @@ public class Displacer extends Block implements ITileEntityProvider {
 
 	@Override
 	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> items) {
-		if (tab == Parachronology.TAB) {
+		if (tab == Parachronology.TAB || tab.getBackgroundImageName()=="item_search.png") {
 			for (int ix = 0; ix < 3; ix++) {
 				items.add(new ItemStack(this, 1, ix));
 			}
@@ -197,25 +197,6 @@ public class Displacer extends Block implements ITileEntityProvider {
 		int selected = world.rand.nextInt(results.size());
 		return results.get(selected);
 	}
-
-//	private BlockReference getDisplaceTo(ArrayList<BlockReference> transforms, World world, BlockPos pos) {
-//		DisplacerEntity entity = (DisplacerEntity) world.getTileEntity(pos);
-//		Random r = new Random();
-//		BlockReference to = transforms.get(r.nextInt(transforms.size()));
-//		if (entity.getTowards() != null) {
-//			BlockReference ref = entity.getTowards();
-//			if (transforms.contains(ref) && to != ref && r.nextInt(100) < 40) {
-//				to = ref;
-//			}
-//		}
-//		if (entity.getAgainst() != null && to == entity.getAgainst()) {
-//			BlockReference ref = entity.getTowards();
-//			if (r.nextInt(100) < 30) {
-//				to = getDisplaceTo(transforms, world, pos);
-//			}
-//		}
-//		return to;
-//	}
 
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {

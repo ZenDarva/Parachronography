@@ -129,8 +129,6 @@ public class Parachronology {
 		storage = new Storage();
 		pickaxe= new TimelessPickaxe();
 		wand = new TimelessWand();
-//		ConfigurationHolder.getInstance().LoadConfigs();
-//		ConfigurationHolder.getInstance().save();
 
 		proxy.preInit();
 

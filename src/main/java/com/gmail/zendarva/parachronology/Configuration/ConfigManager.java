@@ -58,15 +58,17 @@ public class ConfigManager {
     }
 
     private static void buildRecipes() {
-        for (DisplaceTier displaceTier : displaceTiers) {
-            for (BaseBlockReference blockReference : displaceTier.displacements.keySet()) {
-                DisplaceRecipe dr = new DisplaceRecipe(blockReference,displaceTier.displacements.get(blockReference),displaceTier.getTier());
-                ParachronologyPlugin.displaceRecipes.add(dr);
+        if (Loader.isModLoaded("jei")) {
+            for (DisplaceTier displaceTier : displaceTiers) {
+                for (BaseBlockReference blockReference : displaceTier.displacements.keySet()) {
+                    DisplaceRecipe dr = new DisplaceRecipe(blockReference, displaceTier.displacements.get(blockReference), displaceTier.getTier());
+                    ParachronologyPlugin.displaceRecipes.add(dr);
+                }
             }
-        }
-        for (BaseBlockReference blockReference : dislocates.keySet()) {
-            DislocateRecipe tr = new DislocateRecipe(blockReference, dislocates.get(blockReference));
-            ParachronologyPlugin.dislocateRecipes.add(tr);
+            for (BaseBlockReference blockReference : dislocates.keySet()) {
+                DislocateRecipe tr = new DislocateRecipe(blockReference, dislocates.get(blockReference));
+                ParachronologyPlugin.dislocateRecipes.add(tr);
+            }
         }
     }
 
